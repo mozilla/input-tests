@@ -58,13 +58,11 @@ class SearchDates(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_date_filters(self):
+    def test_preset_date_filters(self):
         """
 
-        This testcase covers # 13605 in Litmus
-        1. Verifies that preset durations of 1, 7, and 30 days
-        2. Verifies the custom date filter is functioning
-        3. Verifies the date-start=<date> in the url
+        This testcase covers # 13605 & 13606 in Litmus
+        1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
         sel = self.selenium
@@ -81,6 +79,19 @@ class SearchDates(unittest.TestCase):
             self.assertEqual(search_page_obj.get_current_days(), days[1])
             #search_page_obj.verify_days_search_page_url(days[0])
 
+    def test_custom_date_filter(self):
+        """
+
+        This testcase covers # 13605, 13606 & 13715 in Litmus
+        1. Verifies the calendar is displayed when filtering on custom dates
+        2. Verifies date-start=<date> and end-date=<date> in the url
+
+        """
+        sel = self.selenium
+        feedback_obj = feedback_page.FeedbackPage(sel)
+        search_page_obj = search_results_page.SearchResultsPage(sel)
+
+        feedback_obj.go_to_feedback_page()
         self.assertEqual(search_page_obj.get_custom_dates_filter_tooltip(), "Custom")
         #search_page_obj.filter_by_custom_dates()
 

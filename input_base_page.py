@@ -59,7 +59,9 @@ class InputBasePage(Page):
     _product_dropdown         =  "product"
     _version_dropdown         =  "version"
     
-    _when_links               =  ("link=1d", "link=7d", "link=30d")
+    _current_when_link_locator = "css=#when a.selected"
+    _when_links = ("link=1d", "link=7d", "link=30d")
+    _when_custom_link = "id=show-custom-date"
 
     _feedback_praise_box      =  "praise_bar" 
     _feedback_issues_box      =  "issue_bar" 
@@ -152,7 +154,38 @@ class InputBasePage(Page):
                     self.selenium.select(self._version_dropdown,ver_label)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
-            
+
+    def get_current_days(self):
+        """
+        
+        Returns the link text of the currently applied days filter
+        
+        """
+        try:
+            return self.selenium.get_text(self._current_when_link_locator)
+        except:
+            return None
+
+    def get_days_tooltip(self, days):
+        """
+        
+        Returns the tooltip for the days link 1d/7d/30d
+        
+        """
+        for time in self._when_links:
+            if re.search(days,time,re.IGNORECASE) is None:
+                continue
+            else:
+                return self.selenium.get_attribute(time + "@title")
+
+    def get_custom_dates_filter_tooltip(self):
+        """
+        
+        Returns the tooltip for the custom dates filter link 1d/7d/30d
+        
+        """
+        return self.selenium.get_attribute(self._when_custom_link + "@title")
+
     def click_days(self,days):
         """
         clicks 1d/7d/30d
@@ -161,13 +194,13 @@ class InputBasePage(Page):
             if re.search(days,time,re.IGNORECASE) is None:
                 continue
             else:
-                if self.selenium.is_checked(time):
+                if self.get_current_days() == time:
                     break
                 else:
                     self.selenium.click(time)
+                    self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
 
-            
     def click_platform(self,os):
         """
         clicks Windows XP/ Android etc.
@@ -235,4 +268,3 @@ class InputBasePage(Page):
             version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
             if not (self.selenium.is_element_present(version_locator)):
                 raise Exception('Version %s not found in the filter' % (version))
-        

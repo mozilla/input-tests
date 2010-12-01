@@ -37,6 +37,9 @@
 '''
 Created on Nov 24, 2010
 '''
+
+from datetime import date, timedelta
+
 import input_base_page
 import vars
 
@@ -50,6 +53,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
     _messages_count              =  "css=div[id='big-count'] > p"
     _mobile_results_url_regexp   =  "product=mobile&version="
     _firefox_results_url_regexp  =  "product=firefox&version="
+    _date_start_url_regexp  =  "date_start="
         
     
     def __init__(self, selenium):
@@ -112,3 +116,19 @@ class SearchResultsPage(input_base_page.InputBasePage):
             pass
         else:
             raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
+
+    def verify_days_search_page_url(self, days):
+        """
+
+            Verifies date_start=(today-days) in the url
+
+        """ 
+        
+        date_start = date.today() - timedelta(days=days)
+        date_start_url_regexp = self._date_start_url_regexp + str(date_start)
+        
+        current_loc = self.selenium.get_location()
+        if date_start_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))

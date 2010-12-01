@@ -78,6 +78,8 @@ class SearchDates(unittest.TestCase):
             search_page_obj.click_days(days[1])
             self.assertEqual(search_page_obj.get_current_days(), days[1])
             search_page_obj.verify_days_search_page_url(days[0])
+            # TODO: check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range
+            # currently blocked by bug 615844
 
     def test_custom_date_filter(self):
         """

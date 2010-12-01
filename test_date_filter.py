@@ -77,7 +77,7 @@ class SearchDates(unittest.TestCase):
             self.assertEqual(search_page_obj.get_days_tooltip(days[1]), days[2])
             search_page_obj.click_days(days[1])
             self.assertEqual(search_page_obj.get_current_days(), days[1])
-            #search_page_obj.verify_days_search_page_url(days[0])
+            search_page_obj.verify_days_search_page_url(days[0])
 
     def test_custom_date_filter(self):
         """

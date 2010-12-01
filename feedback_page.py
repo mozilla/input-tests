@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -46,20 +46,20 @@ import re
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
+
 class FeedbackPage(input_base_page.InputBasePage):
     
     _page_title              =  'Welcome'
     _messages_count          =  "css=div[id='big-count'] > p"
     ''' matches input.stage.mozilla.com & input.mozilla.com'''
     _url_regex               =  r'https?://input(\..*)?\.mozilla\.com/en\-US.'
-        
-    
+
     def __init__(self, selenium):
         '''
             Creates a new instance of the class
         '''
-        super(FeedbackPage,self).__init__(selenium)
-        
+        super(FeedbackPage, self).__init__(selenium)
+
     def go_to_feedback_page(self):
         """
             waits until regexp matched the url
@@ -69,6 +69,6 @@ class FeedbackPage(input_base_page.InputBasePage):
         count = 0
         while not re.search(self._url_regex, current_loc, re.U):
             time.sleep(1)
-            count += 1
+            count + = 1
             if count == 20:
-                raise Exception("Home Page has not loaded. Current url is %s" %(current_loc))
+                raise Exception("Home Page has not loaded. Current url is %s" % (current_loc))

@@ -40,6 +40,7 @@ Created on Nov 30, 2010
 
 '''
 
+from datetime import date, timedelta
 from selenium import selenium
 import vars
 import unittest
@@ -77,7 +78,7 @@ class SearchDates(unittest.TestCase):
             self.assertEqual(search_page_obj.get_days_tooltip(days[1]), days[2])
             search_page_obj.click_days(days[1])
             self.assertEqual(search_page_obj.get_current_days(), days[1])
-            search_page_obj.verify_days_search_page_url(days[0])
+            search_page_obj.verify_preset_days_search_page_url(days[0])
             # TODO: check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range
             # currently blocked by bug 615844
 
@@ -94,8 +95,15 @@ class SearchDates(unittest.TestCase):
         search_page_obj = search_results_page.SearchResultsPage(sel)
 
         feedback_obj.go_to_feedback_page()
-        self.assertEqual(search_page_obj.get_custom_dates_filter_tooltip(), "Custom")
-        #search_page_obj.filter_by_custom_dates()
+        self.assertEqual(search_page_obj.get_custom_dates_tooltip(), "Custom")
+        
+        start_date = date.today() - timedelta(days=3)
+        end_date = date.today() - timedelta(days=1)
+        
+        search_page_obj.filter_by_custom_dates(start_date, end_date)
+        search_page_obj.verify_custom_dates_search_page_url(start_date, end_date)
+        # TODO: check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range
+        # currently blocked by bug 615844
 
 if __name__ == "__main__":
     unittest.main()

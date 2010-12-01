@@ -61,7 +61,11 @@ class InputBasePage(Page):
     
     _current_when_link_locator = "css=#when a.selected"
     _when_links = ("link=1d", "link=7d", "link=30d")
-    _when_custom_link = "id=show-custom-date"
+    _show_custom_dates_locator = "id=show-custom-date"
+    _custom_dates_locator = "id=custom-date"
+    _custom_start_date_locator = "id=id_date_start"
+    _custom_end_date_locator = "id=id_date_end"
+    _set_custom_date_locator = "css=#custom-date button:contains(Set)"
 
     _feedback_praise_box      =  "praise_bar" 
     _feedback_issues_box      =  "issue_bar" 
@@ -88,7 +92,26 @@ class InputBasePage(Page):
             Creates a new instance of the class
         '''
         super(InputBasePage,self).__init__(selenium)
-            
+
+    def wait_for_element_present(self, element):
+        count = 0
+        while not self.selenium.is_element_present(element):
+            time.sleep(1)
+            count += 1
+            if count == 20:
+                self.record_error()
+                raise Exception(element + ' has not loaded')
+
+    def wait_for_element_visible(self, element):
+        self.wait_for_element_present(element)
+        count = 0
+        while not self.selenium.is_visible(element):
+            time.sleep(1)
+            count += 1
+            if count == 20:
+                self.record_error()
+                raise Exception(element + " is not visible")
+
     def get_default_selected_product(self):
         """
         returns the product selected in the filter by default
@@ -178,14 +201,6 @@ class InputBasePage(Page):
             else:
                 return self.selenium.get_attribute(time + "@title")
 
-    def get_custom_dates_filter_tooltip(self):
-        """
-        
-        Returns the tooltip for the custom dates filter link 1d/7d/30d
-        
-        """
-        return self.selenium.get_attribute(self._when_custom_link + "@title")
-
     def click_days(self,days):
         """
         clicks 1d/7d/30d
@@ -200,6 +215,36 @@ class InputBasePage(Page):
                     self.selenium.click(time)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
+
+    def get_custom_dates_tooltip(self):
+        """
+        
+        Returns the tooltip for the custom dates filter link 1d/7d/30d
+        
+        """
+        return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
+
+    def click_custom_dates(self):
+        """
+
+        Clicks the custom date filter button and waits for the form to appear
+
+        """
+        self.selenium.click(self._show_custom_dates_locator)
+        self.wait_for_element_visible(self._custom_dates_locator)
+
+    def filter_by_custom_dates(self, start_date, end_date):
+        """
+
+        Filters by a custom date range
+
+        """
+        self.click_custom_dates()
+        # TODO: This currently 'cheats' by typing in the date values, which the user cannot do. We need to change it to use the calendar.
+        self.selenium.type(self._custom_start_date_locator, str(start_date))
+        self.selenium.type(self._custom_end_date_locator, str(end_date))
+        self.selenium.click(self._set_custom_date_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_platform(self,os):
         """

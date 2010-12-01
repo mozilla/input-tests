@@ -54,6 +54,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
     _mobile_results_url_regexp   =  "product=mobile&version="
     _firefox_results_url_regexp  =  "product=firefox&version="
     _date_start_url_regexp  =  "date_start="
+    _date_end_url_regexp  =  "date_end="
         
     
     def __init__(self, selenium):
@@ -117,10 +118,10 @@ class SearchResultsPage(input_base_page.InputBasePage):
         else:
             raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
 
-    def verify_days_search_page_url(self, days):
+    def verify_preset_days_search_page_url(self, days):
         """
 
-            Verifies date_start=(today-days) in the url
+            Verifies date_start=(today - days) in the url
 
         """ 
         
@@ -132,3 +133,25 @@ class SearchResultsPage(input_base_page.InputBasePage):
             pass
         else:
             raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
+
+    def verify_custom_dates_search_page_url(self, start_date, end_date):
+        """
+
+            Verifies date_start=(start_date) in the url
+            Verifies date_end=(end_date) in the url
+
+        """ 
+        
+        date_start_url_regexp = self._date_start_url_regexp + str(start_date)
+        date_end_url_regexp = self._date_end_url_regexp + str(end_date)
+        
+        current_loc = self.selenium.get_location()
+        if date_start_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
+
+        if date_end_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_end_url_regexp, current_loc))

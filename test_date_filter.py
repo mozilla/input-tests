@@ -72,6 +72,7 @@ class SearchDates(unittest.TestCase):
         search_page_obj = search_results_page.SearchResultsPage(sel)
 
         feedback_obj.go_to_feedback_page()
+        self.assertEqual(search_page_obj.get_current_days(), None)
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
         for days in day_filters:

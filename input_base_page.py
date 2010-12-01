@@ -161,9 +161,9 @@ class InputBasePage(Page):
         Returns the link text of the currently applied days filter
         
         """
-        try:
+        if self.selenium.is_element_present(self._current_when_link_locator):
             return self.selenium.get_text(self._current_when_link_locator)
-        except:
+        else:
             return None
 
     def get_days_tooltip(self, days):

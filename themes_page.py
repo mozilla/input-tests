@@ -63,6 +63,6 @@ class ThemesPage(input_base_page.InputBasePage):
         count = 0
         while (re.search(self._page_title, self.sel.get_location(), re.IGNORECASE)) is None:
             time.sleep(1)
-            count + = 1
+            count += 1
             if count == 20:
                 raise Exception("Themes Page has not loaded")

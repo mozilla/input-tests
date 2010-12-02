@@ -71,6 +71,7 @@ class SearchDates(unittest.TestCase):
         search_page_obj = search_results_page.SearchResultsPage(sel)
 
         feedback_obj.go_to_feedback_page()
+        # TODO: Should the default date filter be 30d? Is this a bug?
         self.assertEqual(search_page_obj.get_current_days(), None)
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
@@ -79,8 +80,7 @@ class SearchDates(unittest.TestCase):
             search_page_obj.click_days(days[1])
             self.assertEqual(search_page_obj.get_current_days(), days[1])
             search_page_obj.verify_preset_days_search_page_url(days[0])
-            # TODO: check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range
-            # currently blocked by bug 615844
+            # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
     def test_custom_date_filter(self):
         """
@@ -102,8 +102,9 @@ class SearchDates(unittest.TestCase):
         
         search_page_obj.filter_by_custom_dates(start_date, end_date)
         search_page_obj.verify_custom_dates_search_page_url(start_date, end_date)
-        # TODO: check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range
-        # currently blocked by bug 615844
+        # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
+        
+        # TODO: When the custom date range matches a preset range, the custom dates are invisible and the current preset is selected. We should write checks for this.
 
 if __name__ == "__main__":
     unittest.main()

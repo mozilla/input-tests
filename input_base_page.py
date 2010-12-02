@@ -44,6 +44,7 @@ import vars
 
 import re
 import time
+import base64
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
@@ -66,6 +67,14 @@ class InputBasePage(Page):
     _custom_start_date_locator = "id=id_date_start"
     _custom_end_date_locator = "id=id_date_end"
     _set_custom_date_locator = "css=#custom-date button:contains(Set)"
+    
+    _datepicker_locator = "id=ui-datepicker-div"
+    _datepicker_month_locator = "css=.ui-datepicker-month"
+    _datepicker_year_locator = "css=.ui-datepicker-year"
+    _datepicker_previous_month_locator = "css=.ui-datepicker-prev"
+    _datepicker_next_month_locator = "css=.ui-datepicker-next"
+    _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
+    _datepicker_day_locator_suffix = ")"
 
     _feedback_praise_box      =  "praise_bar" 
     _feedback_issues_box      =  "issue_bar" 
@@ -111,6 +120,33 @@ class InputBasePage(Page):
             if count == 20:
                 self.record_error()
                 raise Exception(element + " is not visible")
+
+    def wait_for_element_not_visible(self, element):
+        count = 0
+        while self.selenium.is_visible(element):
+            time.sleep(1)
+            count += 1
+            if count == 20:
+                self.record_error()
+                raise Exception(element + " is still visible")
+
+    def record_error(self):
+        '''
+
+        Records an error.
+
+        '''
+        print '-------------------'
+        print 'Error at ' + self.selenium.get_location()
+        print 'Page title ' + self.selenium.get_title()
+        print '-------------------'
+        filename = 'input_' + str(time.time()).split('.')[0] + '.png'
+
+        print 'Screenshot of error in file ' + filename
+        f = open(filename, 'wb')
+        f.write(base64.decodestring(
+            self.selenium.capture_entire_page_screenshot_to_string('')))
+        f.close()
 
     def get_default_selected_product(self):
         """
@@ -233,6 +269,79 @@ class InputBasePage(Page):
         self.selenium.click(self._show_custom_dates_locator)
         self.wait_for_element_visible(self._custom_dates_locator)
 
+    def wait_for_datepicker_to_finish_animating(self):
+        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollHeight == 184", 10000)
+
+    def click_start_date(self):
+        """
+
+        Clicks the start date in the custom date filter form and waits for the datepicker to appear
+
+        """
+        self.selenium.click(self._custom_start_date_locator)
+        self.wait_for_datepicker_to_finish_animating()
+        
+    def click_end_date(self):
+        """
+
+        Clicks the end date in the custom date filter form and waits for the datepicker to appear
+
+        """
+        self.selenium.click(self._custom_end_date_locator)
+        self.wait_for_datepicker_to_finish_animating()
+
+    def click_previous_month(self):
+        """
+
+        Clicks the previous month button in the datepicker
+
+        """
+        self.selenium.click(self._datepicker_previous_month_locator)
+
+    def click_next_month(self):
+        """
+
+        Clicks the next month button in the datepicker
+
+        """
+        # TODO: Throw an error if the next month button is disabled
+        self.selenium.click(self._datepicker_next_month_locator)
+
+    def click_day(self, day):
+        """
+
+        Clicks the day in the datepicker and waits for the datepicker to disappear
+
+        """
+        # TODO: Throw an error if the day button is disabled
+        self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
+        self.wait_for_element_not_visible(self._datepicker_locator)
+
+    def select_date(self, target_date):
+        """
+
+        Navigates to the target month in the datepicker and clicks the target day
+
+        """
+        currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
+        targetYear = target_date.year
+        yearDelta = targetYear - currentYear
+        monthDelta = yearDelta * 12
+        
+        months = {"January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
+        currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
+        targetMonth = target_date.month
+        monthDelta += targetMonth - currentMonth
+        
+        count = 0
+        while (count < abs(monthDelta)):
+            if monthDelta < 0:
+                self.click_previous_month()
+            elif monthDelta > 0:
+                self.click_next_month()
+            count = count + 1
+        self.click_day(target_date.day)
+
     def filter_by_custom_dates(self, start_date, end_date):
         """
 
@@ -240,10 +349,10 @@ class InputBasePage(Page):
 
         """
         self.click_custom_dates()
-        # TODO: This currently 'cheats' by typing in the date values, which the user cannot do. We need to change it to use the calendar.
-        self.selenium.type(self._custom_start_date_locator, str(start_date))
-        self.selenium.type(self._custom_end_date_locator, str(end_date))
-        self.selenium.click(self._set_custom_date_locator)
+        self.click_start_date()
+        self.select_date(start_date)
+        self.click_end_date()
+        self.select_date(end_date)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_platform(self,os):

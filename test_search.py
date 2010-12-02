@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # *****BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -60,6 +61,14 @@ class TestSearch(unittest.TestCase):
         '''
         inpbas = InputBasePage(self.selenium)
         inpbas.search_for('')
+        self.assertTrue(0 < inpbas.message_count)
+
+    def test_that_we_can_search_with_unicode(self):
+        '''
+            Litmus 13697
+        '''
+        inpbas = InputBasePage(self.selenium)
+        inpbas.search_for(u"Tension et violence en C\xf4ted'Ivoire avant les r\xe9sultats")
         self.assertTrue(0 < inpbas.message_count)
 
 if __name__ == "__main__":

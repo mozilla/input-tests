@@ -109,6 +109,7 @@ class SearchDates(unittest.TestCase):
         for days in day_filters:
             start_date = date.today() - timedelta(days=days[0])
             search_page_obj.filter_by_custom_dates(start_date, date.today())
+            # TODO: Check that the custom date filter form is not visible
             search_page_obj.verify_custom_dates_search_page_url(start_date, date.today())
             self.assertEqual(search_page_obj.get_current_days(), days[1])
 

@@ -104,7 +104,13 @@ class SearchDates(unittest.TestCase):
         search_page_obj.verify_custom_dates_search_page_url(start_date, end_date)
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
         
-        # TODO: When the custom date range matches a preset range, the custom dates are invisible and the current preset is selected. We should write checks for this.
+        # Check that the relevant days preset link is highlighted when the applied custom date filter matches it
+        day_filters = ((1, "1d"), (7, "7d"), (30, "30d"))
+        for days in day_filters:
+            start_date = date.today() - timedelta(days=days[0])
+            search_page_obj.filter_by_custom_dates(start_date, date.today())
+            search_page_obj.verify_custom_dates_search_page_url(start_date, date.today())
+            self.assertEqual(search_page_obj.get_current_days(), days[1])
 
 if __name__ == "__main__":
     unittest.main()

@@ -86,6 +86,14 @@ class InputBasePage(Page):
             Creates a new instance of the class
         '''
         super(InputBasePage, self).__init__(selenium)
+        self.selenium.open('/')
+        count = 0
+        while not self.selenium.is_element_present(self._search_box):
+            time.sleep(1)
+            count += 1
+            if count == 20:
+                raise Exception("Home Page has not loaded")
+
 
     def get_default_selected_product(self):
         """
@@ -223,3 +231,12 @@ class InputBasePage(Page):
             version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
             if not (self.selenium.is_element_present(version_locator)):
                 raise Exception('Version %s not found in the filter' % (version))
+
+    def search_for(self, search_string):
+        self.selenium.type(self._search_box, search_string)
+        self.selenium.key_press(self._search_box, '\\13')
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    @property
+    def message_count(self):
+        return self.selenium.get_xpath_count('//li[@class="message"]')

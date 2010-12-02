@@ -352,6 +352,7 @@ class InputBasePage(Page):
         self.select_date(start_date)
         self.click_end_date()
         self.select_date(end_date)
+        self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_platform(self,os):

@@ -160,9 +160,7 @@ class InputBasePage(Page):
             if re.search(days, time, re.IGNORECASE) is None:
                 continue
             else:
-                if self.selenium.is_checked(time):
-                    break
-                else:
+                if not self.selenium.is_checked(time):
                     self.selenium.click(time)
                     break
 
@@ -174,9 +172,7 @@ class InputBasePage(Page):
             if re.search(os, plat, re.IGNORECASE) is None:
                 continue
             else:
-                if self.selenium.is_checked(plat):
-                    break
-                else:
+                if not self.selenium.is_checked(plat):
                     self.selenium.click(plat)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
@@ -185,9 +181,7 @@ class InputBasePage(Page):
         """
         clicks Feedback type - Praise
         """
-        if self.selenium.is_checked(self._feedback_praise_box):
-            pass
-        else:
+        if not self.selenium.is_checked(self._feedback_praise_box):
             self.selenium.click(self._feedback_praise_box)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
@@ -195,9 +189,7 @@ class InputBasePage(Page):
         """
         clicks Feedback type - Issues
         """
-        if self.selenium.is_checked(self._feedback_issues_box):
-            pass
-        else:
+        if not self.selenium.is_checked(self._feedback_issues_box):
             self.selenium.click(self._feedback_issues_box)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
@@ -209,9 +201,7 @@ class InputBasePage(Page):
             if re.search(country_name, country, re.IGNORECASE) is None:
                 continue
             else:
-                if self.selenium.is_checked(loc_code):
-                    break
-                else:
+                if not self.selenium.is_checked(loc_code):
                     self.selenium.click(loc_code)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break

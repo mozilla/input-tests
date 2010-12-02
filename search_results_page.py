@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -80,9 +81,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
         if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
             return
         current_loc = self.selenium.get_location()
-        if self._firefox_results_url_regexp in current_loc:
-            pass
-        else:
+        if not self._firefox_results_url_regexp in current_loc:
             raise Exception('%s not found in %s' % (self._firefox_results_url_regexp, current_loc))
 
     def verify_search_form_prod_ver(self, prod, ver):
@@ -104,12 +103,8 @@ class SearchResultsPage(input_base_page.InputBasePage):
         if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
             return
 
-        if self.selenium.is_element_present(prod_tag):
-            pass
-        else:
+        if not self.selenium.is_element_present(prod_tag):
             raise Exception('%s not found in %s' % (prod_tag, self.selenium.get_location()))
 
-        if self.selenium.is_element_present(ver_tag):
-            pass
-        else:
+        if not self.selenium.is_element_present(ver_tag):
             raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))

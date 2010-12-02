@@ -127,7 +127,8 @@ class SearchResultsPage(input_base_page.InputBasePage):
         """ 
         
         date_start = date.today() - timedelta(days=days)
-        date_start_url_regexp = self._date_start_url_regexp + str(date_start)
+        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        date_start_url_regexp = self._date_start_url_regexp + date_start.strftime('%Y-%m-%d')
         
         current_loc = self.selenium.get_location()
         if date_start_url_regexp in current_loc:
@@ -143,8 +144,9 @@ class SearchResultsPage(input_base_page.InputBasePage):
 
         """ 
         
-        date_start_url_regexp = self._date_start_url_regexp + str(start_date)
-        date_end_url_regexp = self._date_end_url_regexp + str(end_date)
+        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        date_start_url_regexp = self._date_start_url_regexp + start_date.strftime('%m%%2F%d%%2F%Y')
+        date_end_url_regexp = self._date_end_url_regexp + end_date.strftime('%m%%2F%d%%2F%Y')
         
         current_loc = self.selenium.get_location()
         if date_start_url_regexp in current_loc:

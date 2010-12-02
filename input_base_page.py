@@ -268,6 +268,14 @@ class InputBasePage(Page):
         self.selenium.click(self._show_custom_dates_locator)
         self.wait_for_element_visible(self._custom_dates_locator)
 
+    def is_custom_date_filter_visible(self):
+        """
+        
+        Returns True if the custom date filter form is visible
+        
+        """
+        return self.selenium.is_visible(self._custom_dates_locator)
+
     def wait_for_datepicker_to_finish_animating(self):
         self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollHeight == 184", 10000)
 

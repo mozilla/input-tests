@@ -57,7 +57,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
     _firefox_results_url_regexp  =  "product=firefox&version="
     _date_start_url_regexp  =  "date_start="
     _date_end_url_regexp  =  "date_end="
-    
+
     def __init__(self, selenium):
         '''
             Creates a new instance of the class
@@ -124,12 +124,12 @@ class SearchResultsPage(input_base_page.InputBasePage):
 
             Verifies date_start=(today - days) in the url
 
-        """ 
-        
+        """
+
         date_start = date.today() - timedelta(days=days)
         # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
         date_start_url_regexp = self._date_start_url_regexp + date_start.strftime('%Y-%m-%d')
-        
+
         current_loc = self.selenium.get_location()
         if date_start_url_regexp in current_loc:
             pass
@@ -142,12 +142,12 @@ class SearchResultsPage(input_base_page.InputBasePage):
             Verifies date_start=(start_date) in the url
             Verifies date_end=(end_date) in the url
 
-        """ 
-        
+        """
+
         # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
         date_start_url_regexp = self._date_start_url_regexp + start_date.strftime('%m%%2F%d%%2F%Y')
         date_end_url_regexp = self._date_end_url_regexp + end_date.strftime('%m%%2F%d%%2F%Y')
-        
+
         current_loc = self.selenium.get_location()
         if date_start_url_regexp in current_loc:
             pass

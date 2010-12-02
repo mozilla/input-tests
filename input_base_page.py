@@ -60,7 +60,7 @@ class InputBasePage(Page):
 
     _product_dropdown         =  "product"
     _version_dropdown         =  "version"
-    
+
     _current_when_link_locator = "css=#when a.selected"
     _when_links = ("link=1d", "link=7d", "link=30d")
     _show_custom_dates_locator = "id=show-custom-date"
@@ -68,7 +68,7 @@ class InputBasePage(Page):
     _custom_start_date_locator = "id=id_date_start"
     _custom_end_date_locator = "id=id_date_end"
     _set_custom_date_locator = "css=#custom-date button:contains(Set)"
-    
+
     _datepicker_locator = "id=ui-datepicker-div"
     _datepicker_month_locator = "css=.ui-datepicker-month"
     _datepicker_year_locator = "css=.ui-datepicker-year"
@@ -215,9 +215,9 @@ class InputBasePage(Page):
 
     def get_current_days(self):
         """
-        
+
         Returns the link text of the currently applied days filter
-        
+
         """
         if self.selenium.is_element_present(self._current_when_link_locator):
             return self.selenium.get_text(self._current_when_link_locator)
@@ -226,9 +226,9 @@ class InputBasePage(Page):
 
     def get_days_tooltip(self, days):
         """
-        
+
         Returns the tooltip for the days link 1d/7d/30d
-        
+
         """
         for time in self._when_links:
             if re.search(days,time,re.IGNORECASE) is None:
@@ -253,9 +253,9 @@ class InputBasePage(Page):
 
     def get_custom_dates_tooltip(self):
         """
-        
+
         Returns the tooltip for the custom dates filter link 1d/7d/30d
-        
+
         """
         return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
 
@@ -270,9 +270,9 @@ class InputBasePage(Page):
 
     def is_custom_date_filter_visible(self):
         """
-        
+
         Returns True if the custom date filter form is visible
-        
+
         """
         return self.selenium.is_visible(self._custom_dates_locator)
 
@@ -287,7 +287,7 @@ class InputBasePage(Page):
         """
         self.selenium.click(self._custom_start_date_locator)
         self.wait_for_datepicker_to_finish_animating()
-        
+
     def click_end_date(self):
         """
 
@@ -334,12 +334,12 @@ class InputBasePage(Page):
         targetYear = target_date.year
         yearDelta = targetYear - currentYear
         monthDelta = yearDelta * 12
-        
+
         months = {"January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
         currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
         targetMonth = target_date.month
         monthDelta += targetMonth - currentMonth
-        
+
         count = 0
         while (count < abs(monthDelta)):
             if monthDelta < 0:

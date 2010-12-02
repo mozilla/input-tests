@@ -96,14 +96,14 @@ class SearchDates(unittest.TestCase):
 
         feedback_obj.go_to_feedback_page()
         self.assertEqual(search_page_obj.get_custom_dates_tooltip(), "Custom")
-        
+
         start_date = date.today() - timedelta(days=3)
         end_date = date.today() - timedelta(days=1)
-        
+
         search_page_obj.filter_by_custom_dates(start_date, end_date)
         search_page_obj.verify_custom_dates_search_page_url(start_date, end_date)
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
-        
+
         # Check that the relevant days preset link is highlighted when the applied custom date filter matches it
         day_filters = ((1, "1d"), (7, "7d"), (30, "30d"))
         for days in day_filters:

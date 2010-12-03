@@ -39,6 +39,9 @@
 '''
 Created on Nov 24, 2010
 '''
+
+from datetime import date, timedelta
+
 import input_base_page
 import vars
 
@@ -53,6 +56,8 @@ class SearchResultsPage(input_base_page.InputBasePage):
     _messages_count              =  "css=div[id='big-count'] > p"
     _mobile_results_url_regexp   =  "product=mobile&version="
     _firefox_results_url_regexp  =  "product=firefox&version="
+    _date_start_url_regexp  =  "date_start="
+    _date_end_url_regexp  =  "date_end="
 
     def __init__(self, selenium):
         '''
@@ -106,3 +111,43 @@ class SearchResultsPage(input_base_page.InputBasePage):
 
         if not self.selenium.is_element_present(ver_tag):
             raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
+
+    def verify_preset_days_search_page_url(self, days):
+        """
+
+            Verifies date_start=(today - days) in the url
+
+        """
+
+        date_start = date.today() - timedelta(days=days)
+        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        date_start_url_regexp = self._date_start_url_regexp + date_start.strftime('%Y-%m-%d')
+
+        current_loc = self.selenium.get_location()
+        if date_start_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
+
+    def verify_custom_dates_search_page_url(self, start_date, end_date):
+        """
+
+            Verifies date_start=(start_date) in the url
+            Verifies date_end=(end_date) in the url
+
+        """
+
+        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        date_start_url_regexp = self._date_start_url_regexp + start_date.strftime('%m%%2F%d%%2F%Y')
+        date_end_url_regexp = self._date_end_url_regexp + end_date.strftime('%m%%2F%d%%2F%Y')
+
+        current_loc = self.selenium.get_location()
+        if date_start_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
+
+        if date_end_url_regexp in current_loc:
+            pass
+        else:
+            raise Exception('%s not found in %s' % (date_end_url_regexp, current_loc))

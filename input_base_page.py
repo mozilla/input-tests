@@ -140,9 +140,7 @@ class InputBasePage(Page):
         selected_ver = self.get_default_selected_version()
         if re.search(version, selected_ver, re.IGNORECASE) is None:
             for f_ver in self._fx_versions:
-                if re.search(version, f_ver, re.IGNORECASE) is None:
-                    continue
-                else:
+                if not re.search(version, f_ver, re.IGNORECASE) is None:
                     ver_label = "value=%s" % (f_ver)
                     self.selenium.select(self._version_dropdown,ver_label)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
@@ -155,9 +153,7 @@ class InputBasePage(Page):
         selected_ver = self.get_default_selected_version()
         if re.search(version, selected_ver, re.IGNORECASE) is None:
             for m_ver in self._mb_versions:
-                if re.search(version, m_ver, re.IGNORECASE) is None:
-                    continue
-                else:
+                if not re.search(version, m_ver, re.IGNORECASE) is None:
                     ver_label = "value=%s" % (m_ver)
                     self.selenium.select(self._version_dropdown,ver_label)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
@@ -168,9 +164,7 @@ class InputBasePage(Page):
         clicks 1d/7d/30d
         """
         for time in self._when_links:
-            if re.search(days, time, re.IGNORECASE) is None:
-                continue
-            else:
+            if not re.search(days, time, re.IGNORECASE) is None:
                 if not self.selenium.is_checked(time):
                     self.selenium.click(time)
                     break
@@ -180,9 +174,7 @@ class InputBasePage(Page):
         clicks Windows XP/ Android etc.
         """
         for plat in self._platforms:
-            if re.search(os, plat, re.IGNORECASE) is None:
-                continue
-            else:
+            if not re.search(os, plat, re.IGNORECASE) is None:
                 if not self.selenium.is_checked(plat):
                     self.selenium.click(plat)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
@@ -209,9 +201,7 @@ class InputBasePage(Page):
         clicks US/German/Spanish etc.
         """
         for country,loc_code in self._locales.iteritems():
-            if re.search(country_name, country, re.IGNORECASE) is None:
-                continue
-            else:
+            if not re.search(country_name, country, re.IGNORECASE) is None:
                 if not self.selenium.is_checked(loc_code):
                     self.selenium.click(loc_code)
                     self.selenium.wait_for_page_to_load(page_load_timeout)

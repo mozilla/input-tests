@@ -66,9 +66,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
         """
 
         current_loc = self.selenium.get_location()
-        if self._mobile_results_url_regexp in current_loc:
-            pass
-        else:
+        if not self._mobile_results_url_regexp in current_loc:
             raise Exception('%s not found in %s' % (self._mobile_results_url_regexp, current_loc))
 
     def verify_firefox_search_page_url(self):

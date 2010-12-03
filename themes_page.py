@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -16,10 +16,11 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2___
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
+#                 David Burns
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,18 +46,17 @@ import re
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
+
 class ThemesPage(input_base_page.InputBasePage):
-    
+
     _page_title              =  'Themes'
     _messages_count          =  "css=div[id='big-count'] > p"
 
-        
-    
     def __init__(self, selenium):
         '''
             Creates a new instance of the class
         '''
-        super(ThemesPage,self).__init__(selenium)
+        super(ThemesPage, self).__init__(selenium)
 
     def go_to_themes_page(self):
         self.sel.open('/en-US/themes/')
@@ -66,4 +66,3 @@ class ThemesPage(input_base_page.InputBasePage):
             count += 1
             if count == 20:
                 raise Exception("Themes Page has not loaded")
-

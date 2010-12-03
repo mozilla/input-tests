@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -16,10 +16,11 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2___
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
+#                 David Burns
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -44,25 +45,25 @@ import re
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
+
 class SearchResultsPage(input_base_page.InputBasePage):
-    
+
     _page_title                  =  'Search Results'
     _messages_count              =  "css=div[id='big-count'] > p"
     _mobile_results_url_regexp   =  "product=mobile&version="
     _firefox_results_url_regexp  =  "product=firefox&version="
-        
-    
+
     def __init__(self, selenium):
         '''
             Creates a new instance of the class
         '''
-        super(SearchResultsPage,self).__init__(selenium)
+        super(SearchResultsPage, self).__init__(selenium)
 
     def verify_mobile_search_page_url(self):
         """
             verifies ?product=mobile in the url
-        """ 
-        
+        """
+
         current_loc = self.selenium.get_location()
         if self._mobile_results_url_regexp in current_loc:
             pass
@@ -74,34 +75,34 @@ class SearchResultsPage(input_base_page.InputBasePage):
             verifies ?product=firefox in the url
             NOTE: if the site is on the homepage (not on the search
                  page) and default/latest version is selected then
-                the URL will not contain product=firefox&version=  
-        """ 
-        if re.search(self._page_title,self.selenium.get_title(),re.I) is None:
-            return 
+                the URL will not contain product=firefox&version=
+        """
+        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
+            return
         current_loc = self.selenium.get_location()
         if self._firefox_results_url_regexp in current_loc:
             pass
         else:
             raise Exception('%s not found in %s' % (self._firefox_results_url_regexp, current_loc))
 
-    def verify_search_form_prod_ver(self,prod,ver):
+    def verify_search_form_prod_ver(self, prod, ver):
         """
             verifies:
             product=firefox in <input type="hidden" value="firefox" name="product">
             and
             version=4.0b6 in <input type="hidden" value="4.0b6" name="version">
-            
+
             NOTE: if the site is on the homepage (not on the search
                  page) and default/latest version is selected for Fx
                  then <input type="hidden" value="4.0b7" name="version">
-                will not exist 
-        """ 
-        
-        prod_tag = "css=form[id='%s'] > input[value='%s']" % (self._search_form,prod)
-        ver_tag  = "css=form[id='%s'] > input[value='%s']" % (self._search_form,ver)
-        
-        if re.search(self._page_title,self.selenium.get_title(),re.I) is None:
-            return 
+                will not exist
+        """
+
+        prod_tag = "css=form[id='%s'] > input[value='%s']" % (self._search_form, prod)
+        ver_tag  = "css=form[id='%s'] > input[value='%s']" % (self._search_form, ver)
+
+        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
+            return
 
         if self.selenium.is_element_present(prod_tag):
             pass

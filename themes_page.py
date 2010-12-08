@@ -57,9 +57,9 @@ class ThemesPage(input_base_page.InputBasePage):
         self.selenium = selenium
 
     def go_to_themes_page(self):
-        self.sel.open('/en-US/themes/')
+        self.selenium.open('/en-US/themes/')
         count = 0
-        while (re.search(self._page_title, self.sel.get_location(), re.IGNORECASE)) is None:
+        while (re.search(self._page_title, self.selenium.get_location(), re.IGNORECASE)) is None:
             time.sleep(1)
             count += 1
             if count == 20:

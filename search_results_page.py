@@ -40,6 +40,7 @@
 Created on Nov 24, 2010
 '''
 
+from urlparse import urlparse
 from datetime import date, timedelta
 
 import input_base_page
@@ -111,6 +112,18 @@ class SearchResultsPage(input_base_page.InputBasePage):
 
         if not self.selenium.is_element_present(ver_tag):
             raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
+
+    @property
+    def type_from_url(self):
+        """
+
+            Returns the type from the current location URL
+
+        """
+
+        url = urlparse(self.selenium.get_location())
+        params = dict([part.split('=') for part in url[4].split('&')])
+        return params["s"]
 
     def verify_preset_days_search_page_url(self, days):
         """

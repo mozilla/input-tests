@@ -63,6 +63,12 @@ class InputBasePage(Page):
 
     _product_dropdown         =  "product"
     _version_dropdown         =  "version"
+    
+    _current_type_locator = "xpath=id('filters')//h3[text()='Type of Feedback']/following-sibling::div//a[@class='selected']"
+    _type_all_locator = "css=#filters a:contains(All)"
+    _type_praise_locator = "css=#filters a:contains(Praise)"
+    _type_issues_locator = "css=#filters a:contains(Issues)"
+    _type_suggestions_locator = "css=#filters a:contains(Suggestions)"
 
     _current_when_link_locator = "css=#when a.selected"
     _when_links = ("link=1d", "link=7d", "link=30d")
@@ -98,6 +104,9 @@ class InputBasePage(Page):
     _search_results_section    = "messages"
     _search_form               = "kw-search"
     _search_box                = "id_q"
+
+    _previous_page_locator = "css=.pager .prev"
+    _next_page_locator = "css=.pager .next"
 
     def __init__(self, selenium):
         """Create a new instance of the class & get the page ready for testing."""
@@ -218,6 +227,51 @@ class InputBasePage(Page):
                     self.selenium.select(self._version_dropdown,ver_label)
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
+
+    @property
+    def current_type(self):
+        """
+
+        Returns the link text of the currently applied type filter
+
+        """
+        return self.selenium.get_text(self._current_type_locator)
+
+    def click_type_all(self):
+        """
+
+        Clicks the 'All' type filter
+
+        """
+        self.selenium.click(self._type_all_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_praise(self):
+        """
+
+        Clicks the 'Praise' type filter
+
+        """
+        self.selenium.click(self._type_praise_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_issues(self):
+        """
+
+        Clicks the 'Issues' type filter
+
+        """
+        self.selenium.click(self._type_issues_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_suggestions(self):
+        """
+
+        Clicks the 'Suggestions' type filter
+
+        """
+        self.selenium.click(self._type_suggestions_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def get_current_days(self):
         """
@@ -429,3 +483,29 @@ class InputBasePage(Page):
     @property
     def message_count(self):
         return self.selenium.get_xpath_count('//li[@class="message"]')
+
+    @property
+    def praise_count(self):
+        return self.selenium.get_xpath_count('//p[@class="type praise"]')
+
+    @property
+    def issue_count(self):
+        return self.selenium.get_xpath_count('//p[@class="type issue"]')
+
+    def click_previous_page(self):
+        """
+
+        Navigates to the previous page of results
+
+        """
+        self.selenium.click(self._previous_page_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_next_page(self):
+        """
+
+        Navigates to the next page of results
+        
+        """
+        self.selenium.click(self._next_page_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)

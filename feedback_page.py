@@ -61,10 +61,4 @@ class FeedbackPage(input_base_page.InputBasePage):
     def go_to_feedback_page(self):
         """go to FD page and wait max of until regexp matches the url."""
         self.selenium.open('/')
-        current_loc = self.selenium.get_location()
-        count = 0
-        while not re.search(self._url_regex, current_loc, re.U):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Home Page has not loaded. Current url is %s" % (current_loc))
+        self.wait_for_page(self._url_regex)

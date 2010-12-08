@@ -124,7 +124,7 @@ class Page(object):
 
     def wait_for_page(self, url_regex):
         count = 0
-        while (re.search(url_regex, self.sel.get_location(), re.IGNORECASE)) is None:
+        while (re.search(url_regex, self.selenium.get_location(), re.IGNORECASE)) is None:
             time.sleep(1)
             count += 1
             if count == page_load_timeout/1000:

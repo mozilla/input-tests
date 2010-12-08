@@ -104,12 +104,7 @@ class InputBasePage(Page):
         self.selenium = selenium
         self.selenium.open('/')
         self.selenium.window_maximize()
-        count = 0
-        while not self.selenium.is_element_present(self._search_box):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Home Page has not loaded")
+        self.wait_for_element_present(self._search_box)
 
     def get_default_selected_product(self):
         """

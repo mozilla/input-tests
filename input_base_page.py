@@ -100,10 +100,8 @@ class InputBasePage(Page):
     _search_box                = "id_q"
 
     def __init__(self, selenium):
-        '''
-            Creates a new instance of the class
-        '''
-        super(InputBasePage, self).__init__(selenium)
+        """Create a new instance of the class & get the page ready for testing."""
+        self.selenium = selenium
         self.selenium.open('/')
         self.selenium.window_maximize()
         count = 0

@@ -51,19 +51,15 @@ class FeedbackPage(input_base_page.InputBasePage):
     
     _page_title              =  'Welcome'
     _messages_count          =  "css=div[id='big-count'] > p"
-    ''' matches input.stage.mozilla.com & input.mozilla.com'''
+    # Matches input.stage.mozilla.com & input.mozilla.com
     _url_regex               =  r'https?://input(\..*)?\.mozilla\.com/en\-US.'
 
     def __init__(self, selenium):
-        '''
-            Creates a new instance of the class
-        '''
-        super(FeedbackPage, self).__init__(selenium)
+        """Create a new instance of the class."""
+        self.selenium = selenium
 
     def go_to_feedback_page(self):
-        """
-            waits until regexp matched the url
-        """
+        """go to FD page and wait max of until regexp matches the url."""
         self.selenium.open('/')
         current_loc = self.selenium.get_location()
         count = 0

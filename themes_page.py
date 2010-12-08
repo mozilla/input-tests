@@ -53,10 +53,8 @@ class ThemesPage(input_base_page.InputBasePage):
     _messages_count          =  "css=div[id='big-count'] > p"
 
     def __init__(self, selenium):
-        '''
-            Creates a new instance of the class
-        '''
-        super(ThemesPage, self).__init__(selenium)
+        """Create a new instance of the class."""
+        self.selenium = selenium
 
     def go_to_themes_page(self):
         self.sel.open('/en-US/themes/')

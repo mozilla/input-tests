@@ -61,9 +61,4 @@ class SitesPage(input_base_page.InputBasePage):
 
     def go_to_sites_page(self):
         self.sel.open('/en-US/sites/')
-        count = 0
-        while (re.search(self._page_title, self.sel.get_location(), re.IGNORECASE)) is None:
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Sites Page has not loaded")
+        self.wait_for_page(self._page_title)

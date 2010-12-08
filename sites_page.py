@@ -60,5 +60,5 @@ class SitesPage(input_base_page.InputBasePage):
         self.selenium = selenium
 
     def go_to_sites_page(self):
-        self.sel.open('/en-US/sites/')
+        self.selenium.open('/en-US/sites/')
         self.wait_for_page(self._page_title)

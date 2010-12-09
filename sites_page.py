@@ -42,13 +42,11 @@ Created on Nov 24, 2010
 '''
 
 import input_base_page
-import vars
 
 import time
 import re
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
-
 
 class SitesPage(input_base_page.InputBasePage):
 

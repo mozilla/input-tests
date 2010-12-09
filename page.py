@@ -41,6 +41,7 @@ Created on Jun 21, 2010
 import re
 import time
 import vars
+import base64
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 

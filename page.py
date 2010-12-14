@@ -58,12 +58,6 @@ class Page(object):
         '''
         self.selenium = selenium
         
-        
-    def verify_page_title(self, title_regexp):
-        if (re.search(title_regexp, self.selenium.get_title()) is None):
-            raise Exception,'\r\nPage tile verification failed. Expected: %s; Actual:%s\r\n' %(title_regexp,self.selenium.get_title())
-       
-        
     def click_link(self, link, wait_flag=False,timeout=80000):
         self.selenium.click("link=%s" %(link))
         if(wait_flag):

@@ -113,59 +113,7 @@ class InputBasePage(Page):
         self.selenium = selenium
         self.selenium.open('/')
         self.selenium.window_maximize()
-        count = 0
-        while not self.selenium.is_element_present(self._search_box):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Home Page has not loaded")
-
-
-    def wait_for_element_present(self, element):
-        count = 0
-        while not self.selenium.is_element_present(element):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                self.record_error()
-                raise Exception(element + ' has not loaded')
-
-    def wait_for_element_visible(self, element):
-        self.wait_for_element_present(element)
-        count = 0
-        while not self.selenium.is_visible(element):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                self.record_error()
-                raise Exception(element + " is not visible")
-
-    def wait_for_element_not_visible(self, element):
-        count = 0
-        while self.selenium.is_visible(element):
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                self.record_error()
-                raise Exception(element + " is still visible")
-
-    def record_error(self):
-        '''
-
-        Records an error.
-
-        '''
-        print '-------------------'
-        print 'Error at ' + self.selenium.get_location()
-        print 'Page title ' + self.selenium.get_title()
-        print '-------------------'
-        filename = 'input_' + str(time.time()).split('.')[0] + '.png'
-
-        print 'Screenshot of error in file ' + filename
-        f = open(filename, 'wb')
-        f.write(base64.decodestring(
-            self.selenium.capture_entire_page_screenshot_to_string('')))
-        f.close()
+        self.wait_for_element_present(self._search_box)
 
     def get_default_selected_product(self):
         """

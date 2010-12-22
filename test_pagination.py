@@ -61,7 +61,7 @@ class TestPagination(unittest.TestCase):
 
         This testcase covers # 1508 in Litmus
         1. Verifies the filter is in the URL
-        2. Verifies the currently applied filter is style appropriately
+        2. Verifies the currently applied filter is styled appropriately
         3. Verifies the currently results of the filter
 
         """

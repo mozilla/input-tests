@@ -39,13 +39,11 @@
 Created on Nov 24, 2010
 '''
 import input_base_page
-import vars
 
 import time
 import re
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
-
 
 class ThemesPage(input_base_page.InputBasePage):
 
@@ -58,9 +56,4 @@ class ThemesPage(input_base_page.InputBasePage):
 
     def go_to_themes_page(self):
         self.sel.open('/en-US/themes/')
-        count = 0
-        while (re.search(self._page_title, self.sel.get_location(), re.IGNORECASE)) is None:
-            time.sleep(1)
-            count += 1
-            if count == 20:
-                raise Exception("Themes Page has not loaded")
+        self.wait_for_page(self._page_title)

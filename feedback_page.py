@@ -37,27 +37,19 @@
 '''
 Created on Nov 19, 2010
 '''
-
 import input_base_page
-import vars
-
-import time
-import re
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class FeedbackPage(input_base_page.InputBasePage):
-    
-    _page_title              =  'Welcome'
-    _messages_count          =  "css=div[id='big-count'] > p"
-    # Matches input.stage.mozilla.com & input.mozilla.com
-    _url_regex               =  r'https?://input(\..*)?\.mozilla\.com/en\-US.'
+
+    _page_title = 'Welcome :: Firefox Input'
 
     def __init__(self, selenium):
         self.selenium = selenium
 
     def go_to_feedback_page(self):
-        """go to FD page and wait max of until regexp matches the url."""
         self.selenium.open('/')
-        self.wait_for_page(self._url_regex)
+        page_title = self.selenium.get_title()
+        if not page_title == self._page_title:
+            self.record_error()
+            raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")

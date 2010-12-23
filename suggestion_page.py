@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -45,9 +47,9 @@ import vars
 
 
 class SuggestionPage(input_base_page.InputBasePage):
-    
-    _page_title = 'Submit Feedback'
-    
+
+    _page_title = u'Submit Feedback \u2014 Firefox Input'
+
     _suggestion_locator = 'id=id_description'
     _remaining_character_count_locator = 'id=count'
     _submit_feedback_locator = 'css=button[type=submit]'
@@ -56,7 +58,11 @@ class SuggestionPage(input_base_page.InputBasePage):
         self.selenium = selenium
 
     def go_to_suggestion_page(self):
-        self.selenium.open('/en-US/suggestion/')
+        self.selenium.open('/suggestion/')
+        page_title = unicode(self.selenium.get_title())
+        if not page_title == self._page_title:
+            self.record_error()
+            raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
 
     def set_suggestion(self, suggestion):
         self.selenium.type_keys(self._suggestion_locator, suggestion)

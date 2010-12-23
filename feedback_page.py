@@ -55,7 +55,6 @@ class FeedbackPage(input_base_page.InputBasePage):
     _url_regex               =  r'https?://input(\..*)?\.mozilla\.com/en\-US.'
 
     def __init__(self, selenium):
-        """Create a new instance of the class."""
         self.selenium = selenium
 
     def go_to_feedback_page(self):

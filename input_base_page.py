@@ -222,7 +222,7 @@ class InputBasePage(Page):
         return self.selenium.is_visible(self._custom_dates_locator)
 
     def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollHeight == 184", 10000)
+        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
 
     def click_start_date(self):
         """

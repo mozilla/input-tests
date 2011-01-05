@@ -40,20 +40,17 @@ Created on Nov 24, 2010
 '''
 import input_base_page
 
-import time
-import re
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 class ThemesPage(input_base_page.InputBasePage):
 
-    _page_title              =  'Themes'
-    _messages_count          =  "css=div[id='big-count'] > p"
+    _page_title = 'Themes :: Firefox Input'
 
     def __init__(self, selenium):
-        """Create a new instance of the class."""
         self.selenium = selenium
 
     def go_to_themes_page(self):
-        self.sel.open('/en-US/themes/')
-        self.wait_for_page(self._page_title)
+        self.selenium.open('/themes/')
+        page_title = self.selenium.get_title()
+        if not page_title == self._page_title:
+            self.record_error()
+            raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")

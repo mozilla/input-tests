@@ -109,42 +109,20 @@ class SearchResultsPage(input_base_page.InputBasePage):
         """
         return self._value_from_url("version")
 
-    def verify_preset_days_search_page_url(self, days):
+    @property
+    def date_start_from_url(self):
         """
 
-            Verifies date_start=(today - days) in the url
+        Returns the date_start value from the current location URL
 
         """
+        return self._value_from_url("date_start")
 
-        date_start = date.today() - timedelta(days=days)
-        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        date_start_url_regexp = self._date_start_url_regexp + date_start.strftime('%Y-%m-%d')
-
-        current_loc = self.selenium.get_location()
-        if date_start_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
-
-    def verify_custom_dates_search_page_url(self, start_date, end_date):
+    @property
+    def date_end_from_url(self):
         """
 
-            Verifies date_start=(start_date) in the url
-            Verifies date_end=(end_date) in the url
+        Returns the date_end value from the current location URL
 
         """
-
-        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        date_start_url_regexp = self._date_start_url_regexp + start_date.strftime('%m%%2F%d%%2F%Y')
-        date_end_url_regexp = self._date_end_url_regexp + end_date.strftime('%m%%2F%d%%2F%Y')
-
-        current_loc = self.selenium.get_location()
-        if date_start_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
-
-        if date_end_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_end_url_regexp, current_loc))
+        return self._value_from_url("date_end")

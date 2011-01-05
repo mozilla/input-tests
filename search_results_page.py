@@ -41,6 +41,7 @@ Created on Nov 24, 2010
 
 from datetime import date, timedelta
 
+from urlparse import urlparse
 import input_base_page
 import vars
 
@@ -64,52 +65,48 @@ class SearchResultsPage(input_base_page.InputBasePage):
         '''
         super(SearchResultsPage, self).__init__(selenium)
 
-    def verify_mobile_search_page_url(self):
-        """
-            verifies ?product=mobile in the url
+    def _value_from_url(self, param):
         """
 
-        current_loc = self.selenium.get_location()
-        if not self._mobile_results_url_regexp in current_loc:
-            raise Exception('%s not found in %s' % (self._mobile_results_url_regexp, current_loc))
+        Returns the value for the specified parameter in the URL
 
-    def verify_firefox_search_page_url(self):
         """
-            verifies ?product=firefox in the url
-            NOTE: if the site is on the homepage (not on the search
-                 page) and default/latest version is selected then
-                the URL will not contain product=firefox&version=
-        """
-        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
-            return
-        current_loc = self.selenium.get_location()
-        if not self._firefox_results_url_regexp in current_loc:
-            raise Exception('%s not found in %s' % (self._firefox_results_url_regexp, current_loc))
+        url = urlparse(self.selenium.get_location())
+        params = dict([part.split('=') for part in url[4].split('&')])
+        return params[param]
 
-    def verify_search_form_prod_ver(self, prod, ver):
-        """
-            verifies:
-            product=firefox in <input type="hidden" value="firefox" name="product">
-            and
-            version=4.0b6 in <input type="hidden" value="4.0b6" name="version">
-
-            NOTE: if the site is on the homepage (not on the search
-                 page) and default/latest version is selected for Fx
-                 then <input type="hidden" value="4.0b7" name="version">
-                will not exist
+    @property
+    def type_from_url(self):
         """
 
-        prod_tag = "css=form[id='%s'] > input[value='%s']" % (self._search_form, prod)
-        ver_tag  = "css=form[id='%s'] > input[value='%s']" % (self._search_form, ver)
+        Returns the type from the current location URL
 
-        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
-            return
+        """
+        return self._value_from_url("s")
 
-        if not self.selenium.is_element_present(prod_tag):
-            raise Exception('%s not found in %s' % (prod_tag, self.selenium.get_location()))
+    @property
+    def product_from_url(self):
+        """
 
-        if not self.selenium.is_element_present(ver_tag):
-            raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
+        Returns the product from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the product parameter
+
+        """
+        return self._value_from_url("product")
+
+    @property
+    def version_from_url(self):
+        """
+
+        Returns the version from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the version parameter
+
+        """
+        return self._value_from_url("version")
 
     def verify_preset_days_search_page_url(self, days):
         """

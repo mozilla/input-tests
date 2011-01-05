@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 David Burns
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -58,64 +59,40 @@ class SearchFirefox(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_that_app_filter_versions_exist(self):
+    def test_filter_feedback_by_product_and_version(self):
         """
-            this tc covers tc # 13601 & 13602 in litmus
-            1. verifies product=<name>&version=<num> in the url
-            2. verifies all the Fx/Mobile versions exists in
-               the search filters
-        """
-        sel = self.selenium
-        feedback_obj        = feedback_page.FeedbackPage(sel)
-        search_page_obj     = search_results_page.SearchResultsPage(sel)
 
-        feedback_obj.go_to_feedback_page()
-        feedback_obj.select_prod_firefox()
-        feedback_obj.select_firefox_version('b7')
-        search_page_obj.verify_firefox_search_page_url()
+        This testcase covers # 13601, 13602, 13603 & 13604 in Litmus
+        1. Verify the correct products exist
+        2. Verify the correct product versions exist
+        3. Verify that each of the versions return results
+        4. Verify that the state of the filters are correct after being applied
+        5. Verify product and version values in the URL
 
-        feedback_obj.select_firefox_version('b6')
-        search_page_obj.verify_firefox_search_page_url()
-
-        feedback_obj.go_to_feedback_page()
-        feedback_obj.select_prod_mobile()
-        feedback_obj.select_mobile_version('4.0b2')
-        search_page_obj.verify_mobile_search_page_url()
-
-        feedback_obj.select_mobile_version('4.0b1')
-        search_page_obj.verify_mobile_search_page_url()
-
-        feedback_obj.go_to_feedback_page()
-        feedback_obj.select_prod_firefox()
-        feedback_obj.verify_all_firefox_versions()
-
-        feedback_obj.go_to_feedback_page()
-        feedback_obj.select_prod_mobile()
-        feedback_obj.verify_all_mobile_versions()
-
-    def test_that_search_page_results_match_search_query(self):
-        """
-            this tc covers tc # 13603 & 13604 in litmus
-            verifies:
-            product=firefox in <input type="hidden" value="firefox" name="product">
-            and
-            version=4.0b6 in <input type="hidden" value="4.0b6" name="version">
         """
         sel = self.selenium
-        feedback_obj        = feedback_page.FeedbackPage(sel)
-        search_page_obj     = search_results_page.SearchResultsPage(sel)
+        feedback_pg = feedback_page.FeedbackPage(sel)
+        search_results_pg = search_results_page.SearchResultsPage(sel)
 
-        feedback_obj.go_to_feedback_page()
-        for ver in feedback_obj._fx_versions:
-            feedback_obj.select_prod_firefox()
-            feedback_obj.select_firefox_version(ver)
-            search_page_obj.verify_search_form_prod_ver(feedback_obj._app_name_fx, ver)
+        products = (
+            {"name": "firefox", "versions": ["4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1"]},
+            {"name": "mobile", "versions": ["4.0b3", "4.0b2", "4.0b1"]}
+        )
 
-        feedback_obj.go_to_feedback_page()
-        for ver in feedback_obj._mobile_versions:
-            feedback_obj.select_prod_mobile()
-            feedback_obj.select_mobile_version(ver)
-            search_page_obj.verify_search_form_prod_ver(feedback_obj._app_name_mb, ver)
+        feedback_pg.go_to_feedback_page()
+        self.assertEqual(len(feedback_pg.products), len(products))
+        for product in products:
+            feedback_pg.select_product(product["name"])
+            # Add an empty version so we can check the filter for all versions of the current product
+            product["versions"].insert(0, "")
+            self.assertEqual(len(feedback_pg.versions), len(product["versions"]))
+            for version in product["versions"]:
+                print "Checking product '%s' and version '%s'." % (product["name"], version)
+                feedback_pg.select_version(version)
+                self.assertEqual(feedback_pg.selected_product, product["name"])
+                self.assertEqual(feedback_pg.selected_version, version)
+                self.assertEqual(search_results_pg.product_from_url, product["name"])
+                self.assertEqual(search_results_pg.version_from_url, version)
 
 if __name__ == "__main__":
     unittest.main()

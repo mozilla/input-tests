@@ -79,10 +79,10 @@ class SearchFirefox(unittest.TestCase):
 
         feedback_obj.go_to_feedback_page()
         feedback_obj.select_prod_mobile()
-        feedback_obj.select_mobile_version('b2')
+        feedback_obj.select_mobile_version('4.0b2')
         search_page_obj.verify_mobile_search_page_url()
 
-        feedback_obj.select_mobile_version('b1')
+        feedback_obj.select_mobile_version('4.0b1')
         search_page_obj.verify_mobile_search_page_url()
 
         feedback_obj.go_to_feedback_page()
@@ -112,7 +112,7 @@ class SearchFirefox(unittest.TestCase):
             search_page_obj.verify_search_form_prod_ver(feedback_obj._app_name_fx, ver)
 
         feedback_obj.go_to_feedback_page()
-        for ver in feedback_obj._mb_versions:
+        for ver in feedback_obj._mobile_versions:
             feedback_obj.select_prod_mobile()
             feedback_obj.select_mobile_version(ver)
             search_page_obj.verify_search_form_prod_ver(feedback_obj._app_name_mb, ver)

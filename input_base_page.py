@@ -59,7 +59,7 @@ class InputBasePage(Page):
 
     _fx_versions              =  ("4.0b1", "4.0b2", "4.0b3", "4.0b4", "4.0b5", "4.0b6", "4.0b7")
 
-    _mb_versions              =  ("1.1", "1.1b1", "4.0b1", "4.0b2")
+    _mobile_versions = ("4.0b1", "4.0b2", "4.0b3")
 
     _product_dropdown         =  "product"
     _version_dropdown         =  "version"
@@ -134,18 +134,18 @@ class InputBasePage(Page):
             self.selenium.select(self._product_dropdown, app_label)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def get_default_selected_version(self):
+    @property
+    def selected_version(self):
         """
-        returns the version selected in the filter by default
+        returns the currently selected product version
         """
-        selected_ver = self.selenium.get_selected_value(self._version_dropdown)
-        return selected_ver
+        return self.selenium.get_selected_value(self._version_dropdown)
 
     def select_firefox_version(self, version):
         """
         selects firefox version,4.0b1
         """
-        selected_ver = self.get_default_selected_version()
+        selected_ver = self.selected_version
         if re.search(version, selected_ver, re.IGNORECASE) is None:
             for f_ver in self._fx_versions:
                 if not re.search(version, f_ver, re.IGNORECASE) is None:
@@ -154,18 +154,13 @@ class InputBasePage(Page):
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
 
-    def select_mobile_version(self,version):
+    def select_mobile_version(self, version):
         """
-        selects mobile version,4.0b1
+        selects mobile version
         """
-        selected_ver = self.get_default_selected_version()
-        if re.search(version, selected_ver, re.IGNORECASE) is None:
-            for m_ver in self._mb_versions:
-                if not re.search(version, m_ver, re.IGNORECASE) is None:
-                    ver_label = "value=%s" % (m_ver)
-                    self.selenium.select(self._version_dropdown,ver_label)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
+        if not version == self.selected_version:
+            self.selenium.select(self._version_dropdown, version)
+            self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def get_current_days(self):
         """
@@ -364,7 +359,7 @@ class InputBasePage(Page):
         """
             checks all mobile versions are present
         """
-        for version in self._mb_versions:
+        for version in self._mobile_versions:
             version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
             if not (self.selenium.is_element_present(version_locator)):
                 raise Exception('Version %s not found in the filter' % (version))

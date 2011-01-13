@@ -59,7 +59,7 @@ class SearchFirefox(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_filter_feedback_by_product_and_version(self):
+    def test_feedback_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 
         This testcase covers # 13601, 13602, 13603 & 13604 in Litmus

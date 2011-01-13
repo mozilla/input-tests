@@ -45,10 +45,16 @@ import vars
 import unittest
 
 import feedback_page
+import sites_page
 import search_results_page
 
 
 class SearchFirefox(unittest.TestCase):
+
+    _products = (
+        {"name": "firefox", "versions": ["4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1"]},
+        {"name": "mobile", "versions": ["4.0b3", "4.0b2", "4.0b1"]}
+    )
 
     def setUp(self):
         self.selenium = selenium(vars.ConnectionParameters.server, vars.ConnectionParameters.port,
@@ -74,14 +80,9 @@ class SearchFirefox(unittest.TestCase):
         feedback_pg = feedback_page.FeedbackPage(sel)
         search_results_pg = search_results_page.SearchResultsPage(sel)
 
-        products = (
-            {"name": "firefox", "versions": ["4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1"]},
-            {"name": "mobile", "versions": ["4.0b3", "4.0b2", "4.0b1"]}
-        )
-
         feedback_pg.go_to_feedback_page()
-        self.assertEqual(len(feedback_pg.products), len(products))
-        for product in products:
+        self.assertEqual(len(feedback_pg.products), len(self._products))
+        for product in self._products:
             feedback_pg.select_product(product["name"])
             # Add an empty version so we can check the filter for all versions of the current product
             product["versions"].insert(0, "")
@@ -91,6 +92,36 @@ class SearchFirefox(unittest.TestCase):
                 feedback_pg.select_version(version)
                 self.assertEqual(feedback_pg.selected_product, product["name"])
                 self.assertEqual(feedback_pg.selected_version, version)
+                self.assertEqual(search_results_pg.product_from_url, product["name"])
+                self.assertEqual(search_results_pg.version_from_url, version)
+
+    def test_sites_can_be_filtered_by_all_expected_products_and_versions(self):
+        """
+
+        This testcase covers # 15042, 15043, 15044 & 15045 in Litmus
+        1. Verify the correct products exist
+        2. Verify the correct product versions exist
+        3. Verify that each of the versions return results
+        4. Verify that the state of the filters are correct after being applied
+        5. Verify product and version values in the URL
+
+        """
+        sel = self.selenium
+        sites_pg = sites_page.SitesPage(sel)
+        search_results_pg = search_results_page.SearchResultsPage(sel)
+
+        sites_pg.go_to_sites_page()
+        self.assertEqual(len(sites_pg.products), len(self._products))
+        for product in self._products:
+            sites_pg.select_product(product["name"])
+            self.assertEqual(len(sites_pg.versions), len(product["versions"]))
+            # Reverse version order because latest version is selected by default
+            product["versions"].reverse()
+            for version in product["versions"]:
+                print "Checking product '%s' and version '%s'." % (product["name"], version)
+                sites_pg.select_version(version)
+                self.assertEqual(sites_pg.selected_product, product["name"])
+                self.assertEqual(sites_pg.selected_version, version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 

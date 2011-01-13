@@ -77,10 +77,10 @@ class SearchResultsPage(input_base_page.InputBasePage):
         return params[param]
 
     @property
-    def type_from_url(self):
+    def feedback_type_from_url(self):
         """
 
-        Returns the type from the current location URL
+        Returns the feedback type (praise, issues, suggestions) from the current location URL
 
         """
         return self._value_from_url("s")

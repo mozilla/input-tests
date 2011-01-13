@@ -52,8 +52,8 @@ import search_results_page
 class SearchFirefox(unittest.TestCase):
 
     _products = (
-        {"name": "firefox", "versions": ["4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1"]},
-        {"name": "mobile", "versions": ["4.0b3", "4.0b2", "4.0b1"]}
+        {"name": "firefox", "versions": ("4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
+        {"name": "mobile", "versions": ("4.0b3", "4.0b2", "4.0b1")}
     )
 
     def setUp(self):
@@ -84,10 +84,11 @@ class SearchFirefox(unittest.TestCase):
         self.assertEqual(len(feedback_pg.products), len(self._products))
         for product in self._products:
             feedback_pg.select_product(product["name"])
+            versions = list(product["versions"])
             # Add an empty version so we can check the filter for all versions of the current product
-            product["versions"].insert(0, "")
-            self.assertEqual(len(feedback_pg.versions), len(product["versions"]))
-            for version in product["versions"]:
+            versions.insert(0, "")
+            self.assertEqual(len(feedback_pg.versions), len(versions))
+            for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 feedback_pg.select_version(version)
                 self.assertEqual(feedback_pg.selected_product, product["name"])
@@ -114,10 +115,11 @@ class SearchFirefox(unittest.TestCase):
         self.assertEqual(len(sites_pg.products), len(self._products))
         for product in self._products:
             sites_pg.select_product(product["name"])
-            self.assertEqual(len(sites_pg.versions), len(product["versions"]))
+            versions = list(product["versions"])
+            self.assertEqual(len(sites_pg.versions), len(versions))
             # Reverse version order because latest version is selected by default
-            product["versions"].reverse()
-            for version in product["versions"]:
+            versions.reverse()
+            for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 sites_pg.select_version(version)
                 self.assertEqual(sites_pg.selected_product, product["name"])

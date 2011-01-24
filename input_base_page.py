@@ -23,6 +23,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -61,8 +62,8 @@ class InputBasePage(Page):
 
     _mobile_versions = ("4.0b1", "4.0b2", "4.0b3")
 
-    _product_dropdown         =  "product"
-    _version_dropdown         =  "version"
+    _product_dropdown_locator = "id=product"
+    _version_dropdown_locator = "id=version"
     
     _current_type_locator = "xpath=id('filters')//h3[text()='Type of Feedback']/following-sibling::div//a[@class='selected']"
     _type_all_locator = "css=#filters a:contains(All)"
@@ -115,60 +116,48 @@ class InputBasePage(Page):
         self.selenium.window_maximize()
         self.wait_for_element_present(self._search_box)
 
-    def get_default_selected_product(self):
+    @property
+    def products(self):
         """
-        returns the product selected in the filter by default
+        returns a list of available products
         """
-        param_val = self._product_dropdown + "@data-selected"
-        selected_app = self.selenium.get_attribute(param_val)
-        return selected_app
+        return self.selenium.get_select_options(self._product_dropdown_locator)
 
-    def select_prod_firefox(self):
+    @property
+    def selected_product(self):
         """
-        selects Firefox from Product filter
+        returns the currently selected product
         """
-        selected_app = self.get_default_selected_product()
-        if re.search(self._app_name_fx, selected_app, re.IGNORECASE) is None:
-            app_label = "value=%s" % (self._app_name_fx)
-            self.selenium.select(self._product_dropdown, app_label)
+        return self.selenium.get_selected_value(self._product_dropdown_locator)
+
+    def select_product(self, product):
+        """
+        selects product
+        """
+        if not product == self.selected_product:
+            self.selenium.select(self._product_dropdown_locator, "value=" + product)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def select_prod_mobile(self):
+    @property
+    def versions(self):
         """
-        selects Mobile from Product filter
+        returns a list of available versions
         """
-        selected_app = self.get_default_selected_product()
-        if re.search(self._app_name_mb, selected_app, re.IGNORECASE) is None:
-            app_label = "value=%s" % (self._app_name_mb)
-            self.selenium.select(self._product_dropdown, app_label)
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+        return self.selenium.get_select_options(self._version_dropdown_locator) 
 
     @property
     def selected_version(self):
         """
         returns the currently selected product version
         """
-        return self.selenium.get_selected_value(self._version_dropdown)
+        return self.selenium.get_selected_value(self._version_dropdown_locator)
 
-    def select_firefox_version(self, version):
+    def select_version(self, version):
         """
-        selects firefox version,4.0b1
-        """
-        selected_ver = self.selected_version
-        if re.search(version, selected_ver, re.IGNORECASE) is None:
-            for f_ver in self._fx_versions:
-                if not re.search(version, f_ver, re.IGNORECASE) is None:
-                    ver_label = "value=%s" % (f_ver)
-                    self.selenium.select(self._version_dropdown,ver_label)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
-
-    def select_mobile_version(self, version):
-        """
-        selects mobile version
+        selects product version
         """
         if not version == self.selected_version:
-            self.selenium.select(self._version_dropdown, version)
+            self.selenium.select(self._version_dropdown_locator, "value=" + version)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
     @property

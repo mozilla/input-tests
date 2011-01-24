@@ -43,7 +43,6 @@ Created on Nov 24, 2010
 from urlparse import urlparse
 from datetime import date, timedelta
 
-from urlparse import urlparse
 import input_base_page
 import vars
 

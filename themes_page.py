@@ -44,7 +44,7 @@ import input_base_page
 class ThemesPage(input_base_page.InputBasePage):
 
     _page_title = 'Themes :: Firefox Input'
-    
+
     _current_type_locator = "css=#filter_type a.selected"
 
     def __init__(self, selenium):

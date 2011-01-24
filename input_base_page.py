@@ -64,7 +64,7 @@ class InputBasePage(Page):
 
     _product_dropdown_locator = "id=product"
     _version_dropdown_locator = "id=version"
-    
+
     _type_all_locator = "css=#filters a:contains(All)"
     _type_praise_locator = "css=#filters a:contains(Praise)"
     _type_issues_locator = "css=#filters a:contains(Issues)"
@@ -142,7 +142,7 @@ class InputBasePage(Page):
         """
         returns a list of available versions
         """
-        return self.selenium.get_select_options(self._version_dropdown_locator) 
+        return self.selenium.get_select_options(self._version_dropdown_locator)
 
     @property
     def selected_version(self):
@@ -427,7 +427,7 @@ class InputBasePage(Page):
         """
 
         Navigates to the next page of results
-        
+
         """
         self.selenium.click(self._next_page_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)

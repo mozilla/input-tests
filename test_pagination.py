@@ -69,7 +69,7 @@ class TestPagination(unittest.TestCase):
         selenium = self.selenium
         themes_page_obj = themes_page.ThemesPage(selenium)
         search_results_page_obj = search_results_page.SearchResultsPage(selenium)
-        
+
         themes_page_obj.go_to_themes_page()
         themes_page_obj.click_type_issues()
         themes_page_obj.click_next_page()

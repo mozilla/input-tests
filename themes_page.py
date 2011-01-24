@@ -44,6 +44,8 @@ import input_base_page
 class ThemesPage(input_base_page.InputBasePage):
 
     _page_title = 'Themes :: Firefox Input'
+    
+    _current_type_locator = "css=#filter_type a.selected"
 
     def __init__(self, selenium):
         self.selenium = selenium
@@ -54,3 +56,12 @@ class ThemesPage(input_base_page.InputBasePage):
         if not page_title == self._page_title:
             self.record_error()
             raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
+
+    @property
+    def current_type(self):
+        """
+
+        Returns the link text of the currently applied type filter
+
+        """
+        return self.selenium.get_text(self._current_type_locator)

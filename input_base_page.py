@@ -65,7 +65,6 @@ class InputBasePage(Page):
     _product_dropdown_locator = "id=product"
     _version_dropdown_locator = "id=version"
     
-    _current_type_locator = "xpath=id('filters')//h3[text()='Type of Feedback']/following-sibling::div//a[@class='selected']"
     _type_all_locator = "css=#filters a:contains(All)"
     _type_praise_locator = "css=#filters a:contains(Praise)"
     _type_issues_locator = "css=#filters a:contains(Issues)"
@@ -159,15 +158,6 @@ class InputBasePage(Page):
         if not version == self.selected_version:
             self.selenium.select(self._version_dropdown_locator, "value=" + version)
             self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    @property
-    def current_type(self):
-        """
-
-        Returns the link text of the currently applied type filter
-
-        """
-        return self.selenium.get_text(self._current_type_locator)
 
     def click_type_all(self):
         """

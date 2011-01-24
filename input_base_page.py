@@ -19,10 +19,11 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2___
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -59,10 +60,15 @@ class InputBasePage(Page):
 
     _fx_versions              =  ("4.0b1", "4.0b2", "4.0b3", "4.0b4", "4.0b5", "4.0b6", "4.0b7")
 
-    _mb_versions              =  ("1.1", "1.1b1", "4.0b1", "4.0b2")
+    _mobile_versions = ("4.0b1", "4.0b2", "4.0b3")
 
-    _product_dropdown         =  "product"
-    _version_dropdown         =  "version"
+    _product_dropdown_locator = "id=product"
+    _version_dropdown_locator = "id=version"
+
+    _type_all_locator = "css=#filters a:contains(All)"
+    _type_praise_locator = "css=#filters a:contains(Praise)"
+    _type_issues_locator = "css=#filters a:contains(Issues)"
+    _type_suggestions_locator = "css=#filters a:contains(Suggestions)"
 
     _current_when_link_locator = "css=#when a.selected"
     _when_links = ("link=1d", "link=7d", "link=30d")
@@ -99,6 +105,9 @@ class InputBasePage(Page):
     _search_form               = "kw-search"
     _search_box                = "id_q"
 
+    _previous_page_locator = "css=.pager .prev"
+    _next_page_locator = "css=.pager .next"
+
     def __init__(self, selenium):
         """Create a new instance of the class & get the page ready for testing."""
         self.selenium = selenium
@@ -106,66 +115,85 @@ class InputBasePage(Page):
         self.selenium.window_maximize()
         self.wait_for_element_present(self._search_box)
 
-    def get_default_selected_product(self):
+    @property
+    def products(self):
         """
-        returns the product selected in the filter by default
+        returns a list of available products
         """
-        param_val = self._product_dropdown + "@data-selected"
-        selected_app = self.selenium.get_attribute(param_val)
-        return selected_app
+        return self.selenium.get_select_options(self._product_dropdown_locator)
 
-    def select_prod_firefox(self):
+    @property
+    def selected_product(self):
         """
-        selects Firefox from Product filter
+        returns the currently selected product
         """
-        selected_app = self.get_default_selected_product()
-        if re.search(self._app_name_fx, selected_app, re.IGNORECASE) is None:
-            app_label = "value=%s" % (self._app_name_fx)
-            self.selenium.select(self._product_dropdown, app_label)
+        return self.selenium.get_selected_value(self._product_dropdown_locator)
+
+    def select_product(self, product):
+        """
+        selects product
+        """
+        if not product == self.selected_product:
+            self.selenium.select(self._product_dropdown_locator, "value=" + product)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def select_prod_mobile(self):
+    @property
+    def versions(self):
         """
-        selects Mobile from Product filter
+        returns a list of available versions
         """
-        selected_app = self.get_default_selected_product()
-        if re.search(self._app_name_mb, selected_app, re.IGNORECASE) is None:
-            app_label = "value=%s" % (self._app_name_mb)
-            self.selenium.select(self._product_dropdown, app_label)
+        return self.selenium.get_select_options(self._version_dropdown_locator)
+
+    @property
+    def selected_version(self):
+        """
+        returns the currently selected product version
+        """
+        return self.selenium.get_selected_value(self._version_dropdown_locator)
+
+    def select_version(self, version):
+        """
+        selects product version
+        """
+        if not version == self.selected_version:
+            self.selenium.select(self._version_dropdown_locator, "value=" + version)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def get_default_selected_version(self):
+    def click_type_all(self):
         """
-        returns the version selected in the filter by default
-        """
-        selected_ver = self.selenium.get_selected_value(self._version_dropdown)
-        return selected_ver
 
-    def select_firefox_version(self, version):
-        """
-        selects firefox version,4.0b1
-        """
-        selected_ver = self.get_default_selected_version()
-        if re.search(version, selected_ver, re.IGNORECASE) is None:
-            for f_ver in self._fx_versions:
-                if not re.search(version, f_ver, re.IGNORECASE) is None:
-                    ver_label = "value=%s" % (f_ver)
-                    self.selenium.select(self._version_dropdown,ver_label)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
+        Clicks the 'All' type filter
 
-    def select_mobile_version(self,version):
         """
-        selects mobile version,4.0b1
+        self.selenium.click(self._type_all_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_praise(self):
         """
-        selected_ver = self.get_default_selected_version()
-        if re.search(version, selected_ver, re.IGNORECASE) is None:
-            for m_ver in self._mb_versions:
-                if not re.search(version, m_ver, re.IGNORECASE) is None:
-                    ver_label = "value=%s" % (m_ver)
-                    self.selenium.select(self._version_dropdown,ver_label)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
+
+        Clicks the 'Praise' type filter
+
+        """
+        self.selenium.click(self._type_praise_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_issues(self):
+        """
+
+        Clicks the 'Issues' type filter
+
+        """
+        self.selenium.click(self._type_issues_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_type_suggestions(self):
+        """
+
+        Clicks the 'Suggestions' type filter
+
+        """
+        self.selenium.click(self._type_suggestions_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def get_current_days(self):
         """
@@ -227,7 +255,7 @@ class InputBasePage(Page):
         return self.selenium.is_visible(self._custom_dates_locator)
 
     def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollHeight == 184", 10000)
+        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
 
     def click_start_date(self):
         """
@@ -364,7 +392,7 @@ class InputBasePage(Page):
         """
             checks all mobile versions are present
         """
-        for version in self._mb_versions:
+        for version in self._mobile_versions:
             version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
             if not (self.selenium.is_element_present(version_locator)):
                 raise Exception('Version %s not found in the filter' % (version))
@@ -377,3 +405,29 @@ class InputBasePage(Page):
     @property
     def message_count(self):
         return self.selenium.get_xpath_count('//li[@class="message"]')
+
+    @property
+    def praise_count(self):
+        return self.selenium.get_xpath_count('//p[@class="type praise"]')
+
+    @property
+    def issue_count(self):
+        return self.selenium.get_xpath_count('//p[@class="type issue"]')
+
+    def click_previous_page(self):
+        """
+
+        Navigates to the previous page of results
+
+        """
+        self.selenium.click(self._previous_page_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_next_page(self):
+        """
+
+        Navigates to the next page of results
+
+        """
+        self.selenium.click(self._next_page_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)

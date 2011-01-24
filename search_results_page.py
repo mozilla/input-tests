@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -22,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 David Burns
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,6 +40,7 @@
 Created on Nov 24, 2010
 '''
 
+from urlparse import urlparse
 from datetime import date, timedelta
 
 import input_base_page
@@ -65,89 +66,63 @@ class SearchResultsPage(input_base_page.InputBasePage):
         '''
         super(SearchResultsPage, self).__init__(selenium)
 
-    def verify_mobile_search_page_url(self):
-        """
-            verifies ?product=mobile in the url
+    def _value_from_url(self, param):
         """
 
-        current_loc = self.selenium.get_location()
-        if not self._mobile_results_url_regexp in current_loc:
-            raise Exception('%s not found in %s' % (self._mobile_results_url_regexp, current_loc))
-
-    def verify_firefox_search_page_url(self):
-        """
-            verifies ?product=firefox in the url
-            NOTE: if the site is on the homepage (not on the search
-                 page) and default/latest version is selected then
-                the URL will not contain product=firefox&version=
-        """
-        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
-            return
-        current_loc = self.selenium.get_location()
-        if not self._firefox_results_url_regexp in current_loc:
-            raise Exception('%s not found in %s' % (self._firefox_results_url_regexp, current_loc))
-
-    def verify_search_form_prod_ver(self, prod, ver):
-        """
-            verifies:
-            product=firefox in <input type="hidden" value="firefox" name="product">
-            and
-            version=4.0b6 in <input type="hidden" value="4.0b6" name="version">
-
-            NOTE: if the site is on the homepage (not on the search
-                 page) and default/latest version is selected for Fx
-                 then <input type="hidden" value="4.0b7" name="version">
-                will not exist
-        """
-
-        prod_tag = "css=form[id='%s'] > input[value='%s']" % (self._search_form, prod)
-        ver_tag  = "css=form[id='%s'] > input[value='%s']" % (self._search_form, ver)
-
-        if re.search(self._page_title, self.selenium.get_title(), re.I) is None:
-            return
-
-        if not self.selenium.is_element_present(prod_tag):
-            raise Exception('%s not found in %s' % (prod_tag, self.selenium.get_location()))
-
-        if not self.selenium.is_element_present(ver_tag):
-            raise Exception('%s not found in %s' % (ver_tag, self.selenium.get_location()))
-
-    def verify_preset_days_search_page_url(self, days):
-        """
-
-            Verifies date_start=(today - days) in the url
+        Returns the value for the specified parameter in the URL
 
         """
+        url = urlparse(self.selenium.get_location())
+        params = dict([part.split('=') for part in url[4].split('&')])
+        return params[param]
 
-        date_start = date.today() - timedelta(days=days)
-        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        date_start_url_regexp = self._date_start_url_regexp + date_start.strftime('%Y-%m-%d')
-
-        current_loc = self.selenium.get_location()
-        if date_start_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
-
-    def verify_custom_dates_search_page_url(self, start_date, end_date):
+    @property
+    def feedback_type_from_url(self):
         """
 
-            Verifies date_start=(start_date) in the url
-            Verifies date_end=(end_date) in the url
+        Returns the feedback type (praise, issues, suggestions) from the current location URL
 
         """
+        return self._value_from_url("s")
 
-        # The regular expression for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        date_start_url_regexp = self._date_start_url_regexp + start_date.strftime('%m%%2F%d%%2F%Y')
-        date_end_url_regexp = self._date_end_url_regexp + end_date.strftime('%m%%2F%d%%2F%Y')
+    @property
+    def product_from_url(self):
+        """
 
-        current_loc = self.selenium.get_location()
-        if date_start_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_start_url_regexp, current_loc))
+        Returns the product from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the product parameter
 
-        if date_end_url_regexp in current_loc:
-            pass
-        else:
-            raise Exception('%s not found in %s' % (date_end_url_regexp, current_loc))
+        """
+        return self._value_from_url("product")
+
+    @property
+    def version_from_url(self):
+        """
+
+        Returns the version from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the version parameter
+
+        """
+        return self._value_from_url("version")
+
+    @property
+    def date_start_from_url(self):
+        """
+
+        Returns the date_start value from the current location URL
+
+        """
+        return self._value_from_url("date_start")
+
+    @property
+    def date_end_from_url(self):
+        """
+
+        Returns the date_end value from the current location URL
+
+        """
+        return self._value_from_url("date_end")

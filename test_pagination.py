@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
-# ***** BEGIN LICENSE BLOCK *****
+# *****BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -22,7 +21,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
+# Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,10 +41,12 @@
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
-from input_base_page import InputBasePage
+
+import themes_page
+import search_results_page
 
 
-class TestSearch(unittest.TestCase):
+class TestPagination(unittest.TestCase):
 
     def setUp(self):
         self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
@@ -56,21 +57,26 @@ class TestSearch(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_that_empty_search_returns_some_data(self):
-        '''
-            Litmus 13847
-        '''
-        inpbas = InputBasePage(self.selenium)
-        inpbas.search_for('')
-        self.assertTrue(0 < inpbas.message_count)
+    def test_filters_persist_when_paging_through_results(self):
+        """
 
-    def test_that_we_can_search_with_unicode(self):
-        '''
-            Litmus 13697
-        '''
-        inpbas = InputBasePage(self.selenium)
-        inpbas.search_for(u"Tension et violence en C\xf4ted'Ivoire avant les r\xe9sultats")
-        self.assertTrue(0 < inpbas.message_count)
+        This testcase covers # 1508 in Litmus
+        1. Verifies the filter is in the URL
+        2. Verifies the currently applied filter is styled appropriately
+        3. Verifies the currently results of the filter
+
+        """
+        selenium = self.selenium
+        themes_page_obj = themes_page.ThemesPage(selenium)
+        search_results_page_obj = search_results_page.SearchResultsPage(selenium)
+
+        themes_page_obj.go_to_themes_page()
+        themes_page_obj.click_type_issues()
+        themes_page_obj.click_next_page()
+        # Asserts disabled for Bug 617177
+        # self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
+        # self.assertEqual(themes_page_obj.current_type, "Issues")
+        # self.assertEqual(themes_page_obj.praise_count, 0)
 
 if __name__ == "__main__":
     unittest.main()

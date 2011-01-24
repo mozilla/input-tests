@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2___
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
@@ -42,7 +42,7 @@ Created on Nov 30, 2010
 
 from datetime import date, timedelta
 from selenium import selenium
-import vars
+from vars import ConnectionParameters
 import unittest
 
 import feedback_page
@@ -52,9 +52,10 @@ import search_results_page
 class SearchDates(unittest.TestCase):
 
     def setUp(self):
-        self.selenium = selenium(vars.ConnectionParameters.server, vars.ConnectionParameters.port, vars.ConnectionParameters.browser, vars.ConnectionParameters.baseurl)
+        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
+                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
         self.selenium.start()
-        self.selenium.set_timeout(vars.ConnectionParameters.page_load_timeout)
+        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
 
     def tearDown(self):
         self.selenium.stop()
@@ -71,15 +72,16 @@ class SearchDates(unittest.TestCase):
         search_page_obj = search_results_page.SearchResultsPage(sel)
 
         feedback_obj.go_to_feedback_page()
-        # Assert disabled for Bug 616299
-        # self.assertEqual(search_page_obj.get_current_days(), "30d")
+        self.assertEqual(search_page_obj.get_current_days(), None)
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
         for days in day_filters:
             self.assertEqual(search_page_obj.get_days_tooltip(days[1]), days[2])
             search_page_obj.click_days(days[1])
             self.assertEqual(search_page_obj.get_current_days(), days[1])
-            search_page_obj.verify_preset_days_search_page_url(days[0])
+            start_date = date.today() - timedelta(days=days[0])
+            # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+            self.assertEqual(search_page_obj.date_start_from_url, start_date.strftime('%Y-%m-%d'))
             # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
     def test_custom_date_filter(self):
@@ -101,7 +103,9 @@ class SearchDates(unittest.TestCase):
         end_date = date.today() - timedelta(days=1)
 
         search_page_obj.filter_by_custom_dates(start_date, end_date)
-        search_page_obj.verify_custom_dates_search_page_url(start_date, end_date)
+        # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        self.assertEqual(search_page_obj.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
+        self.assertEqual(search_page_obj.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
 
         # Check that the relevant days preset link is highlighted when the applied custom date filter matches it
@@ -110,7 +114,9 @@ class SearchDates(unittest.TestCase):
             start_date = date.today() - timedelta(days=days[0])
             search_page_obj.filter_by_custom_dates(start_date, date.today())
             self.assertFalse(search_page_obj.is_custom_date_filter_visible())
-            search_page_obj.verify_custom_dates_search_page_url(start_date, date.today())
+            # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+            self.assertEqual(search_page_obj.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
+            self.assertEqual(search_page_obj.date_end_from_url, date.today().strftime('%m%%2F%d%%2F%Y'))
             self.assertEqual(search_page_obj.get_current_days(), days[1])
 
 if __name__ == "__main__":

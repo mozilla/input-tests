@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2___
+# Portions created by the Initial Developer are Copyright (C) 2010
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -51,7 +51,6 @@ class Page(object):
     Base class for all Pages
     '''
 
-        
     def __init__(self, selenium):
         '''
         Constructor

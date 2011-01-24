@@ -49,7 +49,7 @@ class TestSearch(unittest.TestCase):
 
     def setUp(self):
         self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                               ConnectionParameters.browser, ConnectionParameters.baseurl)
+                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
         self.selenium.start()
         self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
 

@@ -41,7 +41,7 @@ Created on Nov 24, 2010
 '''
 
 from selenium import selenium
-import vars
+from vars import ConnectionParameters
 import unittest
 
 import feedback_page
@@ -57,10 +57,10 @@ class SearchFirefox(unittest.TestCase):
     )
 
     def setUp(self):
-        self.selenium = selenium(vars.ConnectionParameters.server, vars.ConnectionParameters.port,
-                                vars.ConnectionParameters.browser, vars.ConnectionParameters.baseurl)
+        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
+                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
         self.selenium.start()
-        self.selenium.set_timeout(vars.ConnectionParameters.page_load_timeout)
+        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
 
     def tearDown(self):
         self.selenium.stop()

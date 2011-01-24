@@ -72,9 +72,10 @@ class TestPagination(unittest.TestCase):
         themes_page_obj.go_to_themes_page()
         themes_page_obj.click_type_issues()
         themes_page_obj.click_next_page()
-        self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
-        self.assertEqual(themes_page_obj.current_type, "Issues")
-        self.assertEqual(themes_page_obj.praise_count, 0)
+        # Asserts disabled for Bug 617177
+        # self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
+        # self.assertEqual(themes_page_obj.current_type, "Issues")
+        # self.assertEqual(themes_page_obj.praise_count, 0)
 
 if __name__ == "__main__":
     unittest.main()

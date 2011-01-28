@@ -74,5 +74,59 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
 
+    def test_remaining_character_count(self):
+        """
+
+        This testcase covers # 13806 in Litmus
+        1. Verifies the remaining character count decreases
+        2. Verifies that the remaining character count style changes at certain thresholds
+        3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
+
+        """
+        selenium = self.selenium
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(selenium)
+
+        submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "140")
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("a" * 111)
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "29")
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("b")
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "28")
+        self.assertTrue(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("c" * 13)
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "15")
+        self.assertTrue(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("d")
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "14")
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("e" * 14)
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "0")
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+        submit_happy_feedback_pg.set_feedback("f")
+        self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "-1")
+        self.assertFalse(submit_happy_feedback_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        self.assertFalse(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
 if __name__ == "__main__":
     unittest.main()

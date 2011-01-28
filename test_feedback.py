@@ -73,8 +73,7 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
 
-    # Test disabled until we are running Input tests on latest Firefox beta
-    def _test_remaining_character_count(self):
+    def test_remaining_character_count(self):
         """
 
         This testcase covers # 13806 in Litmus

@@ -48,6 +48,7 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     _page_title = u'Submit Feedback \u2014 Firefox Input'
 
     _feedback_locator = 'id=id_description'
+    _remaining_character_count_locator = 'id=count'
     _submit_feedback_locator = 'css=button[type=submit]'
 
     def __init__(self, selenium):
@@ -56,6 +57,28 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
         self.selenium.key_up(self._feedback_locator, feedback[-1:])
+
+    @property
+    def remaining_character_count(self):
+        return self.selenium.get_text(self._remaining_character_count_locator)
+
+    @property
+    def is_remaining_character_count_low(self):
+        try:
+            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "low"
+        except:
+            return False
+
+    @property
+    def is_remaining_character_count_very_low(self):
+        try:
+            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "verylow"
+        except:
+            return False
+
+    @property
+    def is_submit_feedback_enabled(self):
+        return self.selenium.is_editable(self._submit_feedback_locator)
 
     def submit_feedback(self):
         self.selenium.click(self._submit_feedback_locator)

@@ -41,18 +41,19 @@ Created on Dec 22, 2010
 '''
 
 from selenium import selenium
-import vars
+from vars import ConnectionParameters
 import unittest
 
-import suggestion_page
+import submit_suggestion_page
 
 
 class SubmitSuggestion(unittest.TestCase):
 
     def setUp(self):
-        self.selenium = selenium(vars.ConnectionParameters.server, vars.ConnectionParameters.port, vars.ConnectionParameters.browser, vars.ConnectionParameters.baseurl)
+        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
+                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
         self.selenium.start()
-        self.selenium.set_timeout(vars.ConnectionParameters.page_load_timeout)
+        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
 
     def tearDown(self):
         self.selenium.stop()
@@ -66,51 +67,51 @@ class SubmitSuggestion(unittest.TestCase):
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        sel = self.selenium
-        suggestion_pg = suggestion_page.SuggestionPage(sel)
+        selenium = self.selenium
+        submit_suggestion_pg = submit_suggestion_page.SubmitSuggestionPage(selenium)
 
-        suggestion_pg.go_to_suggestion_page()
-        self.assertEqual(suggestion_pg.remaining_character_count, "250")
-        self.assertFalse(suggestion_pg.is_remaining_character_count_low)
-        self.assertFalse(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.go_to_submit_suggestion_page()
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "250")
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("a" * 199)
-        self.assertEqual(suggestion_pg.remaining_character_count, "51")
-        self.assertFalse(suggestion_pg.is_remaining_character_count_low)
-        self.assertFalse(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.set_feedback("a" * 199)
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "51")
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("b")
-        self.assertEqual(suggestion_pg.remaining_character_count, "50")
-        self.assertTrue(suggestion_pg.is_remaining_character_count_low)
-        self.assertFalse(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.set_feedback("b")
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "50")
+        self.assertTrue(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("c" * 24)
-        self.assertEqual(suggestion_pg.remaining_character_count, "26")
-        self.assertTrue(suggestion_pg.is_remaining_character_count_low)
-        self.assertFalse(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.set_feedback("c" * 24)
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "26")
+        self.assertTrue(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("d")
-        self.assertEqual(suggestion_pg.remaining_character_count, "25")
-        self.assertFalse(suggestion_pg.is_remaining_character_count_low)
-        self.assertTrue(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.set_feedback("d")
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "25")
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("e" * 25)
-        self.assertEqual(suggestion_pg.remaining_character_count, "0")
-        self.assertFalse(suggestion_pg.is_remaining_character_count_low)
-        self.assertTrue(suggestion_pg.is_remaining_character_count_very_low)
-        self.assertTrue(suggestion_pg.is_submit_feedback_enabled)
+        submit_suggestion_pg.set_feedback("e" * 25)
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "0")
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_suggestion_pg.is_remaining_character_count_very_low)
+        self.assertTrue(submit_suggestion_pg.is_submit_feedback_enabled)
 
-        suggestion_pg.set_suggestion("f")
-        self.assertEqual(suggestion_pg.remaining_character_count, "-1")
-        self.assertFalse(suggestion_pg.is_remaining_character_count_low)
-        self.assertTrue(suggestion_pg.is_remaining_character_count_very_low)
+        submit_suggestion_pg.set_feedback("f")
+        self.assertEqual(submit_suggestion_pg.remaining_character_count, "-1")
+        self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
+        self.assertTrue(submit_suggestion_pg.is_remaining_character_count_very_low)
         # Assert disabled for Bug 616230
-        #self.assertFalse(suggestion_pg.is_submit_feedback_enabled)
+        #self.assertFalse(submit_suggestion_pg.is_submit_feedback_enabled)
 
 if __name__ == "__main__":
     unittest.main()

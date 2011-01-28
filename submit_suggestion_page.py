@@ -42,50 +42,14 @@ Created on Dec 22, 2010
 
 '''
 
-import input_base_page
-import vars
+import submit_feedback_page
 
 
-class SuggestionPage(input_base_page.InputBasePage):
-
-    _page_title = u'Submit Feedback \u2014 Firefox Input'
-
-    _suggestion_locator = 'id=id_description'
-    _remaining_character_count_locator = 'id=count'
-    _submit_feedback_locator = 'css=button[type=submit]'
+class SubmitSuggestionPage(submit_feedback_page.SubmitFeedbackPage):
 
     def __init__(self, selenium):
         self.selenium = selenium
 
-    def go_to_suggestion_page(self):
+    def go_to_submit_suggestion_page(self):
         self.selenium.open('/suggestion/')
-        page_title = unicode(self.selenium.get_title())
-        if not page_title == self._page_title:
-            self.record_error()
-            raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
-
-    def set_suggestion(self, suggestion):
-        self.selenium.type_keys(self._suggestion_locator, suggestion)
-        self.selenium.key_up(self._suggestion_locator, suggestion[-1:])
-
-    @property
-    def remaining_character_count(self):
-        return self.selenium.get_text(self._remaining_character_count_locator)
-
-    @property
-    def is_remaining_character_count_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "low"
-        except:
-            return False
-
-    @property
-    def is_remaining_character_count_very_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "verylow"
-        except:
-            return False
-
-    @property
-    def is_submit_feedback_enabled(self):
-        return self.selenium.is_editable(self._submit_feedback_locator)
+        self.is_the_current_page

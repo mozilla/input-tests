@@ -57,7 +57,8 @@ class TestFeedback(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_submitting_feedback_with_unicode_characters(self):
+    # Test disabled until we are running Input tests on latest Firefox beta
+    def _test_submitting_feedback_with_unicode_characters(self):
         """
 
         This testcase covers # 15061 in Litmus

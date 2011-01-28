@@ -110,8 +110,7 @@ class SubmitSuggestion(unittest.TestCase):
         self.assertEqual(submit_suggestion_pg.remaining_character_count, "-1")
         self.assertFalse(submit_suggestion_pg.is_remaining_character_count_low)
         self.assertTrue(submit_suggestion_pg.is_remaining_character_count_very_low)
-        # Assert disabled for Bug 616230
-        #self.assertFalse(submit_suggestion_pg.is_submit_feedback_enabled)
+        self.assertFalse(submit_suggestion_pg.is_submit_feedback_enabled)
 
 if __name__ == "__main__":
     unittest.main()

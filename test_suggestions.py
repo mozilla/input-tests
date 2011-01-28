@@ -58,7 +58,8 @@ class SubmitSuggestion(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_remaining_character_count(self):
+    # Test disabled until we are running Input tests on latest Firefox beta
+    def _test_remaining_character_count(self):
         """
 
         This testcase covers # 15029 in Litmus

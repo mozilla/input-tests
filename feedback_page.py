@@ -48,7 +48,7 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium = selenium
 
     def go_to_feedback_page(self):
-        self.selenium.open('/', True)
+        self.selenium.open('/')
         page_title = self.selenium.get_title()
         if not page_title == self._page_title:
             self.record_error()

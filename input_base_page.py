@@ -109,11 +109,8 @@ class InputBasePage(Page):
     _next_page_locator = "css=.pager .next"
 
     def __init__(self, selenium):
-        """Create a new instance of the class & get the page ready for testing."""
         self.selenium = selenium
-        self.selenium.open('/')
         self.selenium.window_maximize()
-        self.wait_for_element_present(self._search_box)
 
     @property
     def products(self):

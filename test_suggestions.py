@@ -67,8 +67,7 @@ class SubmitSuggestion(unittest.TestCase):
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        selenium = self.selenium
-        submit_suggestion_pg = submit_suggestion_page.SubmitSuggestionPage(selenium)
+        submit_suggestion_pg = submit_suggestion_page.SubmitSuggestionPage(self.selenium)
 
         submit_suggestion_pg.go_to_submit_suggestion_page()
         self.assertEqual(submit_suggestion_pg.remaining_character_count, "250")

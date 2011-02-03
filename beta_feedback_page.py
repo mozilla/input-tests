@@ -16,12 +16,10 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Vishal
-#                 David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -37,29 +35,16 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Nov 24, 2010
+Created on Feb 3, 2011
 '''
-import input_base_page
+import feedback_page
 
 
-class ThemesPage(input_base_page.InputBasePage):
-
-    _page_title = 'Themes :: Firefox Input'
-
-    _current_type_locator = "css=#filter_type a.selected"
+class BetaFeedbackPage(feedback_page.FeedbackPage):
 
     def __init__(self, selenium):
         self.selenium = selenium
 
-    def go_to_themes_page(self):
-        self.selenium.open('/themes/')
+    def go_to_beta_feedback_page(self):
+        self.selenium.open('/beta/')
         self.is_the_current_page
-
-    @property
-    def current_type(self):
-        """
-
-        Returns the link text of the currently applied type filter
-
-        """
-        return self.selenium.get_text(self._current_type_locator)

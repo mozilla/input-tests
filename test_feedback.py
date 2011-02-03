@@ -64,9 +64,8 @@ class TestFeedback(unittest.TestCase):
         1. Verifies the thank you page is loaded
 
         """
-        selenium = self.selenium
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(selenium)
-        thanks_pg = thanks_page.ThanksPage(selenium)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
+        thanks_pg = thanks_page.ThanksPage(self.selenium)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
@@ -82,8 +81,7 @@ class TestFeedback(unittest.TestCase):
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        selenium = self.selenium
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(selenium)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         self.assertEqual(submit_happy_feedback_pg.remaining_character_count, "140")

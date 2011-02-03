@@ -45,7 +45,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import feedback_page
+import beta_feedback_page
 import search_results_page
 
 
@@ -60,18 +60,17 @@ class SearchDates(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_preset_date_filters(self):
+    def test_beta_feedback_preset_date_filters(self):
         """
 
         This testcase covers # 13605 & 13606 in Litmus
         1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
-        sel = self.selenium
-        feedback_obj = feedback_page.FeedbackPage(sel)
-        search_page_obj = search_results_page.SearchResultsPage(sel)
+        beta_feedback_obj = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        search_page_obj = search_results_page.SearchResultsPage(self.selenium)
 
-        feedback_obj.go_to_feedback_page()
+        beta_feedback_obj.go_to_beta_feedback_page()
         self.assertEqual(search_page_obj.get_current_days(), None)
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
@@ -84,7 +83,7 @@ class SearchDates(unittest.TestCase):
             self.assertEqual(search_page_obj.date_start_from_url, start_date.strftime('%Y-%m-%d'))
             # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
-    def test_custom_date_filter(self):
+    def test_beta_feedback_custom_date_filter(self):
         """
 
         This testcase covers # 13605, 13606 & 13715 in Litmus
@@ -92,11 +91,10 @@ class SearchDates(unittest.TestCase):
         2. Verifies date-start=<date> and end-date=<date> in the url
 
         """
-        sel = self.selenium
-        feedback_obj = feedback_page.FeedbackPage(sel)
-        search_page_obj = search_results_page.SearchResultsPage(sel)
+        beta_feedback_obj = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        search_page_obj = search_results_page.SearchResultsPage(self.selenium)
 
-        feedback_obj.go_to_feedback_page()
+        beta_feedback_obj.go_to_beta_feedback_page()
         self.assertEqual(search_page_obj.get_custom_dates_tooltip(), "Custom")
 
         start_date = date.today() - timedelta(days=3)

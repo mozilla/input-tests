@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 David Burns
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -50,7 +51,4 @@ class SitesPage(input_base_page.InputBasePage):
 
     def go_to_sites_page(self):
         self.selenium.open('/sites/')
-        page_title = self.selenium.get_title()
-        if not page_title == self._page_title:
-            self.record_error()
-            raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
+        self.is_the_current_page

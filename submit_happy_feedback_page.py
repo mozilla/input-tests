@@ -46,5 +46,5 @@ class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
         self.selenium = selenium
 
     def go_to_submit_happy_feedback_page(self):
-        self.selenium.open('/happy')
+        self.selenium.open('/happy/')
         self.is_the_current_page

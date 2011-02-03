@@ -44,14 +44,14 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import feedback_page
-import sites_page
+import beta_feedback_page
+import beta_sites_page
 import search_results_page
 
 
-class SearchFirefox(unittest.TestCase):
+class TestProductFilter(unittest.TestCase):
 
-    _products = (
+    _beta_products = (
         {"name": "firefox", "versions": ("4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
         {"name": "mobile", "versions": ("4.0b4", "4.0b3", "4.0b2", "4.0b1")}
     )
@@ -65,7 +65,7 @@ class SearchFirefox(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_feedback_can_be_filtered_by_all_expected_products_and_versions(self):
+    def test_beta_feedback_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 
         This testcase covers # 13601, 13602, 13603 & 13604 in Litmus
@@ -76,27 +76,26 @@ class SearchFirefox(unittest.TestCase):
         5. Verify product and version values in the URL
 
         """
-        sel = self.selenium
-        feedback_pg = feedback_page.FeedbackPage(sel)
-        search_results_pg = search_results_page.SearchResultsPage(sel)
+        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
-        feedback_pg.go_to_feedback_page()
-        self.assertEqual(len(feedback_pg.products), len(self._products))
-        for product in self._products:
-            feedback_pg.select_product(product["name"])
+        beta_feedback_pg.go_to_beta_feedback_page()
+        self.assertEqual(len(beta_feedback_pg.products), len(self._beta_products))
+        for product in self._beta_products:
+            beta_feedback_pg.select_product(product["name"])
             versions = list(product["versions"])
             # Add an empty version so we can check the filter for all versions of the current product
-            versions.insert(0, "")
-            self.assertEqual(len(feedback_pg.versions), len(versions))
+            versions.insert(0, "--")
+            self.assertEqual(len(beta_feedback_pg.versions), len(versions))
             for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
-                feedback_pg.select_version(version)
-                self.assertEqual(feedback_pg.selected_product, product["name"])
-                self.assertEqual(feedback_pg.selected_version, version)
+                beta_feedback_pg.select_version(version)
+                self.assertEqual(beta_feedback_pg.selected_product, product["name"])
+                self.assertEqual(beta_feedback_pg.selected_version, version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 
-    def test_sites_can_be_filtered_by_all_expected_products_and_versions(self):
+    def test_beta_sites_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 
         This testcase covers # 15042, 15043, 15044 & 15045 in Litmus
@@ -107,23 +106,22 @@ class SearchFirefox(unittest.TestCase):
         5. Verify product and version values in the URL
 
         """
-        sel = self.selenium
-        sites_pg = sites_page.SitesPage(sel)
-        search_results_pg = search_results_page.SearchResultsPage(sel)
+        beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
+        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
-        sites_pg.go_to_sites_page()
-        self.assertEqual(len(sites_pg.products), len(self._products))
-        for product in self._products:
-            sites_pg.select_product(product["name"])
+        beta_sites_pg.go_to_beta_sites_page()
+        self.assertEqual(len(beta_sites_pg.products), len(self._beta_products))
+        for product in self._beta_products:
+            beta_sites_pg.select_product(product["name"])
             versions = list(product["versions"])
-            self.assertEqual(len(sites_pg.versions), len(versions))
+            self.assertEqual(len(beta_sites_pg.versions), len(versions))
             # Reverse version order because latest version is selected by default
             versions.reverse()
             for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
-                sites_pg.select_version(version)
-                self.assertEqual(sites_pg.selected_product, product["name"])
-                self.assertEqual(sites_pg.selected_version, version)
+                beta_sites_pg.select_version(version)
+                self.assertEqual(beta_sites_pg.selected_product, product["name"])
+                self.assertEqual(beta_sites_pg.selected_version, version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 

@@ -23,6 +23,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -43,7 +44,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import feedback_page
+import beta_feedback_page
 
 
 class TestSearch(unittest.TestCase):
@@ -57,27 +58,25 @@ class TestSearch(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_that_empty_search_returns_some_data(self):
+    def test_that_empty_search_of_beta_feedback_returns_some_data(self):
         '''
             Litmus 13847
         '''
-        selenium = self.selenium
-        feedback_pg = feedback_page.FeedbackPage(selenium)
+        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
 
-        feedback_pg.go_to_feedback_page()
-        feedback_pg.search_for('')
-        self.assertTrue(0 < feedback_pg.message_count)
+        beta_feedback_pg.go_to_beta_feedback_page()
+        beta_feedback_pg.search_for('')
+        self.assertTrue(0 < beta_feedback_pg.message_count)
 
-    def test_that_we_can_search_with_unicode(self):
+    def test_that_we_can_search_beta_feedback_with_unicode(self):
         '''
             Litmus 13697
         '''
-        selenium = self.selenium
-        feedback_pg = feedback_page.FeedbackPage(selenium)
+        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
 
-        feedback_pg.go_to_feedback_page()
-        feedback_pg.search_for(u"Tension et violence en C\xf4ted'Ivoire avant les r\xe9sultats")
-        self.assertTrue(0 < feedback_pg.message_count)
+        beta_feedback_pg.go_to_beta_feedback_page()
+        beta_feedback_pg.search_for(u"Tension et violence en C\xf4ted'Ivoire avant les r\xe9sultats")
+        self.assertTrue(0 < beta_feedback_pg.message_count)
 
 if __name__ == "__main__":
     unittest.main()

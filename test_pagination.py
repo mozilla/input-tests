@@ -42,7 +42,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import themes_page
+import beta_themes_page
 import search_results_page
 
 
@@ -57,7 +57,7 @@ class TestPagination(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_filters_persist_when_paging_through_results(self):
+    def test_beta_themes_filters_persist_when_paging_through_results(self):
         """
 
         This testcase covers # 1508 in Litmus
@@ -66,17 +66,16 @@ class TestPagination(unittest.TestCase):
         3. Verifies the currently results of the filter
 
         """
-        selenium = self.selenium
-        themes_page_obj = themes_page.ThemesPage(selenium)
-        search_results_page_obj = search_results_page.SearchResultsPage(selenium)
+        beta_themes_page_obj = beta_themes_page.BetaThemesPage(self.selenium)
+        search_results_page_obj = search_results_page.SearchResultsPage(self.selenium)
 
-        themes_page_obj.go_to_themes_page()
-        themes_page_obj.click_type_issues()
-        themes_page_obj.click_next_page()
+        beta_themes_page_obj.go_to_beta_themes_page()
+        beta_themes_page_obj.click_type_issues()
+        beta_themes_page_obj.click_next_page()
         # Asserts disabled for Bug 617177
         # self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
-        # self.assertEqual(themes_page_obj.current_type, "Issues")
-        # self.assertEqual(themes_page_obj.praise_count, 0)
+        # self.assertEqual(beta_themes_page_obj.current_type, "Issues")
+        # self.assertEqual(beta_themes_page_obj.praise_count, 0)
 
 if __name__ == "__main__":
     unittest.main()

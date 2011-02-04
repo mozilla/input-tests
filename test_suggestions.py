@@ -40,11 +40,14 @@ Created on Dec 22, 2010
 
 '''
 
+import time
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
 import submit_suggestion_page
+import thanks_page
+import beta_feedback_page
 
 
 class SubmitSuggestion(unittest.TestCase):
@@ -58,7 +61,31 @@ class SubmitSuggestion(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_remaining_character_count(self):
+    def test_submitting_suggestion(self):
+        """
+
+        This testcase covers # XXXXX in Litmus
+        1. Verifies the thank you page is loaded
+        2. Verifies the new suggestion appears on the feedback page
+
+        """
+        submit_suggestion_pg = submit_suggestion_page.SubmitSuggestionPage(self.selenium)
+        thanks_pg = thanks_page.ThanksPage(self.selenium)
+        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+
+        submit_suggestion_pg.go_to_submit_suggestion_page()
+        suggestion = 'Automated suggestion ' + str(time.time()).split('.')[0]
+        submit_suggestion_pg.set_feedback(suggestion)
+        submit_suggestion_pg.submit_feedback()
+        self.assertTrue(thanks_pg.is_the_current_page)
+
+        beta_feedback_pg.go_to_beta_feedback_page()
+        first_message = beta_feedback_pg.message(1)
+        self.assertEqual(first_message.type, "Suggestion")
+        self.assertEqual(first_message.body, suggestion)
+        self.assertEqual(first_message.time, "just now")
+
+    def _test_remaining_character_count(self):
         """
 
         This testcase covers # 15029 in Litmus

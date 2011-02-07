@@ -70,14 +70,17 @@ class TestSimilarMessages(unittest.TestCase):
         sites_pg.go_to_sites_page()
         sites_pg.select_product('firefox')
         sites_pg.select_version(by='index', lookup='1')
-        selected_site = sites_pg.site_name(by='index', lookup='1')
-        sites_pg.click_site(by='index', lookup='1')
+
+        selected_site = sites_pg.site_url(1)
+        sites_pg.click_site(by='url', lookup=selected_site)
         sites_pg.click_first_similar_messages_link()
         sites_pg.click_next_page()
 
-        self.assertEqual(sites_pg.header_text, 'Theme')
-        self.assertEqual(results_pg._value_from_url('page'), '2')
-        sites_pg.is_text_present(selected_site)
-
+        self.assertEqual(sites_pg.messages_heading, 'Theme')
+        self.assertEqual(results_pg.page_from_url, '2')
+        self.assertEqual(sites_pg.theme_callout_text, 'Theme for ' + selected_site)
+        self.assertTrue(0 < sites_pg.message_count)
+        self.assertEqual(sites_pg.back_link_text, 'Back to ' + selected_site)
+        self.assertTrue(selected_site in sites_pg.first_message_url_text)
 if __name__ == "__main__":
     unittest.main()

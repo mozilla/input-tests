@@ -49,7 +49,10 @@ class SitesPage(input_base_page.InputBasePage):
 
     _page_title = 'Sites :: Firefox Input'
     _first_similar_messages_link_locator = "//ul[@class='themes']/li[@class='theme'][1]/p[@class='primary']/a"
-    _message_heading_locator = "//div[@id='messages']/h2"
+    _messages_heading_locator = "//div[@id='messages']/h2"
+    _theme_callout_locator = "//div[@id='theme-callout']"
+    _back_link_locator = "//a[@class='exit']"
+    _first_message_url_link_locator = "//li[@class='message'][1]/ul[@class='meta']/li[4]/a"
 
     def __init__(self, selenium):
         self.selenium = selenium
@@ -58,36 +61,58 @@ class SitesPage(input_base_page.InputBasePage):
         self.selenium.open('/sites/')
         self.is_the_current_page
 
-    def click_site(self, by="index", lookup=None):
-        if not lookup == None:
-            if by == "url":
-                self.selenium.click("link=" + lookup)
-            elif by == "index":
-                self.selenium.click("//li[@class='site'][" + lookup + "]/p[@class='name']/a")
+    def click_site(self, lookup, by="index"):
+        if by == "url":
+            self.selenium.click("link=" + lookup)
+        elif by == "index":
+            self.selenium.click("//li[@class='site'][" + lookup + "]/p[@class='name']/a")
 
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_first_similar_messages_link(self):
         self.selenium.click(self._first_similar_messages_link_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
     @property
-    def header_text(self):
+    def messages_heading(self):
         """
 
         Returns the heading text of the Themes page
 
         """
-        return self.selenium.get_text(self._message_heading_locator)
+        return self.selenium.get_text(self._messages_heading_locator)
 
-    def site_name(self, by="index", lookup=None):
+    @property
+    def theme_callout_text(self):
+        """
+
+        Returns the text value of the theme callout
+
+        """
+        return self.selenium.get_text(self._theme_callout_locator)
+
+    @property
+    def back_link_text(self):
+        """
+
+        Returns the text value of the back link
+
+        """
+        return self.selenium.get_text(self._back_link_locator)
+
+    @property
+    def first_message_url_text(self):
+        """
+
+        Returns the text value of the first message's URL link
+
+        """
+        return self.selenium.get_text(self._first_message_url_link_locator)
+
+    def site_url(self, index):
         """
 
         Returns the name of the currently selected site
 
         """
-        if not lookup == None:
-            if by == "index":
-                return self.selenium.get_text("//li[@class='site'][" + lookup + "]/p[@class='name']/a");
-            elif by == "url":
-                return self.selenium.get_text("link=" + lookup);
+        return self.selenium.get_text("//li[@class='site'][" + str(index) + "]/p[@class='name']/a");

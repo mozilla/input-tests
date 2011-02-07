@@ -124,7 +124,6 @@ class InputBasePage(Page):
         """
         returns the currently selected product
         """
-        self.wait_for_element_present("id=producddt")
         return self.selenium.get_selected_value(self._product_dropdown_locator)
 
     def select_product(self, product):

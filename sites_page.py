@@ -40,11 +40,16 @@
 Created on Nov 24, 2010
 '''
 import input_base_page
+from vars import ConnectionParameters
+
+page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class SitesPage(input_base_page.InputBasePage):
 
     _page_title = 'Sites :: Firefox Input'
+    _first_similar_messages_link_locator = "//ul[@class='themes']/li[@class='theme'][1]/p[@class='primary']/a"
+    _message_heading_locator = "//div[@id='messages']/h2"
 
     def __init__(self, selenium):
         self.selenium = selenium
@@ -52,3 +57,37 @@ class SitesPage(input_base_page.InputBasePage):
     def go_to_sites_page(self):
         self.selenium.open('/sites/')
         self.is_the_current_page
+
+    def click_site(self, by="index", lookup=None):
+        if not lookup == None:
+            if by == "url":
+                self.selenium.click("link=" + lookup)
+            elif by == "index":
+                self.selenium.click("//li[@class='site'][" + lookup + "]/p[@class='name']/a")
+
+            self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_first_similar_messages_link(self):
+        self.selenium.click(self._first_similar_messages_link_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    @property
+    def header_text(self):
+        """
+
+        Returns the heading text of the Themes page
+
+        """
+        return self.selenium.get_text(self._message_heading_locator)
+
+    def site_name(self, by="index", lookup=None):
+        """
+
+        Returns the name of the currently selected site
+
+        """
+        if not lookup == None:
+            if by == "index":
+                return self.selenium.get_text("//li[@class='site'][" + lookup + "]/p[@class='name']/a");
+            elif by == "url":
+                return self.selenium.get_text("link=" + lookup);

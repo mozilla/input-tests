@@ -142,19 +142,34 @@ class InputBasePage(Page):
         """
         return self.selenium.get_select_options(self._version_dropdown_locator)
 
-    @property
-    def selected_version(self):
+    def selected_version(self, type='value'):
         """
         returns the currently selected product version
         """
-        return self.selenium.get_selected_value(self._version_dropdown_locator)
+        if type == 'value':
+            return self.selenium.get_selected_value(self._version_dropdown_locator)
+        elif type == 'label':
+            return self.selenium.get_selected_label(self._version_dropdown_locator)
+        elif type == 'id':
+            return self.selenium.get_selected_id(self._version_dropdown_locator)
+        elif type == 'index':
+            return self.selenium.get_selected_index(self._version_dropdown_locator)
 
-    def select_version(self, version):
+    def select_version(self, by='value', lookup=None):
         """
         selects product version
         """
-        if not version == self.selected_version:
-            self.selenium.select(self._version_dropdown_locator, "value=" + version)
+        if not lookup == self.selected_version(by):
+            if not lookup == None:
+                if by == 'value':
+                    self.selenium.select(self._version_dropdown_locator, "value=" + lookup)
+                elif by == 'label':
+                    self.selenium.select(self._version_dropdown_locator, "label=" + lookup)
+                elif by == 'id':
+                    self.selenium.select(self._version_dropdown_locator, "id=" + lookup)
+                elif by == 'index':
+                    self.selenium.select(self._version_dropdown_locator, "index=" + lookup)
+
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_type_all(self):

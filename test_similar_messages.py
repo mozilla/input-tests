@@ -42,7 +42,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import sites_page
+import beta_sites_page
 import search_results_page
 
 
@@ -63,16 +63,15 @@ class TestSimilarMessages(unittest.TestCase):
         This testcase covers # 13807 in Litmus
 
         """
-        sel = self.selenium
-        sites_pg = sites_page.SitesPage(sel)
-        results_pg = search_results_page.SearchResultsPage(sel)
+        sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
+        results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         sites_pg.go_to_sites_page()
         sites_pg.select_product('firefox')
-        sites_pg.select_version(by='index', lookup='1')
+        sites_pg.select_version(1, by='index')
 
         selected_site = sites_pg.site_url(1)
-        sites_pg.click_site(by='url', lookup=selected_site)
+        sites_pg.click_site(selected_site, by='url')
         sites_pg.click_first_similar_messages_link()
         sites_pg.click_next_page()
 
@@ -80,7 +79,8 @@ class TestSimilarMessages(unittest.TestCase):
         self.assertEqual(results_pg.page_from_url, '2')
         self.assertEqual(sites_pg.theme_callout, 'Theme for ' + selected_site)
         self.assertTrue(0 < sites_pg.message_count)
-        self.assertEqual(sites_pg.back_link, 'Back to ' + selected_site)
+        self.assertEqual(sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')
         self.assertTrue(selected_site in sites_pg.first_message_url)
+
 if __name__ == "__main__":
     unittest.main()

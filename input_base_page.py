@@ -153,7 +153,7 @@ class InputBasePage(Page):
         selects product version
         """
         if not lookup == self.selected_version(by):
-            self.selenium.select(self._version_dropdown_locator, by + "=" + lookup)
+            self.selenium.select(self._version_dropdown_locator, by + "=" + str(lookup))
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_type_all(self):

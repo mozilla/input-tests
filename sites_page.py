@@ -65,7 +65,7 @@ class SitesPage(input_base_page.InputBasePage):
         if by == "url":
             self.selenium.click("link=" + lookup)
         elif by == "index":
-            self.selenium.click("//li[@class='site'][" + lookup + "]/p[@class='name']/a")
+            self.selenium.click("//li[@class='site'][" + str(lookup) + "]/p[@class='name']/a")
 
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
@@ -115,4 +115,4 @@ class SitesPage(input_base_page.InputBasePage):
         Returns the name of the currently selected site
 
         """
-        return self.selenium.get_text("//li[@class='site'][" + str(index) + "]/p[@class='name']/a");
+        return self.selenium.get_text("//li[@class='site'][" + str(index) + "]/p[@class='name']/a")

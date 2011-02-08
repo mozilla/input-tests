@@ -49,9 +49,9 @@ class SitesPage(input_base_page.InputBasePage):
 
     _page_title = 'Sites :: Firefox Input'
     _first_similar_messages_link_locator = "//ul[@class='themes']/li[@class='theme'][1]/p[@class='primary']/a"
-    _messages_heading_locator = "//div[@id='messages']/h2"
-    _theme_callout_locator = "//div[@id='theme-callout']"
-    _back_link_locator = "//a[@class='exit']"
+    _messages_heading_locator = "css=#messages h2"
+    _theme_callout_locator = "id=theme-callout"
+    _back_link_locator = "css=a.exit"
     _first_message_url_link_locator = "//li[@class='message'][1]/ul[@class='meta']/li[4]/a"
 
     def __init__(self, selenium):
@@ -83,7 +83,7 @@ class SitesPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._messages_heading_locator)
 
     @property
-    def theme_callout_text(self):
+    def theme_callout(self):
         """
 
         Returns the text value of the theme callout
@@ -92,7 +92,7 @@ class SitesPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._theme_callout_locator)
 
     @property
-    def back_link_text(self):
+    def back_link(self):
         """
 
         Returns the text value of the back link
@@ -101,7 +101,7 @@ class SitesPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._back_link_locator)
 
     @property
-    def first_message_url_text(self):
+    def first_message_url(self):
         """
 
         Returns the text value of the first message's URL link

@@ -78,9 +78,9 @@ class TestSimilarMessages(unittest.TestCase):
 
         self.assertEqual(sites_pg.messages_heading, 'Theme')
         self.assertEqual(results_pg.page_from_url, '2')
-        self.assertEqual(sites_pg.theme_callout_text, 'Theme for ' + selected_site)
+        self.assertEqual(sites_pg.theme_callout, 'Theme for ' + selected_site)
         self.assertTrue(0 < sites_pg.message_count)
-        self.assertEqual(sites_pg.back_link_text, 'Back to ' + selected_site)
-        self.assertTrue(selected_site in sites_pg.first_message_url_text)
+        self.assertEqual(sites_pg.back_link, 'Back to ' + selected_site)
+        self.assertTrue(selected_site in sites_pg.first_message_url)
 if __name__ == "__main__":
     unittest.main()

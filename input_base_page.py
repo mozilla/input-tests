@@ -146,29 +146,14 @@ class InputBasePage(Page):
         """
         returns the currently selected product version
         """
-        if type == 'value':
-            return self.selenium.get_selected_value(self._version_dropdown_locator)
-        elif type == 'label':
-            return self.selenium.get_selected_label(self._version_dropdown_locator)
-        elif type == 'id':
-            return self.selenium.get_selected_id(self._version_dropdown_locator)
-        elif type == 'index':
-            return self.selenium.get_selected_index(self._version_dropdown_locator)
+        return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
     def select_version(self, lookup, by='value'):
         """
         selects product version
         """
         if not lookup == self.selected_version(by):
-            if by == 'value':
-                self.selenium.select(self._version_dropdown_locator, "value=" + lookup)
-            elif by == 'label':
-                self.selenium.select(self._version_dropdown_locator, "label=" + lookup)
-            elif by == 'id':
-                self.selenium.select(self._version_dropdown_locator, "id=" + lookup)
-            elif by == 'index':
-                self.selenium.select(self._version_dropdown_locator, "index=" + lookup)
-
+            self.selenium.select(self._version_dropdown_locator, by + "=" + lookup)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_type_all(self):

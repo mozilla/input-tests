@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -12,7 +13,7 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Firefox Input.
+# The Original Code is Firefox Input 
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
@@ -20,6 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
+#                 Dave Hunt
+#                 David Burns
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -44,6 +47,8 @@ import vars
 import base64
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
+base_url = vars.ConnectionParameters.baseurl
+http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
 
 
 class Page(object):
@@ -92,6 +97,9 @@ class Page(object):
     
     def is_element_present(self,locator):
         return self.selenium.is_element_present(locator)
+
+    def is_element_visible(self, locator):
+        return self.selenium.is_visible(locator)
     
     def is_text_present(self,text):
         return self.selenium.is_text_present(text)
@@ -102,7 +110,7 @@ class Page(object):
 
     def wait_for_element_present(self, element):
         count = 0
-        while not self.selenium.is_element_present(element):
+        while not self.is_element_present(element):
             time.sleep(1)
             count += 1
             if count == page_load_timeout/1000:
@@ -112,7 +120,7 @@ class Page(object):
     def wait_for_element_visible(self, element):
         self.wait_for_element_present(element)
         count = 0
-        while not self.selenium.is_visible(element):
+        while not self.is_element_visible(element):
             time.sleep(1)
             count += 1
             if count == page_load_timeout/1000:
@@ -121,7 +129,7 @@ class Page(object):
 
     def wait_for_element_not_visible(self, element):
         count = 0
-        while self.selenium.is_visible(element):
+        while self.is_element_visible(element):
             time.sleep(1)
             count += 1
             if count == page_load_timeout/1000:
@@ -138,16 +146,16 @@ class Page(object):
                 raise Exception("Sites Page has not loaded")
 
     def record_error(self):
-        '''
+        ''' Records an error. '''
 
-        Records an error.
+        http_matches = http_regex.match(base_url)
+        file_name = http_matches.group(1)
 
-        '''
         print '-------------------'
         print 'Error at ' + self.selenium.get_location()
         print 'Page title ' + self.selenium.get_title()
         print '-------------------'
-        filename = 'input_' + str(time.time()).split('.')[0] + '.png'
+        filename = file_name + '_' + str(time.time()).split('.')[0] + '.png'
 
         print 'Screenshot of error in file ' + filename
         f = open(filename, 'wb')

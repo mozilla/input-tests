@@ -63,24 +63,24 @@ class TestSimilarMessages(unittest.TestCase):
         This testcase covers # 13807 in Litmus
 
         """
-        sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
+        beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
         results_pg = search_results_page.SearchResultsPage(self.selenium)
 
-        sites_pg.go_to_sites_page()
-        sites_pg.select_product('firefox')
-        sites_pg.select_version(1, by='index')
+        beta_sites_pg.go_to_beta_sites_page()
+        beta_sites_pg.select_product('firefox')
+        beta_sites_pg.select_version(1, by='index')
 
-        selected_site = sites_pg.site_url(1)
-        sites_pg.click_site(selected_site, by='url')
-        sites_pg.click_first_similar_messages_link()
-        sites_pg.click_next_page()
+        selected_site = beta_sites_pg.site_url(1)
+        beta_sites_pg.click_site(selected_site, by='url')
+        beta_sites_pg.click_first_similar_messages_link()
+        beta_sites_pg.click_next_page()
 
-        self.assertEqual(sites_pg.messages_heading, 'Theme')
+        self.assertEqual(beta_sites_pg.messages_heading, 'Theme')
         self.assertEqual(results_pg.page_from_url, '2')
-        self.assertEqual(sites_pg.theme_callout, 'Theme for ' + selected_site)
-        self.assertTrue(0 < sites_pg.message_count)
-        self.assertEqual(sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')
-        self.assertTrue(selected_site in sites_pg.first_message_url)
+        self.assertEqual(beta_sites_pg.theme_callout, 'Theme for ' + selected_site)
+        self.assertTrue(0 < beta_sites_pg.message_count)
+        self.assertEqual(beta_sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')
+        self.assertTrue(selected_site in beta_sites_pg.first_message_url)
 
 if __name__ == "__main__":
     unittest.main()

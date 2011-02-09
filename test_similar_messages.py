@@ -64,7 +64,7 @@ class TestSimilarMessages(unittest.TestCase):
 
         """
         beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
-        results_pg = search_results_page.SearchResultsPage(self.selenium)
+        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_sites_pg.go_to_beta_sites_page()
         beta_sites_pg.select_product('firefox')
@@ -76,7 +76,7 @@ class TestSimilarMessages(unittest.TestCase):
         beta_sites_pg.click_next_page()
 
         self.assertEqual(beta_sites_pg.messages_heading, 'Theme')
-        self.assertEqual(results_pg.page_from_url, '2')
+        self.assertEqual(search_results_pg.page_from_url, '2')
         self.assertEqual(beta_sites_pg.theme_callout, 'Theme for ' + selected_site)
         self.assertTrue(0 < beta_sites_pg.message_count)
         self.assertEqual(beta_sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')

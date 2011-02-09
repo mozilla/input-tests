@@ -52,7 +52,7 @@ import search_results_page
 class TestProductFilter(unittest.TestCase):
 
     _beta_products = (
-        {"name": "firefox", "versions": ("4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
+        {"name": "firefox", "versions": ("4.0b11", "4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
         {"name": "mobile", "versions": ("4.0b4", "4.0b3", "4.0b2", "4.0b1")}
     )
 

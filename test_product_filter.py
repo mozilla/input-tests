@@ -91,7 +91,7 @@ class TestProductFilter(unittest.TestCase):
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 beta_feedback_pg.select_version(version)
                 self.assertEqual(beta_feedback_pg.selected_product, product["name"])
-                self.assertEqual(beta_feedback_pg.selected_version, version)
+                self.assertEqual(beta_feedback_pg.selected_version(), version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 
@@ -121,7 +121,7 @@ class TestProductFilter(unittest.TestCase):
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 beta_sites_pg.select_version(version)
                 self.assertEqual(beta_sites_pg.selected_product, product["name"])
-                self.assertEqual(beta_sites_pg.selected_version, version)
+                self.assertEqual(beta_sites_pg.selected_version(), version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 

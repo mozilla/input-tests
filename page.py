@@ -153,7 +153,7 @@ class Page(object):
 
         print '-------------------'
         print 'Error at ' + self.selenium.get_location()
-        print 'Page title ' + self.selenium.get_title()
+        print 'Page title ' + self.selenium.get_title().encode('utf-8')
         print '-------------------'
         filename = file_name + '_' + str(time.time()).split('.')[0] + '.png'
 

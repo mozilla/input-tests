@@ -23,7 +23,8 @@ Run
 
 followed by
 
-    sudo pip install nose
+    sudo pip install py.test 
+    sudo pip install py.test-xdist
     sudo pip install selenium
     
 to install the required Python libraries.

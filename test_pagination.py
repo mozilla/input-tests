@@ -72,7 +72,6 @@ class TestPagination(unittest.TestCase):
 
         beta_themes_page_obj.go_to_beta_themes_page()
         beta_themes_page_obj.click_type_issues()
-        raise SkipTest("Bug 631418 - No content on beta Themes page")
         beta_themes_page_obj.click_next_page()
         raise SkipTest("Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
         self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")

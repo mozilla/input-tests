@@ -100,7 +100,9 @@ class InputBasePage(Page):
                                   'poland' :'loc_pl',
                                   'china' :'loc_zh-CN'
                                   }
-
+    _more_locales_link_locator = "css=#filter_locale .more"
+    _extra_locales_list_locator = "css=.extra"
+    _first_message_locale_locator = "//li[@class='message'][1]/ul/li[3]/a"
     _search_results_section    = "messages"
     _search_form               = "kw-search"
     _search_box                = "id_q"
@@ -376,6 +378,26 @@ class InputBasePage(Page):
                     self.selenium.wait_for_page_to_load(page_load_timeout)
                     break
 
+    def click_more_locales_link(self):
+        """
+        clicks the 'More locales' link
+        """
+        self.selenium.click(self._more_locales_link_locator)
+        self.wait_for_element_not_visible(self._more_locales_link_locator)
+
+    def is_extra_locales_list_visible(self):
+        """
+        Returns True if the list of additional locales is visible
+        """
+        return self.is_element_visible(self._extra_locales_list_locator)
+
+    @property
+    def first_message_locale(self):
+        """
+        Returns the locale name for the first message in the message list
+        """
+        return self.selenium.get_text(self._first_message_locale_locator)
+
     def verify_all_firefox_versions(self):
         """
             checks all Fx versions are present
@@ -410,6 +432,10 @@ class InputBasePage(Page):
     @property
     def issue_count(self):
         return self.selenium.get_xpath_count('//p[@class="type issue"]')
+
+    @property
+    def locale_count(self):
+        return self.selenium.get_xpath_count('//div[@id="filter_locale"]/ul[@class="bars"]/div[1]/li')
 
     def click_previous_page(self):
         """

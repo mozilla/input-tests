@@ -40,8 +40,7 @@
 
 from selenium import selenium
 from vars import ConnectionParameters
-import unittest
-from nose.exc import SkipTest
+import unittest2 as unittest
 
 import beta_themes_page
 import search_results_page
@@ -67,13 +66,13 @@ class TestPagination(unittest.TestCase):
         3. Verifies the currently results of the filter
 
         """
+        self.skipTest("Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
         beta_themes_page_obj = beta_themes_page.BetaThemesPage(self.selenium)
         search_results_page_obj = search_results_page.SearchResultsPage(self.selenium)
 
         beta_themes_page_obj.go_to_beta_themes_page()
         beta_themes_page_obj.click_type_issues()
         beta_themes_page_obj.click_next_page()
-        raise SkipTest("Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
         self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
         self.assertEqual(beta_themes_page_obj.current_type, "Issues")
         self.assertEqual(beta_themes_page_obj.praise_count, 0)

@@ -42,7 +42,7 @@
 
 from selenium import selenium
 from vars import ConnectionParameters
-import unittest
+import unittest2 as unittest
 
 import beta_feedback_page
 
@@ -75,7 +75,7 @@ class TestSearch(unittest.TestCase):
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.search_for(u"Tension et violence en C\xf4ted'Ivoire avant les r\xe9sultats")
+        beta_feedback_pg.search_for(u"rapidit\xe9")
         self.assertTrue(0 < beta_feedback_pg.message_count)
 
 if __name__ == "__main__":

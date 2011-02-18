@@ -64,7 +64,7 @@ class SubmitSuggestion(unittest.TestCase):
     def test_submitting_suggestion(self):
         """
 
-        This testcase covers # XXXXX in Litmus
+        This testcase covers # 15104 in Litmus
         1. Verifies the thank you page is loaded
         2. Verifies the new suggestion appears on the feedback page
 

@@ -23,7 +23,8 @@ Run
 
 followed by
 
-    sudo pip install nose
+    sudo pip install py.test 
+    sudo pip install py.test-xdist
     sudo pip install selenium
     
 to install the required Python libraries.
@@ -45,7 +46,7 @@ Edit the vars.py file to specify the browser you will want to run your tests in.
 Once the above prerequisites have been met you can run the tests using the
 following command:
 
-    nosetests .
+    py.test-2.6 .
 
 Writing Tests
 -------------

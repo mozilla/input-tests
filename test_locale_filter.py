@@ -61,21 +61,49 @@ class TestLocaleFilter(unittest.TestCase):
         """
 
         This testcase covers # 15087 in Litmus
-
+        1. Verify the initial locale count is 10
+        2. Verify that clicking a specific locale in the top 10 list of locales only shows input specific for that locale
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
         search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
+        beta_feedback_pg.select_product('firefox')
+        beta_feedback_pg.select_version(2, by='index')
 
-        self.assertEqual(int(beta_feedback_pg.locale_count), 10)
+        self.assertEqual(beta_feedback_pg.locale_count, 10)
+        num_messages = beta_feedback_pg.locale_message_count("de", by="code")
+        beta_feedback_pg.click_locale("germany")
+
+        self.assertTrue(beta_feedback_pg.message_count <= num_messages)
+        self.assertEqual(beta_feedback_pg.first_message_locale, "German (Germany)")
+        self.assertEqual(search_results_pg.locale_from_url, "de")
+
+    def test_extra_locale_filter(self):
+        """
+
+        This testcase covers # 15087 in Litmus
+        1. Verify the initial locale count is 10
+        2. Verify clicking the More locales link shows additional locales
+        3. Verify that clicking a specific locale in the extended list of locales only shows input specific for that locale
+        """
+        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
+
+        beta_feedback_pg.go_to_beta_feedback_page()
+        beta_feedback_pg.select_product('firefox')
+        beta_feedback_pg.select_version(2, by='index')
+
+        self.assertEqual(beta_feedback_pg.locale_count, 10)
         beta_feedback_pg.click_more_locales_link()
-        self.assertTrue(beta_feedback_pg.is_extra_locales_list_visible)
-        beta_feedback_pg.click_locale("china")
+        loc_name = beta_feedback_pg.locale_name_by_index(11)
+        loc_code = beta_feedback_pg.locale_code_by_index(11)
+        num_messages = beta_feedback_pg.locale_message_count(11)
+        beta_feedback_pg.click_locale(11, by="index")
 
-        self.assertTrue(0 < beta_feedback_pg.message_count)
-        self.assertEqual(beta_feedback_pg.first_message_locale, "Chinese (Simplified)")
-        self.assertEqual(search_results_pg.locale_from_url, 'zh-CN')
+        self.assertTrue(beta_feedback_pg.message_count <= num_messages)
+        self.assertEqual(beta_feedback_pg.first_message_locale, loc_name)
+        self.assertEqual(search_results_pg.locale_from_url, loc_code)
 
 if __name__ == "__main__":
     unittest.main()

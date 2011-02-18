@@ -126,3 +126,12 @@ class SearchResultsPage(input_base_page.InputBasePage):
 
         """
         return self._value_from_url("date_end")
+
+    @property
+    def page_from_url(self):
+        """
+
+        Returns the page value from the current location URL
+
+        """
+        return self._value_from_url("page")

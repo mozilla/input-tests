@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# *****BEGIN LICENSE BLOCK *****
+# ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -14,14 +12,14 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Mozilla WebQA Selenium Tests.
+# The Original Code is Firefox Input.
 #
 # The Initial Developer of the Original Code is
-# Mozilla.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Mozilla Corp.
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Tobias Markus <tobbi.bugs@googlemail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,46 +34,53 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-
+'''
+Created on Jan 26, 2011
+'''
 
 from selenium import selenium
 from vars import ConnectionParameters
-import unittest2 as unittest
+import unittest
 
-import beta_themes_page
+import beta_sites_page
 import search_results_page
 
 
-class TestPagination(unittest.TestCase):
+class TestSimilarMessages(unittest.TestCase):
 
     def setUp(self):
         self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
+                                ConnectionParameters.browser, ConnectionParameters.baseurl)
         self.selenium.start()
         self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
 
     def tearDown(self):
         self.selenium.stop()
 
-    def test_beta_themes_filters_persist_when_paging_through_results(self):
+    def test_similar_messages(self):
         """
 
-        This testcase covers # 1508 in Litmus
-        1. Verifies the filter is in the URL
-        2. Verifies the currently applied filter is styled appropriately
-        3. Verifies the currently results of the filter
+        This testcase covers # 13807 in Litmus
 
         """
-        beta_themes_page_obj = beta_themes_page.BetaThemesPage(self.selenium)
-        search_results_page_obj = search_results_page.SearchResultsPage(self.selenium)
+        beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
+        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
-        beta_themes_page_obj.go_to_beta_themes_page()
-        beta_themes_page_obj.click_type_issues()
-        beta_themes_page_obj.click_next_page()
-        self.skipTest("Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
-        self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
-        self.assertEqual(beta_themes_page_obj.current_type, "Issues")
-        self.assertEqual(beta_themes_page_obj.praise_count, 0)
+        beta_sites_pg.go_to_beta_sites_page()
+        beta_sites_pg.select_product('firefox')
+        beta_sites_pg.select_version(1, by='index')
+
+        selected_site = beta_sites_pg.site_url(1)
+        beta_sites_pg.click_site(selected_site, by='url')
+        beta_sites_pg.click_first_similar_messages_link()
+        beta_sites_pg.click_next_page()
+
+        self.assertEqual(beta_sites_pg.messages_heading, 'Theme')
+        self.assertEqual(search_results_pg.page_from_url, '2')
+        self.assertEqual(beta_sites_pg.theme_callout, 'Theme for ' + selected_site)
+        self.assertTrue(0 < beta_sites_pg.message_count)
+        self.assertEqual(beta_sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')
+        self.assertTrue(selected_site in beta_sites_pg.first_message_url)
 
 if __name__ == "__main__":
     unittest.main()

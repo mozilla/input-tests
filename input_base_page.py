@@ -124,6 +124,7 @@ class InputBasePage(Page):
         """
         returns the currently selected product
         """
+        self.wait_for_element_present(self._product_dropdown_locator)
         return self.selenium.get_selected_value(self._product_dropdown_locator)
 
     def select_product(self, product):
@@ -141,19 +142,18 @@ class InputBasePage(Page):
         """
         return self.selenium.get_select_options(self._version_dropdown_locator)
 
-    @property
-    def selected_version(self):
+    def selected_version(self, type='value'):
         """
         returns the currently selected product version
         """
-        return self.selenium.get_selected_value(self._version_dropdown_locator)
+        return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
-    def select_version(self, version):
+    def select_version(self, lookup, by='value'):
         """
         selects product version
         """
-        if not version == self.selected_version:
-            self.selenium.select(self._version_dropdown_locator, "value=" + version)
+        if not lookup == self.selected_version(by):
+            self.selenium.select(self._version_dropdown_locator, by + "=" + str(lookup))
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_type_all(self):

@@ -52,7 +52,7 @@ import search_results_page
 class TestProductFilter(unittest.TestCase):
 
     _beta_products = (
-        {"name": "firefox", "versions": ("4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
+        {"name": "firefox", "versions": ("4.0b11", "4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
         {"name": "mobile", "versions": ("4.0b4", "4.0b3", "4.0b2", "4.0b1")}
     )
 
@@ -91,7 +91,7 @@ class TestProductFilter(unittest.TestCase):
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 beta_feedback_pg.select_version(version)
                 self.assertEqual(beta_feedback_pg.selected_product, product["name"])
-                self.assertEqual(beta_feedback_pg.selected_version, version)
+                self.assertEqual(beta_feedback_pg.selected_version(), version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 
@@ -121,7 +121,7 @@ class TestProductFilter(unittest.TestCase):
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
                 beta_sites_pg.select_version(version)
                 self.assertEqual(beta_sites_pg.selected_product, product["name"])
-                self.assertEqual(beta_sites_pg.selected_version, version)
+                self.assertEqual(beta_sites_pg.selected_version(), version)
                 self.assertEqual(search_results_pg.product_from_url, product["name"])
                 self.assertEqual(search_results_pg.version_from_url, version)
 

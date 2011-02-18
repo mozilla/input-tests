@@ -44,11 +44,11 @@ Created on Dec 22, 2010
 import submit_feedback_page
 
 
-class SubmitSuggestionPage(submit_feedback_page.SubmitFeedbackPage):
+class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
     def __init__(self, selenium):
         self.selenium = selenium
 
-    def go_to_submit_suggestion_page(self):
+    def go_to_submit_idea_page(self):
         self.selenium.open('/ideas/')
         self.is_the_current_page

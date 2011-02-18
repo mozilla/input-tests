@@ -68,7 +68,7 @@ class InputBasePage(Page):
     _type_all_locator = "css=#filters a:contains(All)"
     _type_praise_locator = "css=#filters a:contains(Praise)"
     _type_issues_locator = "css=#filters a:contains(Issues)"
-    _type_suggestions_locator = "css=#filters a:contains(Suggestions)"
+    _type_ideas_locator = "css=#filters a:contains(Ideas)"
 
     _current_when_link_locator = "css=#when a.selected"
     _when_links = ("link=1d", "link=7d", "link=30d")
@@ -183,13 +183,13 @@ class InputBasePage(Page):
         self.selenium.click(self._type_issues_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def click_type_suggestions(self):
+    def click_type_ideas(self):
         """
 
-        Clicks the 'Suggestions' type filter
+        Clicks the 'Ideas' type filter
 
         """
-        self.selenium.click(self._type_suggestions_locator)
+        self.selenium.click(self._type_ideas_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def get_current_days(self):

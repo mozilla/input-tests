@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,6 +47,9 @@ page_load_timeout = vars.ConnectionParameters.page_load_timeout
 class SubmitFeedbackPage(input_base_page.InputBasePage):
 
     _page_title = u'Submit Feedback \u2014 Firefox Input'
+    _duplicate_feedback_error_message = u'We already got your feedback! Thanks.'
+    
+    _errorlist_locator = "css=ul.errorlist>li"
 
     _feedback_locator = 'id=id_description'
     _remaining_character_count_locator = 'id=count'
@@ -57,6 +61,13 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
         self.selenium.key_up(self._feedback_locator, feedback[-1:])
+
+    @property
+    def is_duplicate_feedback_error_messgae_present(self):
+        try:
+            return self.selenium.get_text(self._errorlist_locator) == self._duplicate_feedback_error_message
+        except:
+            return False
 
     @property
     def remaining_character_count(self):

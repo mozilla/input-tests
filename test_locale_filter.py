@@ -57,7 +57,7 @@ class TestLocaleFilter(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_locale_filter(self):
+    def test_beta_feedback_can_be_filtered_by_locale(self):
         """
         This testcase covers # 15120 in Litmus
         1. Verify that the number of messages in the locale list matches the number of messages returned
@@ -81,7 +81,7 @@ class TestLocaleFilter(unittest.TestCase):
         self.assertEqual(search_results_pg.locale_from_url, locale_code)
         [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
 
-    def test_extra_locale_filter(self):
+    def test_beta_feedback_can_be_filtered_by_locale_from_expanded_list(self):
         """
         This testcase covers # 15087 & 15120 in Litmus
         1. Verify the initial locale count is 10

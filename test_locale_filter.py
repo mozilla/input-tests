@@ -63,6 +63,7 @@ class TestLocaleFilter(unittest.TestCase):
         This testcase covers # 15087 in Litmus
         1. Verify the initial locale count is 10
         2. Verify that clicking a specific locale in the top 10 list of locales only shows input specific for that locale
+
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
         search_results_pg = search_results_page.SearchResultsPage(self.selenium)
@@ -71,21 +72,25 @@ class TestLocaleFilter(unittest.TestCase):
         beta_feedback_pg.select_product('firefox')
         beta_feedback_pg.select_version(2, by='index')
 
-        self.assertEqual(beta_feedback_pg.locale_count, 10)
-        num_messages = beta_feedback_pg.locale_message_count("de", by="code")
-        beta_feedback_pg.click_locale("germany")
+        self.assertEqual(beta_feedback_pg.locale_filter.locale_count, 10)
+        
+        locale_name = "Russian"
+        locale = beta_feedback_pg.locale_filter.locale(locale_name)
+        locale_message_count = locale.message_count
+        locale_code = locale.code
+        locale.select()
 
-        self.assertTrue(beta_feedback_pg.message_count <= num_messages)
-        self.assertEqual(beta_feedback_pg.first_message_locale, "German (Germany)")
-        self.assertEqual(search_results_pg.locale_from_url, "de")
+        self.assertEqual(beta_feedback_pg.message(1).locale, locale_name)
+        self.assertEqual(search_results_pg.locale_from_url, locale_code)
+        [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
 
     def test_extra_locale_filter(self):
         """
 
         This testcase covers # 15087 in Litmus
-        1. Verify the initial locale count is 10
-        2. Verify clicking the More locales link shows additional locales
-        3. Verify that clicking a specific locale in the extended list of locales only shows input specific for that locale
+        1. Verify clicking the More locales link shows additional locales
+        2. Verify that clicking a specific locale in the extended list of locales only shows input specific for that locale
+
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
         search_results_pg = search_results_page.SearchResultsPage(self.selenium)
@@ -94,16 +99,18 @@ class TestLocaleFilter(unittest.TestCase):
         beta_feedback_pg.select_product('firefox')
         beta_feedback_pg.select_version(2, by='index')
 
-        self.assertEqual(beta_feedback_pg.locale_count, 10)
-        beta_feedback_pg.click_more_locales_link()
-        loc_name = beta_feedback_pg.locale_name_by_index(11)
-        loc_code = beta_feedback_pg.locale_code_by_index(11)
-        num_messages = beta_feedback_pg.locale_message_count(11)
-        beta_feedback_pg.click_locale(11, by="index")
+        beta_feedback_pg.locale_filter.show_extra_locales()
+        self.assertTrue(beta_feedback_pg.locale_filter.locale_count > 10)
 
-        self.assertTrue(beta_feedback_pg.message_count <= num_messages)
-        self.assertEqual(beta_feedback_pg.first_message_locale, loc_name)
-        self.assertEqual(search_results_pg.locale_from_url, loc_code)
+        locale = beta_feedback_pg.locale_filter.locale(11)
+        locale_name = locale.name
+        locale_message_count = locale.message_count
+        locale_code = locale.code
+        locale.select()
+
+        self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), locale_message_count)
+        self.assertEqual(search_results_pg.locale_from_url, locale_code)
+        [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
 
 if __name__ == "__main__":
     unittest.main()

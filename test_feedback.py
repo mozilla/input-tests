@@ -65,7 +65,7 @@ class TestFeedback(unittest.TestCase):
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute
             window.
         """
-        text = u'I try submit this feedback twice within a five minute window and it should fail.'
+        text = 'I submit this feedback twice within a five minute window and it should fail.'
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
         thanks_pg = thanks_page.ThanksPage(self.selenium)
         
@@ -77,7 +77,7 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
         submit_happy_feedback_pg.submit_feedback()
-        self.assertTrue(submit_happy_feedback_pg.is_duplicate_feedback_error_messgae_present)
+        self.assertEqual(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
 
     def test_submitting_feedback_with_unicode_characters(self):
         """

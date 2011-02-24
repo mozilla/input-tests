@@ -80,7 +80,7 @@ class SearchResultsPage(input_base_page.InputBasePage):
     def feedback_type_from_url(self):
         """
 
-        Returns the feedback type (praise, issues, suggestions) from the current location URL
+        Returns the feedback type (praise, issues, ideas) from the current location URL
 
         """
         return self._value_from_url("s")

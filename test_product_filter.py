@@ -43,6 +43,8 @@ Created on Nov 24, 2010
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
+import pytest
+xfail = pytest.mark.xfail
 
 import beta_feedback_page
 import beta_sites_page
@@ -53,7 +55,7 @@ class TestProductFilter(unittest.TestCase):
 
     _beta_products = (
         {"name": "firefox", "versions": ("4.0b11", "4.0b10", "4.0b9", "4.0b8", "4.0b7", "4.0b6", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")},
-        {"name": "mobile", "versions": ("4.0b4", "4.0b3", "4.0b2", "4.0b1")}
+        {"name": "mobile", "versions": ("4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")}
     )
 
     def setUp(self):
@@ -65,6 +67,7 @@ class TestProductFilter(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
+    @xfail(reason="Bug 632436 - 'Query has timed out.' when searching Firefox beta with empty/inclusive start/end dates")
     def test_beta_feedback_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 

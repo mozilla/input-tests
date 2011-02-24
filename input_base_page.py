@@ -100,7 +100,11 @@ class InputBasePage(Page):
                                   'poland' :'loc_pl',
                                   'china' :'loc_zh-CN'
                                   }
-
+    _more_locales_link_locator = "css=#filter_locale .more"
+    _locales_locator = "//div[@id='filter_locale']/ul[@class='bars']/div[1]/li"
+    _extra_locales_locator = "css=#filter_locale .extra"
+    _extra_locales_xpath_locator = "//div[@id='filter_locale']/ul[@class='bars']/div[@class='extra']/li"
+    _first_message_locale_locator = "//li[@class='message'][1]/ul/li[3]/a"
     _search_results_section    = "messages"
     _search_form               = "kw-search"
     _search_box                = "id_q"
@@ -365,16 +369,68 @@ class InputBasePage(Page):
             self.selenium.click(self._feedback_issues_box)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def click_locale(self,country_name):
+    def click_locale(self,lookup, by="name"):
         """
         clicks US/German/Spanish etc.
         """
-        for country,loc_code in self._locales.iteritems():
-            if not re.search(country_name, country, re.IGNORECASE) is None:
-                if not self.selenium.is_checked(loc_code):
-                    self.selenium.click(loc_code)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
+        if by == "name":
+            for country,loc_code in self._locales.iteritems():
+                if not re.search(lookup, country, re.IGNORECASE) is None:
+                    if not self.selenium.is_checked(loc_code):
+                        self.selenium.click(loc_code)
+                        self.selenium.wait_for_page_to_load(page_load_timeout)
+                        break
+        elif by == "index":
+            if lookup <= 10:
+                self.selenium.click(self._locales_locator+"["+str(lookup)+"]/input")
+            else:
+                self.selenium.click(self._extra_locales_xpath_locator+"["+str(lookup-10)+"]/input")
+            self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def locale_name_by_index(self, index):
+        """
+        returns a locale name by index
+        """
+        if index <= 10:
+            return self.selenium.get_text(self._locales_locator+"["+str(index)+"]/label/strong")
+        else:
+            return self.selenium.get_text(self._extra_locales_xpath_locator+"["+str(index-10)+"]/label/strong")
+
+    def locale_code_by_index(self, index):
+        """
+        returns the locale code by index
+        """
+        if index <= 10:
+            return self.selenium.get_attribute(self._locales_locator+"["+str(index)+"]/input@value")
+        else:
+            return self.selenium.get_attribute(self._extra_locales_xpath_locator+"["+str(index-10)+"]/input@value")
+
+    def locale_message_count(self, lookup, by="index"):
+        """
+        Returns the number of messages for a locale in the locales list
+        """
+        if by == "index":
+            if lookup <= 10:
+                return int(self.selenium.get_text(self._locales_locator+"["+str(lookup)+"]/label/span[@class='count']"))
+            else:
+                return int(self.selenium.get_text(self._extra_locales_xpath_locator+"["+str(lookup-10)+"]/label/span[@class='count']"))
+        if by == "name":
+            return int(self.selenium.get_text(self._locales_locator+"/label[@for='loc_"+lookup+"']/span[@class='count']"))
+
+    def click_more_locales_link(self):
+        """
+        clicks the 'More locales' link
+        """
+        self.selenium.click(self._more_locales_link_locator)
+        self.wait_for_element_not_visible(self._more_locales_link_locator)
+        self.wait_for_element_visible(self._extra_locales_locator)
+
+    @property
+    def first_message_locale(self):
+        """
+        Returns the locale name for the first message in the message list
+        """
+        return self.selenium.get_text(self._first_message_locale_locator)
 
     def verify_all_firefox_versions(self):
         """
@@ -401,7 +457,7 @@ class InputBasePage(Page):
 
     @property
     def message_count(self):
-        return self.selenium.get_xpath_count('//li[@class="message"]')
+        return int(self.selenium.get_xpath_count('//li[@class="message"]'))
 
     @property
     def praise_count(self):
@@ -410,6 +466,10 @@ class InputBasePage(Page):
     @property
     def issue_count(self):
         return self.selenium.get_xpath_count('//p[@class="type issue"]')
+
+    @property
+    def locale_count(self):
+        return int(self.selenium.get_xpath_count(self._locales_locator))
 
     def click_previous_page(self):
         """

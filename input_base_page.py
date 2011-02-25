@@ -45,6 +45,7 @@ Created on Nov 19, 2010
 
 from page import Page
 import vars
+import locale_filter_region
 
 import re
 import time
@@ -90,16 +91,6 @@ class InputBasePage(Page):
     _feedback_issues_box      =  "issue_bar"
 
     _platforms                =  ("os_win7", "os_winxp", "os_mac", "os_vista", "os_linux", "os_")
-
-    _locales                  =  {'us' : 'loc_en-US',
-                                  'germany' :'loc_de',
-                                  'spain' :'loc_es',
-                                  'russia' :'loc_ru',
-                                  'france' :'loc_fr',
-                                  'british' :'loc_en-GB',
-                                  'poland' :'loc_pl',
-                                  'china' :'loc_zh-CN'
-                                  }
 
     _search_results_section    = "messages"
     _search_form               = "kw-search"
@@ -365,16 +356,9 @@ class InputBasePage(Page):
             self.selenium.click(self._feedback_issues_box)
             self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def click_locale(self,country_name):
-        """
-        clicks US/German/Spanish etc.
-        """
-        for country,loc_code in self._locales.iteritems():
-            if not re.search(country_name, country, re.IGNORECASE) is None:
-                if not self.selenium.is_checked(loc_code):
-                    self.selenium.click(loc_code)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
+    @property
+    def locale_filter(self):
+        return locale_filter_region.LocaleFilter(self.selenium)
 
     def verify_all_firefox_versions(self):
         """
@@ -401,7 +385,7 @@ class InputBasePage(Page):
 
     @property
     def message_count(self):
-        return self.selenium.get_xpath_count('//li[@class="message"]')
+        return int(self.selenium.get_xpath_count('//li[@class="message"]'))
 
     @property
     def praise_count(self):

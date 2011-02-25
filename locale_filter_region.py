@@ -87,9 +87,11 @@ class LocaleFilter(Page):
 
         @property
         def root_locator(self):
-            try:
-                return "css=#filter_locale div li:nth(" + str(int(self.lookup - 1)) + ")"
-            except:
+            if type(self.lookup) == int:
+                # lookup by index
+                return "css=#filter_locale div li:nth(" + str(self.lookup) + ")"
+            else:
+                # lookup by name
                 return "css=#filter_locale div li:contains(" + self.lookup + ")"
 
         @property

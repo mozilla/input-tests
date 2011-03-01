@@ -60,10 +60,8 @@ class TestFeedback(unittest.TestCase):
 
     def test_submitting_same_feedback_twice(self):
         """
-        
         This testcase covers # 15119 in Litmus  
-        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute
-            window.
+        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
@@ -81,10 +79,8 @@ class TestFeedback(unittest.TestCase):
 
     def test_submitting_feedback_with_unicode_characters(self):
         """
-
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
-
         """
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
         thanks_pg = thanks_page.ThanksPage(self.selenium)
@@ -96,12 +92,10 @@ class TestFeedback(unittest.TestCase):
 
     def test_remaining_character_count(self):
         """
-
         This testcase covers # 13806 in Litmus
         1. Verifies the remaining character count decreases
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
-
         """
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
 

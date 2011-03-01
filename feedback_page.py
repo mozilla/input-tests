@@ -45,6 +45,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
+    _total_message_count_locator = "css=#big-count p"
     _messages_locator = "id('messages')//li[@class='message']"
 
     def __init__(self, selenium):
@@ -53,6 +54,10 @@ class FeedbackPage(input_base_page.InputBasePage):
     def go_to_feedback_page(self):
         self.selenium.open('/')
         self.is_the_current_page
+
+    @property
+    def total_message_count(self):
+       return self.selenium.get_text(self._total_message_count_locator)
 
     @property
     def message_count(self):

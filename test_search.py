@@ -24,6 +24,7 @@
 #
 # Contributor(s): David Burns
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -75,6 +76,11 @@ class TestSearch(unittest.TestCase):
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
+        # Select the Firefox beta version that is 1 less than the newest to ensure 
+        # the unicode search returns 0 results.
+        beta_feedback_pg.select_product('firefox')
+        beta_feedback_pg.select_version(2, by='index')
+        
         beta_feedback_pg.search_for(u"rapidit\xe9")
         self.assertTrue(0 < beta_feedback_pg.message_count)
 

@@ -77,7 +77,7 @@ class TestSearch(unittest.TestCase):
 
         beta_feedback_pg.go_to_beta_feedback_page()
         # Select the Firefox beta version that is 1 less than the newest to ensure the unicode
-        # search returns least 1 result.
+        # search returns at least 1 result.
         beta_feedback_pg.select_product('firefox')
         beta_feedback_pg.select_version(2, by='index')
         

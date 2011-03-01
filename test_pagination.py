@@ -63,7 +63,7 @@ class TestPagination(unittest.TestCase):
     def test_beta_themes_filters_persist_when_paging_through_results(self):
         """
 
-        This testcase covers # 1508 in Litmus
+        This testcase covers # 15018 in Litmus
         1. Verifies the filter is in the URL
         2. Verifies the currently applied filter is styled appropriately
         3. Verifies the currently results of the filter

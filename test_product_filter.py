@@ -67,7 +67,6 @@ class TestProductFilter(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    @xfail(reason="Bug 632436 - 'Query has timed out.' when searching Firefox beta with empty/inclusive start/end dates")
     def test_beta_feedback_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 

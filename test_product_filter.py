@@ -43,8 +43,6 @@ Created on Nov 24, 2010
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
-import pytest
-xfail = pytest.mark.xfail
 
 import beta_feedback_page
 import beta_sites_page

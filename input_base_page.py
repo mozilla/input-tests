@@ -46,6 +46,7 @@ Created on Nov 19, 2010
 from page import Page
 import vars
 import locale_filter_region
+import platform_filter_region
 
 import re
 import time
@@ -359,6 +360,10 @@ class InputBasePage(Page):
     @property
     def locale_filter(self):
         return locale_filter_region.LocaleFilter(self.selenium)
+
+    @property
+    def platform_filter(self):
+        return platform_filter_region.PlatformFilter(self.selenium)
 
     def verify_all_firefox_versions(self):
         """

@@ -86,6 +86,13 @@ class SearchResultsPage(input_base_page.InputBasePage):
         return self._value_from_url("s")
 
     @property
+    def platform_from_url(self):
+        """
+        Returns the platform from the current location URL
+        """
+        return self._value_from_url("platform")
+
+    @property
     def product_from_url(self):
         """
 

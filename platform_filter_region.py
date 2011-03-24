@@ -74,10 +74,10 @@ class PlatformFilter(Page):
         def root_locator(self):
             if type(self.lookup) == int:
                 # lookup by index
-                return "css=#filter_platform li:nth(" + str(self.lookup) + ")"
+                return "css=#filter_platform li:nth(%s)" % self.lookup
             else:
                 # lookup by name
-                return "css=#filter_platform li:contains(" + self.lookup + ")"
+                return "css=#filter_platform li:contains(%s)" % self.lookup
 
         @property
         def is_selected(self):

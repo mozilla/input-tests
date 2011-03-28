@@ -42,9 +42,6 @@ import sites_page
 
 class BetaSitesPage(sites_page.SitesPage):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_beta_sites_page(self):
         self.selenium.open('/beta/sites/')
         self.is_the_current_page

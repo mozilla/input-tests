@@ -47,9 +47,6 @@ class PlatformFilter(Page):
 
     _platforms_locator = "id('filter_platform')//li"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     @property
     def platform_count(self):
         return int(self.selenium.get_xpath_count(self._platforms_locator))

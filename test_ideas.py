@@ -85,7 +85,7 @@ class SubmitIdea(unittest.TestCase):
         #self.assertEqual(first_message.body, idea)
         #self.assertEqual(first_message.time, "just now")
 
-    def _test_remaining_character_count(self):
+    def test_remaining_character_count(self):
         """
 
         This testcase covers # 15029 in Litmus

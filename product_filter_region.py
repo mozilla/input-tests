@@ -50,9 +50,6 @@ class ProductFilter(Page):
         _product_dropdown_locator = "id=product"
         _version_dropdown_locator = "id=version"
 
-        def __init__(self, selenium):
-            self.selenium = selenium
-
         @property
         def products(self):
             """
@@ -73,7 +70,7 @@ class ProductFilter(Page):
             selects product
             """
             if not product == self.selected_product:
-                self.selenium.select(self._product_dropdown_locator, "value=" + product)
+                self.selenium.select(self._product_dropdown_locator, "value=%s" % product)
                 self.selenium.wait_for_page_to_load(page_load_timeout)
 
         @property
@@ -94,5 +91,5 @@ class ProductFilter(Page):
             selects product version
             """
             if not lookup == self.selected_version(by):
-                self.selenium.select(self._version_dropdown_locator, by + "=" + str(lookup))
+                self.selenium.select(self._version_dropdown_locator, "%s=%s" % (by, lookup))
                 self.selenium.wait_for_page_to_load(page_load_timeout)

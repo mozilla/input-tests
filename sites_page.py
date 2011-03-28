@@ -53,9 +53,6 @@ class SitesPage(input_base_page.InputBasePage):
 
     _sites_locator = "id('themes')//li[@class='site']"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_sites_page(self):
         self.selenium.open('/sites/')
         self.is_the_current_page

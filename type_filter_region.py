@@ -49,9 +49,6 @@ class TypeFilter(Page):
 
         _selected_type_locator = "css=#filter_type a.selected"
 
-        def __init__(self, selenium):
-            self.selenium = selenium
-
         @property
         def selected_type(self):
             return self.selenium.get_text(self._selected_type_locator)

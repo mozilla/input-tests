@@ -42,9 +42,6 @@ import submit_feedback_page
 
 class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_submit_happy_feedback_page(self):
         self.selenium.open('/happy/')
         self.is_the_current_page

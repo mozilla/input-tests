@@ -42,9 +42,6 @@ import themes_page
 
 class BetaThemesPage(themes_page.ThemesPage):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_beta_themes_page(self):
         self.selenium.open('/beta/themes/')
         self.is_the_current_page

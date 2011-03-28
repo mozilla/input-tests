@@ -50,9 +50,6 @@ class LocaleFilter(Page):
     _more_locales_link_locator = "css=#filter_locale .more"
     _extra_locales_locator = "css=#filter_locale .extra"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     @property
     def is_extra_locales_visible(self):
         return self.selenium.is_visible(self._extra_locales_locator)

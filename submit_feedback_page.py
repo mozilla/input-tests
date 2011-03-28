@@ -53,9 +53,6 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     _remaining_character_count_locator = 'id=count'
     _submit_feedback_locator = 'css=button[type=submit]'
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
         self.selenium.key_up(self._feedback_locator, feedback[-1:])

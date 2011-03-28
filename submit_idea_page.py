@@ -46,9 +46,6 @@ import submit_feedback_page
 
 class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_submit_idea_page(self):
         self.selenium.open('/ideas/')
         self.is_the_current_page

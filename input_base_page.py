@@ -56,10 +56,6 @@ class InputBasePage(Page):
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-        self.selenium.window_maximize()
-
     def click_previous_page(self):
         """
         Navigates to the previous page of results

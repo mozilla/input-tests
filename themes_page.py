@@ -52,9 +52,6 @@ class ThemesPage(input_base_page.InputBasePage):
 
     _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_themes_page(self):
         self.selenium.open('/themes/')
         self.is_the_current_page

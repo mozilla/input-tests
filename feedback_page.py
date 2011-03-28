@@ -77,9 +77,6 @@ class FeedbackPage(input_base_page.InputBasePage):
     _total_message_count_locator = "css=#big-count p"
     _messages_locator = "id('messages')//li[@class='message']"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_feedback_page(self):
         self.selenium.open('/')
         self.is_the_current_page
@@ -148,7 +145,8 @@ class FeedbackPage(input_base_page.InputBasePage):
         return self.selenium.is_visible(self._custom_dates_locator)
 
     def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
+        self.selenium.wait_for_condition(
+            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
 
     def click_start_date(self):
         """
@@ -207,7 +205,18 @@ class FeedbackPage(input_base_page.InputBasePage):
         yearDelta = targetYear - currentYear
         monthDelta = yearDelta * 12
 
-        months = {"January": 1, "February": 2, "March": 3, "April": 4, "May": 5, "June": 6, "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12}
+        months = {"January": 1,
+                  "February": 2,
+                  "March": 3,
+                  "April": 4,
+                  "May": 5,
+                  "June": 6,
+                  "July": 7,
+                  "August": 8,
+                  "September": 9,
+                  "October": 10,
+                  "November": 11,
+                  "December": 12}
         currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
         targetMonth = target_date.month
         monthDelta += targetMonth - currentMonth

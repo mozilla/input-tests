@@ -48,9 +48,6 @@ class ThemePage(input_base_page.InputBasePage):
     _back_link_locator = "css=a.exit"
     _messages_locator = "id('messages')//li[@class='message']"
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     @property
     def messages_heading(self):
         """

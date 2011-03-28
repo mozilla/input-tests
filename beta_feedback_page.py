@@ -42,9 +42,6 @@ import feedback_page
 
 class BetaFeedbackPage(feedback_page.FeedbackPage):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
-
     def go_to_beta_feedback_page(self):
         self.selenium.open('/beta/')
         self.is_the_current_page

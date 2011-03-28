@@ -60,13 +60,13 @@ class TestFeedback(unittest.TestCase):
 
     def test_submitting_same_feedback_twice(self):
         """
-        This testcase covers # 15119 in Litmus  
+        This testcase covers # 15119 in Litmus
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
         thanks_pg = thanks_page.ThanksPage(self.selenium)
-        
+
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
         submit_happy_feedback_pg.submit_feedback()

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -13,15 +12,15 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Firefox Input 
+# The Original Code is Firefox Input.
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
-#                 Dave Hunt
+#                 Dave Hunt <dhunt@mozilla.com>
 #                 David Burns
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -37,6 +36,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
+
 '''
 Created on Jun 21, 2010
 
@@ -74,37 +74,37 @@ class Page(object):
         else:
             return True
 
-    def click_link(self, link, wait_flag=False,timeout=80000):
-        self.selenium.click("link=%s" %(link))
+    def click_link(self, link, wait_flag=False, timeout=80000):
+        self.selenium.click("link=%s" % (link))
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
-        
-    def click(self,locator,wait_flag=False,timeout=80000):
+
+    def click(self, locator, wait_flag=False, timeout=80000):
         self.selenium.click(locator)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
-            
-    def type(self,locator, str):
+
+    def type(self, locator, str):
         self.selenium.type(locator, str)
-        
-    def click_button(self,button,wait_flag=False,timeout=80000):
+
+    def click_button(self, button, wait_flag=False, timeout=80000):
         self.selenium.click(button)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
 
     def get_url_current_page(self):
         return(self.selenium.get_location())
-    
-    def is_element_present(self,locator):
+
+    def is_element_present(self, locator):
         return self.selenium.is_element_present(locator)
 
     def is_element_visible(self, locator):
         return self.selenium.is_visible(locator)
-    
-    def is_text_present(self,text):
+
+    def is_text_present(self, text):
         return self.selenium.is_text_present(text)
-    
-    def refresh(self,timeout=80000):
+
+    def refresh(self, timeout=80000):
         self.selenium.refresh()
         self.selenium.wait_for_page_to_load(timeout)
 
@@ -113,7 +113,7 @@ class Page(object):
         while not self.is_element_present(element):
             time.sleep(1)
             count += 1
-            if count == page_load_timeout/1000:
+            if count == page_load_timeout / 1000:
                 self.record_error()
                 raise Exception(element + ' has not loaded')
 
@@ -123,7 +123,7 @@ class Page(object):
         while not self.is_element_visible(element):
             time.sleep(1)
             count += 1
-            if count == page_load_timeout/1000:
+            if count == page_load_timeout / 1000:
                 self.record_error()
                 raise Exception(element + " is not visible")
 
@@ -132,7 +132,7 @@ class Page(object):
         while self.is_element_visible(element):
             time.sleep(1)
             count += 1
-            if count == page_load_timeout/1000:
+            if count == page_load_timeout / 1000:
                 self.record_error()
                 raise Exception(element + " is still visible")
 
@@ -141,7 +141,7 @@ class Page(object):
         while (re.search(url_regex, self.selenium.get_location(), re.IGNORECASE)) is None:
             time.sleep(1)
             count += 1
-            if count == page_load_timeout/1000:
+            if count == page_load_timeout / 1000:
                 self.record_error()
                 raise Exception("Sites Page has not loaded")
 

@@ -16,12 +16,10 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Vishal
-#                 David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -37,63 +35,50 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Nov 24, 2010
+Created on March 28, 2010
 '''
 import input_base_page
-from vars import ConnectionParameters
-
-import product_filter_region
-
-page_load_timeout = ConnectionParameters.page_load_timeout
+import message_region
 
 
-class SitesPage(input_base_page.InputBasePage):
+class ThemePage(input_base_page.InputBasePage):
 
-    _page_title = 'Sites :: Firefox Input'
-
-    _sites_locator = "id('themes')//li[@class='site']"
+    _messages_heading_locator = "css=#messages h2"
+    _theme_callout_locator = "id=theme-callout"
+    _back_link_locator = "css=a.exit"
+    _messages_locator = "id('messages')//li[@class='message']"
 
     def __init__(self, selenium):
         self.selenium = selenium
 
-    def go_to_sites_page(self):
-        self.selenium.open('/sites/')
-        self.is_the_current_page
+    @property
+    def messages_heading(self):
+        """
+        Returns the heading text of the Theme page
+        """
+        return self.selenium.get_text(self._messages_heading_locator)
 
     @property
-    def product_filter(self):
-        return product_filter_region.ProductFilter.ComboFilter(self.selenium)
+    def theme_callout(self):
+        """
+        Returns the text value of the theme callout
+        """
+        return self.selenium.get_text(self._theme_callout_locator)
 
     @property
-    def site_count(self):
-        return int(self.selenium.get_xpath_count(self._sites_locator))
+    def back_link(self):
+        """
+        Returns the text value of the back link
+        """
+        return self.selenium.get_text(self._back_link_locator)
 
     @property
-    def sites(self):
-        return [self.Site(self.selenium, i + 1) for i in range(self.site_count)]
+    def message_count(self):
+        return int(self.selenium.get_xpath_count(self._messages_locator))
 
-    def site(self, index):
-        return self.Site(self.selenium, index)
+    @property
+    def messages(self):
+        return [message_region.Message(self.selenium, i + 1) for i in range(self.message_count)]
 
-    class Site(object):
-
-        _name_locator = " .name a"
-
-        def __init__(self, selenium, index):
-            self.selenium = selenium
-            self.index = index
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
-
-        @property
-        def root_locator(self):
-            return "css=#themes .site:nth(%s)" % (self.index - 1)
-
-        @property
-        def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
-
-        def click_name(self):
-            self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+    def message(self, index):
+        return message_region.Message(self.selenium, index)

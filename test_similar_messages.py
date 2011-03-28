@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Tobias Markus <tobbi.bugs@googlemail.com>
+#                 Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -43,7 +44,8 @@ from vars import ConnectionParameters
 import unittest
 
 import beta_sites_page
-import search_results_page
+import themes_page
+import theme_page
 
 
 class TestSimilarMessages(unittest.TestCase):
@@ -59,28 +61,31 @@ class TestSimilarMessages(unittest.TestCase):
 
     def test_similar_messages(self):
         """
-
         This testcase covers # 13807 in Litmus
-
         """
         beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
-        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
+        themes_pg = themes_page.ThemesPage(self.selenium)
+        theme_pg = theme_page.ThemePage(self.selenium)
 
         beta_sites_pg.go_to_beta_sites_page()
-        beta_sites_pg.select_product('firefox')
-        beta_sites_pg.select_version(1, by='index')
+        beta_sites_pg.product_filter.select_product('firefox')
+        beta_sites_pg.product_filter.select_version(1, by='index')
 
-        selected_site = beta_sites_pg.site_url(1)
-        beta_sites_pg.click_site(selected_site, by='url')
-        beta_sites_pg.click_first_similar_messages_link()
-        beta_sites_pg.click_next_page()
+        #store the first site's name and click in
+        site = beta_sites_pg.site(1)
+        site_name = site.name
+        site.click_name()
 
-        self.assertEqual(beta_sites_pg.messages_heading, 'Theme')
-        self.assertEqual(search_results_pg.page_from_url, '2')
-        self.assertEqual(beta_sites_pg.theme_callout, 'Theme for ' + selected_site)
-        self.assertTrue(0 < beta_sites_pg.message_count)
-        self.assertEqual(beta_sites_pg.back_link, 'Back to ' + selected_site + u' \xbb')
-        self.assertTrue(selected_site in beta_sites_pg.first_message_url)
+        #click similar messages and navigate to the second page
+        themes_pg.theme(1).click_similar_messages()
+        theme_pg.click_next_page()
+
+        self.assertEqual(theme_pg.messages_heading, 'Theme')
+        self.assertEqual(theme_pg.page_from_url, '2')
+        self.assertEqual(theme_pg.theme_callout, 'Theme for ' + site_name)
+        self.assertTrue(theme_pg.message_count > 0)
+        self.assertEqual(theme_pg.back_link, u'Back to %s \xbb' % site_name)
+        [self.assertTrue(site_name in message.site) for message in theme_pg.messages]
 
 if __name__ == "__main__":
     unittest.main()

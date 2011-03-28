@@ -42,7 +42,7 @@ from vars import ConnectionParameters
 import unittest
 
 import beta_feedback_page
-import search_results_page
+
 
 class TestLocaleFilter(unittest.TestCase):
 
@@ -63,12 +63,11 @@ class TestLocaleFilter(unittest.TestCase):
         3. Verify that the locale for all messages on the first page of results is correct
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
-        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.select_product('firefox')
-        beta_feedback_pg.select_version(2, by='index')
-        
+        beta_feedback_pg.product_filter.select_product('firefox')
+        beta_feedback_pg.product_filter.select_version(2, by='index')
+
         locale_name = "Russian"
         locale = beta_feedback_pg.locale_filter.locale(locale_name)
         locale_message_count = locale.message_count
@@ -76,7 +75,7 @@ class TestLocaleFilter(unittest.TestCase):
         locale.select()
 
         self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), locale_message_count)
-        self.assertEqual(search_results_pg.locale_from_url, locale_code)
+        self.assertEqual(beta_feedback_pg.locale_from_url, locale_code)
         [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
 
     def test_beta_feedback_can_be_filtered_by_locale_from_expanded_list(self):
@@ -90,11 +89,10 @@ class TestLocaleFilter(unittest.TestCase):
         6. Verify that the locale for all messages on the first page of results is correct
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
-        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.select_product('firefox')
-        beta_feedback_pg.select_version(2, by='index')
+        beta_feedback_pg.product_filter.select_product('firefox')
+        beta_feedback_pg.product_filter.select_version(2, by='index')
 
         self.assertEqual(beta_feedback_pg.locale_filter.locale_count, 10)
         beta_feedback_pg.locale_filter.show_extra_locales()
@@ -107,7 +105,7 @@ class TestLocaleFilter(unittest.TestCase):
         locale.select()
 
         self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), locale_message_count)
-        self.assertEqual(search_results_pg.locale_from_url, locale_code)
+        self.assertEqual(beta_feedback_pg.locale_from_url, locale_code)
         [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
 
 if __name__ == "__main__":

@@ -48,7 +48,6 @@ xfail = pytest.mark.xfail
 
 import beta_feedback_page
 import beta_sites_page
-import search_results_page
 
 
 class TestProductFilter(unittest.TestCase):
@@ -80,23 +79,22 @@ class TestProductFilter(unittest.TestCase):
 
         """
         beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
-        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_feedback_pg.go_to_beta_feedback_page()
-        self.assertEqual(len(beta_feedback_pg.products), len(self._beta_products))
+        self.assertEqual(len(beta_feedback_pg.product_filter.products), len(self._beta_products))
         for product in self._beta_products:
-            beta_feedback_pg.select_product(product["name"])
+            beta_feedback_pg.product_filter.select_product(product["name"])
             versions = list(product["versions"])
             # Add an empty version so we can check the filter for all versions of the current product
             versions.insert(0, "--")
-            self.assertEqual(len(beta_feedback_pg.versions), len(versions))
+            self.assertEqual(len(beta_feedback_pg.product_filter.versions), len(versions))
             for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
-                beta_feedback_pg.select_version(version)
-                self.assertEqual(beta_feedback_pg.selected_product, product["name"])
-                self.assertEqual(beta_feedback_pg.selected_version(), version)
-                self.assertEqual(search_results_pg.product_from_url, product["name"])
-                self.assertEqual(search_results_pg.version_from_url, version)
+                beta_feedback_pg.product_filter.select_version(version)
+                self.assertEqual(beta_feedback_pg.product_filter.selected_product, product["name"])
+                self.assertEqual(beta_feedback_pg.product_filter.selected_version(), version)
+                self.assertEqual(beta_feedback_pg.product_from_url, product["name"])
+                self.assertEqual(beta_feedback_pg.version_from_url, version)
 
     def test_beta_sites_can_be_filtered_by_all_expected_products_and_versions(self):
         """
@@ -110,23 +108,22 @@ class TestProductFilter(unittest.TestCase):
 
         """
         beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
-        search_results_pg = search_results_page.SearchResultsPage(self.selenium)
 
         beta_sites_pg.go_to_beta_sites_page()
-        self.assertEqual(len(beta_sites_pg.products), len(self._beta_products))
+        self.assertEqual(len(beta_sites_pg.product_filter.products), len(self._beta_products))
         for product in self._beta_products:
-            beta_sites_pg.select_product(product["name"])
+            beta_sites_pg.product_filter.select_product(product["name"])
             versions = list(product["versions"])
-            self.assertEqual(len(beta_sites_pg.versions), len(versions))
+            self.assertEqual(len(beta_sites_pg.product_filter.versions), len(versions))
             # Reverse version order because latest version is selected by default
             versions.reverse()
             for version in versions:
                 print "Checking product '%s' and version '%s'." % (product["name"], version)
-                beta_sites_pg.select_version(version)
-                self.assertEqual(beta_sites_pg.selected_product, product["name"])
-                self.assertEqual(beta_sites_pg.selected_version(), version)
-                self.assertEqual(search_results_pg.product_from_url, product["name"])
-                self.assertEqual(search_results_pg.version_from_url, version)
+                beta_sites_pg.product_filter.select_version(version)
+                self.assertEqual(beta_sites_pg.product_filter.selected_product, product["name"])
+                self.assertEqual(beta_sites_pg.product_filter.selected_version(), version)
+                self.assertEqual(beta_sites_pg.product_from_url, product["name"])
+                self.assertEqual(beta_sites_pg.version_from_url, version)
 
 if __name__ == "__main__":
     unittest.main()

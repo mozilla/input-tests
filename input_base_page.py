@@ -42,60 +42,16 @@
 '''
 Created on Nov 19, 2010
 '''
+from urlparse import urlparse
 
 from page import Page
 import vars
-import locale_filter_region
-import platform_filter_region
 
-import re
-import time
-import base64
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class InputBasePage(Page):
-
-    _app_name_fx              =  "firefox"
-    _app_name_mb              =  "mobile"
-
-    _fx_versions              =  ("4.0b1", "4.0b2", "4.0b3", "4.0b4", "4.0b5", "4.0b6", "4.0b7")
-
-    _mobile_versions = ("4.0b1", "4.0b2", "4.0b3")
-
-    _product_dropdown_locator = "id=product"
-    _version_dropdown_locator = "id=version"
-
-    _type_all_locator = "css=#filters a:contains(All)"
-    _type_praise_locator = "css=#filters a:contains(Praise)"
-    _type_issues_locator = "css=#filters a:contains(Issues)"
-    _type_ideas_locator = "css=#filters a:contains(Ideas)"
-
-    _current_when_link_locator = "css=#when a.selected"
-    _when_links = ("link=1d", "link=7d", "link=30d")
-    _show_custom_dates_locator = "id=show-custom-date"
-    _custom_dates_locator = "id=custom-date"
-    _custom_start_date_locator = "id=id_date_start"
-    _custom_end_date_locator = "id=id_date_end"
-    _set_custom_date_locator = "css=#custom-date button:contains(Set)"
-
-    _datepicker_locator = "id=ui-datepicker-div"
-    _datepicker_month_locator = "css=.ui-datepicker-month"
-    _datepicker_year_locator = "css=.ui-datepicker-year"
-    _datepicker_previous_month_locator = "css=.ui-datepicker-prev"
-    _datepicker_next_month_locator = "css=.ui-datepicker-next"
-    _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
-    _datepicker_day_locator_suffix = ")"
-
-    _feedback_praise_box      =  "praise_bar"
-    _feedback_issues_box      =  "issue_bar"
-
-    _platforms                =  ("os_win7", "os_winxp", "os_mac", "os_vista", "os_linux", "os_")
-
-    _search_results_section    = "messages"
-    _search_form               = "kw-search"
-    _search_box                = "id_q"
 
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
@@ -104,316 +60,86 @@ class InputBasePage(Page):
         self.selenium = selenium
         self.selenium.window_maximize()
 
-    @property
-    def products(self):
-        """
-        returns a list of available products
-        """
-        return self.selenium.get_select_options(self._product_dropdown_locator)
-
-    @property
-    def selected_product(self):
-        """
-        returns the currently selected product
-        """
-        self.wait_for_element_present(self._product_dropdown_locator)
-        return self.selenium.get_selected_value(self._product_dropdown_locator)
-
-    def select_product(self, product):
-        """
-        selects product
-        """
-        if not product == self.selected_product:
-            self.selenium.select(self._product_dropdown_locator, "value=" + product)
-            self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    @property
-    def versions(self):
-        """
-        returns a list of available versions
-        """
-        return self.selenium.get_select_options(self._version_dropdown_locator)
-
-    def selected_version(self, type='value'):
-        """
-        returns the currently selected product version
-        """
-        return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
-
-    def select_version(self, lookup, by='value'):
-        """
-        selects product version
-        """
-        if not lookup == self.selected_version(by):
-            self.selenium.select(self._version_dropdown_locator, by + "=" + str(lookup))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_type_all(self):
-        """
-
-        Clicks the 'All' type filter
-
-        """
-        self.selenium.click(self._type_all_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_type_praise(self):
-        """
-
-        Clicks the 'Praise' type filter
-
-        """
-        self.selenium.click(self._type_praise_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_type_issues(self):
-        """
-
-        Clicks the 'Issues' type filter
-
-        """
-        self.selenium.click(self._type_issues_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_type_ideas(self):
-        """
-
-        Clicks the 'Ideas' type filter
-
-        """
-        self.selenium.click(self._type_ideas_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def get_current_days(self):
-        """
-
-        Returns the link text of the currently applied days filter
-
-        """
-        if self.selenium.is_element_present(self._current_when_link_locator):
-            return self.selenium.get_text(self._current_when_link_locator)
-        else:
-            return None
-
-    def get_days_tooltip(self, days):
-        """
-
-        Returns the tooltip for the days link 1d/7d/30d
-
-        """
-        for time in self._when_links:
-            if re.search(days,time,re.IGNORECASE) is None:
-                continue
-            else:
-                return self.selenium.get_attribute(time + "@title")
-
-    def click_days(self,days):
-        """
-        clicks 1d/7d/30d
-        """
-        for time in self._when_links:
-            if not re.search(days, time, re.IGNORECASE) is None:
-                if not self.get_current_days() == time:
-                    self.selenium.click(time)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
-
-    def get_custom_dates_tooltip(self):
-        """
-
-        Returns the tooltip for the custom dates filter link 1d/7d/30d
-
-        """
-        return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
-
-    def click_custom_dates(self):
-        """
-
-        Clicks the custom date filter button and waits for the form to appear
-
-        """
-        self.selenium.click(self._show_custom_dates_locator)
-        self.wait_for_element_visible(self._custom_dates_locator)
-
-    def is_custom_date_filter_visible(self):
-        """
-
-        Returns True if the custom date filter form is visible
-
-        """
-        return self.selenium.is_visible(self._custom_dates_locator)
-
-    def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition("selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
-
-    def click_start_date(self):
-        """
-
-        Clicks the start date in the custom date filter form and waits for the datepicker to appear
-
-        """
-        self.selenium.click(self._custom_start_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
-
-    def click_end_date(self):
-        """
-
-        Clicks the end date in the custom date filter form and waits for the datepicker to appear
-
-        """
-        self.selenium.click(self._custom_end_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
-
-    def click_previous_month(self):
-        """
-
-        Clicks the previous month button in the datepicker
-
-        """
-        self.selenium.click(self._datepicker_previous_month_locator)
-
-    def click_next_month(self):
-        """
-
-        Clicks the next month button in the datepicker
-
-        """
-        # TODO: Throw an error if the next month button is disabled
-        self.selenium.click(self._datepicker_next_month_locator)
-
-    def click_day(self, day):
-        """
-
-        Clicks the day in the datepicker and waits for the datepicker to disappear
-
-        """
-        # TODO: Throw an error if the day button is disabled
-        self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
-        self.wait_for_element_not_visible(self._datepicker_locator)
-
-    def select_date(self, target_date):
-        """
-
-        Navigates to the target month in the datepicker and clicks the target day
-
-        """
-        currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
-        targetYear = target_date.year
-        yearDelta = targetYear - currentYear
-        monthDelta = yearDelta * 12
-
-        months = {"January":1, "February":2, "March":3, "April":4, "May":5, "June":6, "July":7, "August":8, "September":9, "October":10, "November":11, "December":12}
-        currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
-        targetMonth = target_date.month
-        monthDelta += targetMonth - currentMonth
-
-        count = 0
-        while (count < abs(monthDelta)):
-            if monthDelta < 0:
-                self.click_previous_month()
-            elif monthDelta > 0:
-                self.click_next_month()
-            count = count + 1
-        self.click_day(target_date.day)
-
-    def filter_by_custom_dates(self, start_date, end_date):
-        """
-
-        Filters by a custom date range
-
-        """
-        self.click_custom_dates()
-        self.click_start_date()
-        self.select_date(start_date)
-        self.click_end_date()
-        self.select_date(end_date)
-        self.selenium.click(self._set_custom_date_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_platform(self,os):
-        """
-        clicks Windows XP/ Android etc.
-        """
-        for plat in self._platforms:
-            if not re.search(os, plat, re.IGNORECASE) is None:
-                if not self.selenium.is_checked(plat):
-                    self.selenium.click(plat)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
-                    break
-
-    def click_feedback_praise(self):
-        """
-        clicks Feedback type - Praise
-        """
-        if not self.selenium.is_checked(self._feedback_praise_box):
-            self.selenium.click(self._feedback_praise_box)
-            self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_feedback_issues(self):
-        """
-        clicks Feedback type - Issues
-        """
-        if not self.selenium.is_checked(self._feedback_issues_box):
-            self.selenium.click(self._feedback_issues_box)
-            self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    @property
-    def locale_filter(self):
-        return locale_filter_region.LocaleFilter(self.selenium)
-
-    @property
-    def platform_filter(self):
-        return platform_filter_region.PlatformFilter(self.selenium)
-
-    def verify_all_firefox_versions(self):
-        """
-            checks all Fx versions are present
-        """
-        for version in self._fx_versions:
-            version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
-            if not (self.selenium.is_element_present(version_locator)):
-                raise Exception('Version %s not found in the filter' % (version))
-
-    def verify_all_mobile_versions(self):
-        """
-            checks all mobile versions are present
-        """
-        for version in self._mobile_versions:
-            version_locator = "css=select#%s > option[value='%s']" % (self._version_dropdown,version)
-            if not (self.selenium.is_element_present(version_locator)):
-                raise Exception('Version %s not found in the filter' % (version))
-
-    def search_for(self, search_string):
-        self.selenium.type(self._search_box, search_string)
-        self.selenium.key_press(self._search_box, '\\13')
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    @property
-    def message_count(self):
-        return int(self.selenium.get_xpath_count('//li[@class="message"]'))
-
-    @property
-    def praise_count(self):
-        return self.selenium.get_xpath_count('//p[@class="type praise"]')
-
-    @property
-    def issue_count(self):
-        return self.selenium.get_xpath_count('//p[@class="type issue"]')
-
     def click_previous_page(self):
         """
-
         Navigates to the previous page of results
-
         """
         self.selenium.click(self._previous_page_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
     def click_next_page(self):
         """
-
         Navigates to the next page of results
-
         """
         self.selenium.click(self._next_page_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def _value_from_url(self, param):
+        """
+        Returns the value for the specified parameter in the URL
+        """
+        url = urlparse(self.selenium.get_location())
+        params = dict([part.split('=') for part in url[4].split('&')])
+        return params[param]
+
+    @property
+    def feedback_type_from_url(self):
+        """
+        Returns the feedback type (praise, issues, ideas) from the current location URL
+        """
+        return self._value_from_url("s")
+
+    @property
+    def platform_from_url(self):
+        """
+        Returns the platform from the current location URL
+        """
+        return self._value_from_url("platform")
+
+    @property
+    def product_from_url(self):
+        """
+        Returns the product from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the product parameter
+        """
+        return self._value_from_url("product")
+
+    @property
+    def version_from_url(self):
+        """
+        Returns the version from the current location URL
+        NOTE: if the site is on the homepage (not on the search
+            page) and default/latest version is selected then
+            the URL will not contain the version parameter
+        """
+        return self._value_from_url("version")
+
+    @property
+    def date_start_from_url(self):
+        """
+        Returns the date_start value from the current location URL
+        """
+        return self._value_from_url("date_start")
+
+    @property
+    def date_end_from_url(self):
+        """
+        Returns the date_end value from the current location URL
+        """
+        return self._value_from_url("date_end")
+
+    @property
+    def page_from_url(self):
+        """
+        Returns the page value from the current location URL
+        """
+        return self._value_from_url("page")
+
+    @property
+    def locale_from_url(self):
+        """
+        Returns the locale value from the current location URL
+        """
+        return self._value_from_url("locale")

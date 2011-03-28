@@ -45,7 +45,6 @@ import pytest
 xfail = pytest.mark.xfail
 
 import beta_themes_page
-import search_results_page
 
 
 class TestPagination(unittest.TestCase):
@@ -66,18 +65,17 @@ class TestPagination(unittest.TestCase):
         This testcase covers # 15018 in Litmus
         1. Verifies the filter is in the URL
         2. Verifies the currently applied filter is styled appropriately
-        3. Verifies the currently results of the filter
+        3. Verifies the results of the filter
 
         """
         beta_themes_page_obj = beta_themes_page.BetaThemesPage(self.selenium)
-        search_results_page_obj = search_results_page.SearchResultsPage(self.selenium)
 
         beta_themes_page_obj.go_to_beta_themes_page()
-        beta_themes_page_obj.click_type_issues()
+        beta_themes_page_obj.type_filter.select_type("Issues")
         beta_themes_page_obj.click_next_page()
-        self.assertEqual(search_results_page_obj.feedback_type_from_url, "sad")
-        self.assertEqual(beta_themes_page_obj.current_type, "Issues")
-        self.assertEqual(beta_themes_page_obj.praise_count, 0)
+        self.assertEqual(beta_themes_page_obj.feedback_type_from_url, "issue")
+        self.assertEqual(beta_themes_page_obj.type_filter.selected_type, "Issues")
+        [self.assertEqual(theme.type, "Issue") for theme in beta_themes_page_obj.themes]
 
 if __name__ == "__main__":
     unittest.main()

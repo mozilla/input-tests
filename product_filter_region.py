@@ -35,7 +35,7 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Mar 18, 2011
+Created on Mar 25, 2011
 '''
 from page import Page
 from vars import ConnectionParameters
@@ -43,58 +43,56 @@ from vars import ConnectionParameters
 page_load_timeout = ConnectionParameters.page_load_timeout
 
 
-class PlatformFilter(Page):
+class ProductFilter(Page):
 
-    _platforms_locator = "id('filter_platform')//li"
+    class ComboFilter(Page):
 
-    def __init__(self, selenium):
-        self.selenium = selenium
+        _product_dropdown_locator = "id=product"
+        _version_dropdown_locator = "id=version"
 
-    @property
-    def platform_count(self):
-        return int(self.selenium.get_xpath_count(self._platforms_locator))
-
-    def platform(self, lookup):
-        return self.Platform(self.selenium, lookup)
-
-    class Platform(object):
-
-        _checkbox_locator = " input"
-        _name_locator = " label > strong"
-        _message_count_locator = " .count"
-
-        def __init__(self, selenium, lookup):
+        def __init__(self, selenium):
             self.selenium = selenium
-            self.lookup = lookup
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
 
         @property
-        def root_locator(self):
-            if type(self.lookup) == int:
-                # lookup by index
-                return "css=#filter_platform li:nth(%s)" % self.lookup
-            else:
-                # lookup by name
-                return "css=#filter_platform li:contains(%s)" % self.lookup
+        def products(self):
+            """
+            returns a list of available products
+            """
+            return self.selenium.get_select_options(self._product_dropdown_locator)
 
         @property
-        def is_selected(self):
-            return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+        def selected_product(self):
+            """
+            returns the currently selected product
+            """
+            self.wait_for_element_present(self._product_dropdown_locator)
+            return self.selenium.get_selected_value(self._product_dropdown_locator)
+
+        def select_product(self, product):
+            """
+            selects product
+            """
+            if not product == self.selected_product:
+                self.selenium.select(self._product_dropdown_locator, "value=" + product)
+                self.selenium.wait_for_page_to_load(page_load_timeout)
 
         @property
-        def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
+        def versions(self):
+            """
+            returns a list of available versions
+            """
+            return self.selenium.get_select_options(self._version_dropdown_locator)
 
-        @property
-        def code(self):
-            return self.selenium.get_attribute(self.absolute_locator(self._checkbox_locator + "@value"))
+        def selected_version(self, type='value'):
+            """
+            returns the currently selected product version
+            """
+            return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
-        @property
-        def message_count(self):
-            return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
-
-        def select(self):
-            self.selenium.click(self.absolute_locator(self._checkbox_locator))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+        def select_version(self, lookup, by='value'):
+            """
+            selects product version
+            """
+            if not lookup == self.selected_version(by):
+                self.selenium.select(self._version_dropdown_locator, by + "=" + str(lookup))
+                self.selenium.wait_for_page_to_load(page_load_timeout)

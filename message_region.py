@@ -20,7 +20,6 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
-#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,56 +35,55 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Jan 28, 2011
+Created on Mar 28, 2011
 '''
-import input_base_page
-import vars
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
-class SubmitFeedbackPage(input_base_page.InputBasePage):
+class Message(object):
 
-    _page_title = u'Submit Feedback \u2014 Firefox Input'
+    _type_locator = " .type"
+    _body_locator = " .body"
+    _time_locator = " time"
+    _platform_locator = " .meta li:nth(1)"
+    _locale_locator = " .meta li:nth(2)"
+    _site_locator = " .meta li:nth(3)"
+    _more_options_locator = " .options"
+    _copy_user_agent_locator = " .options .copy_ua"
+    _copy_user_agent_locator = " .options .copy_ua"
+    _translate_message_locator = " li:nth(1) a"
+    _tweet_this_locator = " .options .twitter"
 
-    _error_locator = 'css=ul.errorlist>li'
-    _feedback_locator = 'id=id_description'
-    _remaining_character_count_locator = 'id=count'
-    _submit_feedback_locator = 'css=button[type=submit]'
-
-    def __init__(self, selenium):
+    def __init__(self, selenium, index):
         self.selenium = selenium
+        self.index = index
 
-    def set_feedback(self, feedback):
-        self.selenium.type_keys(self._feedback_locator, feedback)
-        self.selenium.key_up(self._feedback_locator, feedback[-1:])
-
-    @property
-    def error_message(self):
-        return self.selenium.get_text(self._error_locator)
+    def absolute_locator(self, relative_locator):
+        return self.root_locator + relative_locator
 
     @property
-    def remaining_character_count(self):
-        return self.selenium.get_text(self._remaining_character_count_locator)
+    def root_locator(self):
+        return "css=#messages .message:nth(" + str(self.index - 1) + ")"
 
     @property
-    def is_remaining_character_count_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "low"
-        except:
-            return False
+    def type(self):
+        return self.selenium.get_text(self.absolute_locator(self._type_locator))
 
     @property
-    def is_remaining_character_count_very_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "verylow"
-        except:
-            return False
+    def body(self):
+        return self.selenium.get_text(self.absolute_locator(self._body_locator).encode('utf-8'))
 
     @property
-    def is_submit_feedback_enabled(self):
-        return self.selenium.is_editable(self._submit_feedback_locator)
+    def time(self):
+        return self.selenium.get_text(self.absolute_locator(self._time_locator))
 
-    def submit_feedback(self):
-        self.selenium.click(self._submit_feedback_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+    @property
+    def platform(self):
+        return self.selenium.get_text(self.absolute_locator(self._platform_locator))
+
+    @property
+    def locale(self):
+        return self.selenium.get_text(self.absolute_locator(self._locale_locator))
+
+    @property
+    def site(self):
+        return self.selenium.get_text(self.absolute_locator(self._site_locator))

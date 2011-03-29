@@ -49,11 +49,4 @@ class ThanksPage(release_submit_feedback_page.SubmitFeedbackPage):
 
     _thank_you_text = 'Thanks for Your Feedback'
 
-    @property
-    def is_the_current_page(self):
-        if super(ThanksPage, self).is_the_current_page:
-            if not self.selenium.is_text_present(self._thank_you_text):
-                self.record_error()
-                raise Exception('This does not appear to be the Thank You page.')
-            return True
 

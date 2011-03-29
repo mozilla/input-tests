@@ -74,9 +74,8 @@ class SubmitIdea(unittest.TestCase):
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
-        
-        self.assertTrue(self.selenium.is_text_present("Thanks for Your Feedback"))
-        self.assertTrue(self.selenium.is_visible('css=#thanks header h1'))
+        submit_idea_pg.wait_for_element_visible('id=thanks')
+        self.assertTrue(self.selenium.is_visible('id=thanks'))
 
 
     def test_remaining_character_count(self):

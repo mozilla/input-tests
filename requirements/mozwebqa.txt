@@ -4,4 +4,3 @@
 selenium
 pytest
 pytest-xdist
-selenium

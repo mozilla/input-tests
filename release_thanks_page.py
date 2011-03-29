@@ -18,7 +18,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Bob Silverberg <bob.silverberg@gmail.com>
@@ -47,6 +47,14 @@ import release_submit_feedback_page
 
 class ThanksPage(release_submit_feedback_page.SubmitFeedbackPage):
 
-    _thank_you_text = 'Thanks for Your Feedback'
+    _thanks_header_locator = 'id=thanks'
+
+    @property
+    def is_thanks_visible(self):
+        try:
+            self.wait_for_element_visible(self._thanks_header_locator)
+            return True
+        except:
+            return False
 
 

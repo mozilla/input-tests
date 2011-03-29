@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Bob Silverberg <bob.silverberg@gmail.com>
@@ -73,9 +73,7 @@ class SubmitIdea(unittest.TestCase):
         idea = 'Automated idea ' + str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
-        self.assertTrue(thanks_pg.is_the_current_page)
-        submit_idea_pg.wait_for_element_visible('id=thanks')
-        self.assertTrue(self.selenium.is_visible('id=thanks'))
+        self.assertTrue(thanks_pg.is_thanks_visible)
 
 
     def test_remaining_character_count(self):
@@ -130,6 +128,41 @@ class SubmitIdea(unittest.TestCase):
         self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
         self.assertTrue(submit_idea_pg.is_submit_feedback_disabled)
+
+    def test_submitting_same_feedback_twice(self):
+        """
+        
+        This testcase covers # 15119 in Litmus
+        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
+        
+        """
+        
+        text = 'I submit this feedback twice within a five minute window and it should fail.'
+        submit_idea_pg = release_submit_idea_page.SubmitIdeaPage(self.selenium)
+        thanks_pg = release_thanks_page.ThanksPage(self.selenium)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
+        submit_idea_pg.submit_feedback()
+        self.assertTrue(thanks_pg.is_the_current_page)
+
+        submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
+        submit_happy_feedback_pg.set_feedback(text)
+        submit_happy_feedback_pg.submit_feedback()
+        self.assertEqual(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
+
+    def thanks_page_reached_successfully(self):
+        """
+        
+        This testcase covers # 15119 in Litmus
+        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
+        
+        """
+        
+        self.assertTrue(thanks_pg.is_the_current_page)
+        submit_idea_pg.wait_for_element_visible('id=thanks')
+        self.assertTrue(self.selenium.is_visible('id=thanks'))
+
 
 if __name__ == "__main__":
     unittest.main()

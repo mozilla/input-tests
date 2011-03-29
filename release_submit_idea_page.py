@@ -18,7 +18,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Bob Silverberg <bob.silverberg@gmail.com>
@@ -38,7 +38,7 @@
 # ***** END LICENSE BLOCK *****
 '''
 
-Created on Mar 29, 2010
+Created on Mar 29, 2011
 
 '''
 

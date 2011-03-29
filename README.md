@@ -25,7 +25,7 @@ followed by
 
     sudo pip install -r requirements/mozwebqa.txt
 
-_note_
+__note__
 
 If you are running on Ubuntu/Debian you will need to do following first
 

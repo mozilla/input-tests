@@ -126,7 +126,7 @@ class SubmitIdea(unittest.TestCase):
         self.assertEqual(submit_idea_pg.remaining_character_count, "-1")
         self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
+        self.assertTrue(submit_idea_pg.is_submit_feedback_disabled)
 
 if __name__ == "__main__":
     unittest.main()

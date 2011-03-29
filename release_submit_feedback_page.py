@@ -46,10 +46,10 @@ class SubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
     _page_title = u'Submit Feedback :: Firefox Input'
 
     def is_submit_feedback_enabled(self):
-        try:
-            return not self.selenium.get_attribute(self._submit_feedback_locator + "@class") == "disabled"
-        except:
-            return True
+        return self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback']") + self.selenium.is_element_not_present("css=a[data-waittext='Submitting Feedback'][class='disabled']")
+
+    def is_submit_feedback_disabled(self):
+        return self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback']") + self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback'][class='disabled']")
 
     @property
     def is_remaining_character_count_low(self):
@@ -65,3 +65,5 @@ class SubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
         except:
             return False
     
+    def submit_feedback(self):
+        self.selenium.click(self._submit_feedback_locator)

@@ -49,7 +49,7 @@ class SubmitIdeaPage(release_submit_feedback_page.SubmitFeedbackPage):
 
     _feedback_locator = 'id=idea-desc'
     _remaining_character_count_locator = 'id=count-idea-desc'
-    _submit_feedback_locator = 'css=a[data-waittext=''Submitting Feedback''] span'
+    _submit_feedback_locator = 'css=#idea .submit span'
     #_submit_feedback_locator = '//article[@id=''idea'']/section/form/div[2]/a/span'
 
     def go_to_submit_idea_page(self):

@@ -42,16 +42,22 @@ Created on Mar 29, 2011
 
 '''
 
-
 import release_submit_feedback_page
 
-class SubmitIdeaPage(release_submit_feedback_page.SubmitFeedbackPage):
+
+class SubmitIdeaPage(release_submit_feedback_page.ReleaseSubmitFeedbackPage):
 
     _feedback_locator = 'id=idea-desc'
-    _remaining_character_count_locator = 'id=count-idea-desc'
+    _remaining_character_count_locator = 'css=#count-idea-desc'
     _submit_feedback_locator = 'css=#idea .submit span'
-    #_submit_feedback_locator = '//article[@id=''idea'']/section/form/div[2]/a/span'
 
     def go_to_submit_idea_page(self):
         self.selenium.open('/release/feedback#idea')
-        self.is_the_current_page
+
+    @property
+    def is_submit_feedback_enabled(self):
+        return self.selenium.is_element_present('css=#idea .submit a.disabled') == False
+
+    def submit_feedback(self):
+        self.selenium.click(self._submit_feedback_locator)
+        self.wait_for_element_not_visible(self._idea_page_locator)

@@ -70,11 +70,10 @@ class SubmitIdea(unittest.TestCase):
         thanks_pg = release_thanks_page.ThanksPage(self.selenium)
 
         submit_idea_pg.go_to_submit_idea_page()
-        idea = 'Automated idea ' + str(time.time()).split('.')[0]
+        idea = 'Automated idea %s' % str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
-        self.assertTrue(thanks_pg.is_thanks_visible)
-
+        self.assertTrue(submit_idea_pg.is_thanks_page_visible)
 
     def test_remaining_character_count(self):
         """
@@ -127,7 +126,7 @@ class SubmitIdea(unittest.TestCase):
         self.assertEqual(submit_idea_pg.remaining_character_count, "-1")
         self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_disabled)
+        self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
 
 if __name__ == "__main__":
     unittest.main()

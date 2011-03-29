@@ -50,7 +50,7 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
 
     _error_locator = 'css=ul.errorlist>li'
     _feedback_locator = 'id=id_description'
-    _remaining_character_count_locator = 'id=count'
+    _remaining_character_count_locator = 'css=#count'
     _submit_feedback_locator = 'css=button[type=submit]'
 
     def set_feedback(self, feedback):
@@ -68,14 +68,14 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     @property
     def is_remaining_character_count_low(self):
         try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "low"
+            return self.selenium.is_visible(self._remaining_character_count_locator + ".low")
         except:
             return False
 
     @property
     def is_remaining_character_count_very_low(self):
         try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "verylow"
+            return self.selenium.is_visible(self._remaining_character_count_locator + ".verylow")
         except:
             return False
 

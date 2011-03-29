@@ -40,31 +40,14 @@ Created on Mar 29, 2011
 
 import submit_feedback_page
 
-class SubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
+
+class ReleaseSubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
     _page_title = u'Submit Feedback :: Firefox Input'
 
-    def is_submit_feedback_enabled(self):
-        return self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback']") 
-        + self.selenium.is_element_not_present("css=a[data-waittext='Submitting Feedback'][class='disabled']")
-
-    def is_submit_feedback_disabled(self):
-        return self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback']") 
-        + self.selenium.is_element_present("css=a[data-waittext='Submitting Feedback'][class='disabled']")
+    _idea_page_locator = 'id=idea'
+    _thanks_page_locator = 'id=thanks'
 
     @property
-    def is_remaining_character_count_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "count low"
-        except:
-            return False
-
-    @property
-    def is_remaining_character_count_very_low(self):
-        try:
-            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "count verylow"
-        except:
-            return False
-    
-    def submit_feedback(self):
-        self.selenium.click(self._submit_feedback_locator)
+    def is_thanks_page_visible(self):
+        return self.selenium.is_visible(self._thanks_page_locator)

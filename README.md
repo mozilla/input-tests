@@ -23,10 +23,13 @@ Run
 
 followed by
 
-    sudo pip install unittest2
-    sudo pip install pytest 
-    sudo pip install pytest-xdist
-    sudo pip install selenium
+    sudo pip install -r requirements/mozwebqa.txt
+
+_note_
+
+If you are running on Ubuntu/Debian you will need to do following first
+
+    sudo apt-get install python-setuptools
     
 to install the required Python libraries.
 
@@ -35,7 +38,7 @@ Once this is all set up you will need to download and start a Selenium server. Y
 
 To start the Selenium server run the following command:
 
-    java -jar ~/Downloads/selenium-server-standalone-2.0b2.jar
+    java -jar ~/Downloads/selenium-server-standalone-2.0b3.jar
 
 Change the path/name to the downloaded Selenium server file.
 

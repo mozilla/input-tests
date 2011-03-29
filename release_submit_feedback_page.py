@@ -19,8 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Dave Hunt <dhunt@mozilla.com>
-#                 Matt Brandt <mbrandt@mozilla.com>
+# Contributor(s): Bob Silverberg <bob.silverberg@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,7 +45,6 @@ class SubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
     _page_title = u'Submit Feedback :: Firefox Input'
 
-    @property
     def is_submit_feedback_enabled(self):
         try:
             return not self.selenium.get_attribute(self._submit_feedback_locator + "@class") == "disabled"
@@ -54,6 +52,16 @@ class SubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
             return True
 
     @property
-    def remaining_character_count(self):
-        time.sleep(10)
-        return super(SubmitFeedbackPage, self).remaining_character_count
+    def is_remaining_character_count_low(self):
+        try:
+            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "count low"
+        except:
+            return False
+
+    @property
+    def is_remaining_character_count_very_low(self):
+        try:
+            return self.selenium.get_attribute(self._remaining_character_count_locator + "@class") == "count verylow"
+        except:
+            return False
+    

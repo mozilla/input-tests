@@ -50,6 +50,7 @@ class ReleaseSubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
     @property
     def is_thanks_page_visible(self):
+        return self.selenium.is_visible(self._thanks_page_locator)
+    
+    def wait_for_idea_page_to_be_not_visible(self):
         self.wait_for_element_not_visible(self._idea_page_locator)
-        self.wait_for_element_visible(self._thanks_page_locator)
-        return True

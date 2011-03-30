@@ -71,6 +71,7 @@ class SubmitIdea(unittest.TestCase):
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
+        submit_idea_pg.wait_for_idea_page_to_be_not_visible()
         self.assertTrue(submit_idea_pg.is_thanks_page_visible)
 
     def test_remaining_character_count(self):
@@ -126,7 +127,7 @@ class SubmitIdea(unittest.TestCase):
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
         self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
 
-    def test_submitting_same_feedback_twice(self):
+    def test_submitting_same_idea_twice_generates_error_message(self):
         """
         This testcase covers # 15119 in Litmus
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
@@ -137,7 +138,6 @@ class SubmitIdea(unittest.TestCase):
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
-        self.assertTrue(submit_idea_pg.is_thanks_page_visible)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

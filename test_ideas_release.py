@@ -44,9 +44,10 @@ import time
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
-
+import pytest
 import release_submit_idea_page
 
+@pytest.mark.release
 class SubmitIdea(unittest.TestCase):
 
     def setUp(self):

@@ -54,3 +54,7 @@ class ReleaseSubmitFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
     
     def wait_for_idea_page_to_be_not_visible(self):
         self.wait_for_element_not_visible(self._idea_page_locator)
+
+    def wait_for_thanks_page_to_be_visible(self):
+        self.wait_for_element_visible(self._thanks_page_locator)
+

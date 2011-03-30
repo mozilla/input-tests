@@ -139,6 +139,7 @@ class SubmitIdea(unittest.TestCase):
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback()
         submit_idea_pg.wait_for_idea_page_to_be_not_visible()
+        submit_idea_pg.wait_for_thanks_page_to_be_visible()
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

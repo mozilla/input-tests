@@ -59,6 +59,7 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
 
     @property
     def error_message(self):
+        self.wait_for_element_visible(self._error_locator)
         return self.selenium.get_text(self._error_locator)
 
     @property

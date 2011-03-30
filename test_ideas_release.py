@@ -74,6 +74,22 @@ class SubmitIdea(unittest.TestCase):
         submit_idea_pg.wait_for_idea_page_to_be_not_visible()
         self.assertTrue(submit_idea_pg.is_thanks_page_visible)
 
+    def test_submitting_idea_with_unicode_characters(self):
+        """
+
+        This testcase covers # 15061 in Litmus
+        1. Verifies the thank you page is loaded
+
+        """
+        submit_idea_pg = release_submit_idea_page.SubmitIdeaPage(self.selenium)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
+        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.submit_feedback()
+        submit_idea_pg.wait_for_idea_page_to_be_not_visible()
+        self.assertTrue(submit_idea_pg.is_thanks_page_visible)
+
     def test_remaining_character_count(self):
         """
 

@@ -46,7 +46,6 @@ from vars import ConnectionParameters
 import unittest
 
 import release_submit_idea_page
-import release_thanks_page
 
 class SubmitIdea(unittest.TestCase):
 
@@ -67,7 +66,6 @@ class SubmitIdea(unittest.TestCase):
 
         """
         submit_idea_pg = release_submit_idea_page.SubmitIdeaPage(self.selenium)
-        thanks_pg = release_thanks_page.ThanksPage(self.selenium)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]

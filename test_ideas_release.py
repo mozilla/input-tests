@@ -126,5 +126,24 @@ class SubmitIdea(unittest.TestCase):
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
         self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
 
+    def test_submitting_same_feedback_twice(self):
+        """
+        This testcase covers # 15119 in Litmus
+        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
+        """
+        idea = 'Automated idea %s' % str(time.time()).split('.')[0]
+        submit_idea_pg = release_submit_idea_page.SubmitIdeaPage(self.selenium)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.submit_feedback()
+        self.assertTrue(submit_idea_pg.is_thanks_page_visible)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.submit_feedback()
+        self.assertEqual(submit_idea_pg.error_message, 'We already got your feedback! Thanks.')
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -43,7 +43,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import beta_sites_page
+import sites_page
 import themes_page
 import theme_page
 
@@ -63,16 +63,16 @@ class TestSimilarMessages(unittest.TestCase):
         """
         This testcase covers # 13807 in Litmus
         """
-        beta_sites_pg = beta_sites_page.BetaSitesPage(self.selenium)
+        sites_pg = sites_page.SitesPage(self.selenium)
         themes_pg = themes_page.ThemesPage(self.selenium)
         theme_pg = theme_page.ThemePage(self.selenium)
 
-        beta_sites_pg.go_to_beta_sites_page()
-        beta_sites_pg.product_filter.select_product('firefox')
-        beta_sites_pg.product_filter.select_version(1, by='index')
+        sites_pg.go_to_sites_page()
+        sites_pg.product_filter.select_product('firefox')
+        sites_pg.product_filter.select_version(1, by='index')
 
         #store the first site's name and click in
-        site = beta_sites_pg.site(1)
+        site = sites_pg.site(1)
         site_name = site.name
         site.click_name()
 

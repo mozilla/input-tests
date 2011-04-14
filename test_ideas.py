@@ -47,7 +47,7 @@ import unittest
 
 import submit_idea_page
 import thanks_page
-import beta_feedback_page
+import feedback_page
 
 
 class SubmitIdea(unittest.TestCase):
@@ -70,7 +70,7 @@ class SubmitIdea(unittest.TestCase):
         """
         submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
         thanks_pg = thanks_page.ThanksPage(self.selenium)
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea ' + str(time.time()).split('.')[0]
@@ -79,8 +79,8 @@ class SubmitIdea(unittest.TestCase):
         self.assertTrue(thanks_pg.is_the_current_page)
 
         # A delay prevents us from checking that the idea appears on the site
-        #beta_feedback_pg.go_to_beta_feedback_page()
-        #first_message = beta_feedback_pg.message(1)
+        #feedback_pg.go_to_feedback_page()
+        #first_message = feedback_pg.message(1)
         #self.assertEqual(first_message.type, "Idea")
         #self.assertEqual(first_message.body, idea)
         #self.assertEqual(first_message.time, "just now")

@@ -96,6 +96,7 @@ class TestProductFilter(unittest.TestCase):
                 self.assertEqual(beta_feedback_pg.product_from_url, product["name"])
                 self.assertEqual(beta_feedback_pg.version_from_url, version)
 
+    @xfail(reason="Bug 650242 - Sites page has version --all-- listed for both desktop and mobile products")
     def test_beta_sites_can_be_filtered_by_all_expected_products_and_versions(self):
         """
 

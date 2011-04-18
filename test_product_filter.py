@@ -171,6 +171,7 @@ class TestProductFilter(unittest.TestCase):
             self.assertEqual(sites_pg.product_from_url, product)
             self.assertEqual(sites_pg.version_from_url, version)
 
+    @xfail(reason="Bug 650917 - Unable to select mobile product from Sites page")
     def test_sites_can_be_filtered_by_mobile_versions(self):
         """
         This testcase covers # XXXXX in Litmus

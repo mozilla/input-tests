@@ -66,7 +66,7 @@ class TestPlatformFilter(unittest.TestCase):
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.product_filter.select_version('--')
 
         platform_name = "Mac OS X"
         platform = feedback_pg.platform_filter.platform(platform_name)

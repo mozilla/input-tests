@@ -66,7 +66,7 @@ class TestLocaleFilter(unittest.TestCase):
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.product_filter.select_version('--')
 
         locale_name = "Russian"
         locale = feedback_pg.locale_filter.locale(locale_name)
@@ -92,7 +92,7 @@ class TestLocaleFilter(unittest.TestCase):
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.product_filter.select_version('--')
 
         self.assertEqual(feedback_pg.locale_filter.locale_count, 10)
         feedback_pg.locale_filter.show_extra_locales()

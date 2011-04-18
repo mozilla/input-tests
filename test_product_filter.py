@@ -63,7 +63,7 @@ class TestProductFilter(unittest.TestCase):
 
     def test_feedback_can_be_filtered_by_firefox_versions(self):
         """
-        This testcase covers # 13601, 13602, 13603 & 13604 in Litmus
+        This testcase covers # 13602 & 13603 in Litmus
         1. Verify that at least three firefox versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
@@ -87,7 +87,7 @@ class TestProductFilter(unittest.TestCase):
 
     def test_feedback_can_be_displayed_for_all_firefox_versions(self):
         """
-        This testcase covers # XXXXX in Litmus
+        This testcase covers # 15149 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
@@ -106,7 +106,7 @@ class TestProductFilter(unittest.TestCase):
 
     def test_feedback_can_be_filtered_by_mobile_versions(self):
         """
-        This testcase covers # XXXX in Litmus
+        This testcase covers # 13602 & 13604 in Litmus
         1. Verify that at least three mobile versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
@@ -130,7 +130,7 @@ class TestProductFilter(unittest.TestCase):
 
     def test_feedback_can_be_displayed_for_all_mobile_versions(self):
         """
-        This testcase covers # XXXXX in Litmus
+        This testcase covers # 15377 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
@@ -149,7 +149,7 @@ class TestProductFilter(unittest.TestCase):
 
     def test_sites_can_be_filtered_by_firefox_versions(self):
         """
-        This testcase covers # 15042, 15043, 15044 & 15045 in Litmus
+        This testcase covers # 15043 & 15045 in Litmus
         1. Verify that at least three firefox versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
@@ -174,7 +174,7 @@ class TestProductFilter(unittest.TestCase):
     @xfail(reason="Bug 650917 - Unable to select mobile product from Sites page")
     def test_sites_can_be_filtered_by_mobile_versions(self):
         """
-        This testcase covers # XXXXX in Litmus
+        This testcase covers # 15043 & 15044 in Litmus
         1. Verify that at least three mobile versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied

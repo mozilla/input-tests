@@ -79,7 +79,7 @@ class TestSearch(unittest.TestCase):
         # Select the Firefox version that is 1 less than the newest to ensure the unicode
         # search returns at least 1 result.
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.product_filter.select_version('--')
 
         feedback_pg.search_for(u"rapidit\xe9")
         self.assertTrue(0 < feedback_pg.message_count)

@@ -45,7 +45,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import beta_feedback_page
+import feedback_page
 
 
 class SearchDates(unittest.TestCase):
@@ -59,29 +59,29 @@ class SearchDates(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_beta_feedback_preset_date_filters(self):
+    def test_feedback_preset_date_filters(self):
         """
 
         This testcase covers # 13605 & 13606 in Litmus
         1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
-        beta_feedback_obj = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_obj.go_to_beta_feedback_page()
-        self.assertEqual(beta_feedback_obj.get_current_days(), None)
+        feedback_pg.go_to_feedback_page()
+        self.assertEqual(feedback_pg.get_current_days(), None)
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
         for days in day_filters:
-            self.assertEqual(beta_feedback_obj.get_days_tooltip(days[1]), days[2])
-            beta_feedback_obj.click_days(days[1])
-            self.assertEqual(beta_feedback_obj.get_current_days(), days[1])
+            self.assertEqual(feedback_pg.get_days_tooltip(days[1]), days[2])
+            feedback_pg.click_days(days[1])
+            self.assertEqual(feedback_pg.get_current_days(), days[1])
             start_date = date.today() - timedelta(days=days[0])
             # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-            self.assertEqual(beta_feedback_obj.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+            self.assertEqual(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
             # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
-    def test_beta_feedback_custom_date_filter(self):
+    def test_feedback_custom_date_filter(self):
         """
 
         This testcase covers # 13605, 13606 & 13715 in Litmus
@@ -89,30 +89,30 @@ class SearchDates(unittest.TestCase):
         2. Verifies date-start=<date> and end-date=<date> in the url
 
         """
-        beta_feedback_obj = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_obj.go_to_beta_feedback_page()
-        self.assertEqual(beta_feedback_obj.get_custom_dates_tooltip(), "Custom")
+        feedback_pg.go_to_feedback_page()
+        self.assertEqual(feedback_pg.get_custom_dates_tooltip(), "Custom")
 
         start_date = date.today() - timedelta(days=3)
         end_date = date.today() - timedelta(days=1)
 
-        beta_feedback_obj.filter_by_custom_dates(start_date, end_date)
+        feedback_pg.filter_by_custom_dates(start_date, end_date)
         # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        self.assertEqual(beta_feedback_obj.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
-        self.assertEqual(beta_feedback_obj.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
+        self.assertEqual(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
+        self.assertEqual(feedback_pg.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
 
         # Check that the relevant days preset link is highlighted when the applied custom date filter matches it
         day_filters = ((1, "1d"), (7, "7d"), (30, "30d"))
         for days in day_filters:
             start_date = date.today() - timedelta(days=days[0])
-            beta_feedback_obj.filter_by_custom_dates(start_date, date.today())
-            self.assertFalse(beta_feedback_obj.is_custom_date_filter_visible())
+            feedback_pg.filter_by_custom_dates(start_date, date.today())
+            self.assertFalse(feedback_pg.is_custom_date_filter_visible())
             # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-            self.assertEqual(beta_feedback_obj.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
-            self.assertEqual(beta_feedback_obj.date_end_from_url, date.today().strftime('%m%%2F%d%%2F%Y'))
-            self.assertEqual(beta_feedback_obj.get_current_days(), days[1])
+            self.assertEqual(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
+            self.assertEqual(feedback_pg.date_end_from_url, date.today().strftime('%m%%2F%d%%2F%Y'))
+            self.assertEqual(feedback_pg.get_current_days(), days[1])
 
 if __name__ == "__main__":
     unittest.main()

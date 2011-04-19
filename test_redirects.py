@@ -53,6 +53,7 @@ class TestRedirects(unittest.TestCase):
         request.add_header('User-Agent', user_agent)
         request.add_header('Accept-Language', locale)
         f = opener.open(request)
+        opener.close()
         self.assertEqual(f.url, ConnectionParameters.baseurl + end_url)
 
     def test_root_without_locale_redirects_to_root_with_german_locale(self):

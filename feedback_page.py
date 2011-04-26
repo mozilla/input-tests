@@ -69,7 +69,12 @@ class FeedbackPage(input_base_page.InputBasePage):
     _datepicker_next_month_locator = "css=.ui-datepicker-next"
     _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
     _datepicker_day_locator_suffix = ")"
-
+    
+    _message_warning_locator = "id=message-warning"
+    _custom_date_only_error_locator = "//div[@id='custom-date']/ul/li"
+    _custom_date_first_error_locator = "//div[@id='custom-date']/ul[1]/li"
+    _custom_date_second_error_locator = "//div[@id='custom-date']/ul[2]/li"
+    
     _type_issues_locator = "css=#filters a:contains(Issues)"
 
     _search_box = "id_q"
@@ -244,6 +249,35 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
+    def filter_by_custom_data(self, start_date, end_date):
+        """
+        
+        Filters by a custom date range using any input type, not using date() format
+        
+        """
+        self.click_custom_dates()
+        self.click_start_date()
+        self.type(self._custom_start_date_locator, start_date)
+        self.click_end_date()
+        self.type(self._custom_end_date_locator, end_date)
+        self.selenium.click(self._set_custom_date_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+        
+    def filter_by_custom_data_using_type_keys(self, start_date, end_date):
+        """
+        
+        Filters by a custom date range using any input type, not using date() format
+        This uses selenium.type_keys in an attempt to mimic actual typing
+        
+        """
+        self.click_custom_dates()
+        self.click_start_date()
+        self.selenium.type_keys(self._custom_start_date_locator, start_date)
+        self.click_end_date()
+        self.selenium.type_keys(self._custom_end_date_locator, end_date)
+        self.selenium.click(self._set_custom_date_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
     @property
     def locale_filter(self):
         return locale_filter_region.LocaleFilter(self.selenium)
@@ -271,3 +305,27 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def message(self, index):
         return message_region.Message(self.selenium, index)
+    
+    @property
+    def message_warning(self):
+        return self.selenium.get_text(self._message_warning_locator)
+    
+    @property
+    def custom_date_only_error(self):
+        return self.selenium.get_text(self._custom_date_only_error_locator)
+    
+    @property
+    def custom_date_first_error(self):
+        return self.selenium.get_text(self._custom_date_first_error_locator)
+    
+    @property
+    def custom_date_second_error(self):
+        return self.selenium.get_text(self._custom_date_second_error_locator)
+    
+    @property
+    def custom_start_date(self):
+        return self.selenium.get_value(self._custom_start_date_locator)
+    
+    @property
+    def custom_end_date(self):
+        return self.selenium.get_value(self._custom_end_date_locator)

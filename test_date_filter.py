@@ -44,6 +44,10 @@ from datetime import date, timedelta
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
+import random
+import string
+import pytest
+xfail = pytest.mark.xfail
 
 import feedback_page
 
@@ -113,6 +117,212 @@ class SearchDates(unittest.TestCase):
             self.assertEqual(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
             self.assertEqual(feedback_pg.date_end_from_url, date.today().strftime('%m%%2F%d%%2F%Y'))
             self.assertEqual(feedback_pg.get_current_days(), days[1])
+    
+    def test_feedback_custom_date_filter_with_alphabet(self):
+        """
+        
+        This testcase covers # 13607 in Litmus
+        1.Verifies custom date fields do not accept alphabet
+                
+        """
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        start_date = ''.join(random.sample(letters, 8))
+        end_date = ''.join(random.sample(letters, 8))
+        
+        feedback_obj.filter_by_custom_data_using_type_keys(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, '')
+        self.assertEqual(feedback_obj.date_end_from_url, '')
+        
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, '')
+        self.assertEqual(feedback_obj.custom_end_date, '')
+        
+    def test_feedback_custom_date_filter_with_random_numbers(self):
+        """
+        
+        This testcase covers # 13608 in Litmus
+        1.Verifies random numbers generate an error
+                
+        """
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        start_date = random.randint(10000000, 50000000)
+        end_date = random.randint(50000001, 99999999)
+        
+        feedback_obj.filter_by_custom_data(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, str(start_date))
+        self.assertEqual(feedback_obj.date_end_from_url, str(end_date))
+        
+        self.assertEqual(feedback_obj.message_warning, 'No search results found.')
+        
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, str(start_date))
+        self.assertEqual(feedback_obj.custom_end_date, str(end_date))
+        self.assertEqual(feedback_obj.custom_date_first_error, 'Enter a valid date.')
+        self.assertEqual(feedback_obj.custom_date_second_error, 'Enter a valid date.')
+    
+    def test_feedback_custom_date_filter_with_invalid_dates(self):
+        """
+        
+        This testcase covers # 13609 , 13725 in Litmus
+        1.Verifies invalid dates generate an error
+                
+        """
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        
+        start_date = "00/00/0000"
+        end_date = "00/00/0000"
 
+        feedback_obj.filter_by_custom_data(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, string.replace(start_date, '/', '%2F'))
+        self.assertEqual(feedback_obj.date_end_from_url, string.replace(end_date, '/', '%2F'))
+
+        self.assertEqual(feedback_obj.message_warning, 'No search results found.')
+
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, start_date)
+        self.assertEqual(feedback_obj.custom_end_date, end_date)
+        self.assertEqual(feedback_obj.custom_date_first_error, 'Enter a valid date.')
+        self.assertEqual(feedback_obj.custom_date_second_error, 'Enter a valid date.')
+    
+    def test_feedback_custom_date_filter_with_future_dates(self):
+        """
+        
+        This testcase covers # 13612 in Litmus
+        1.Verifies future dates generate an error
+        
+        """
+        
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        
+        start_date = "01/01/2021"
+        end_date = "01/01/2031"
+
+        feedback_obj.filter_by_custom_data(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, string.replace(start_date, '/', '%2F'))
+        self.assertEqual(feedback_obj.date_end_from_url, string.replace(end_date, '/', '%2F'))
+
+        self.assertEqual(feedback_obj.message_warning, 'No search results found.')
+
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, start_date)
+        self.assertEqual(feedback_obj.custom_end_date, end_date)
+    
+    @xfail(reason="Bug 645850 - [input-stage] Internal Server Error - OverflowError: mktime argument out of range")
+    def test_feedback_custom_date_filter_with_future_start_date(self):
+        """
+        
+        This testcase covers # 13610 in Litmus
+        1.Verifies future start date generate an error
+        
+        """
+                
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        
+        start_date = "01/01/2900"
+        end_date = ""
+
+        feedback_obj.filter_by_custom_data(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, string.replace(start_date, '/', '%2F'))
+        self.assertEqual(feedback_obj.date_end_from_url, string.replace(end_date, '/', '%2F'))
+
+        self.assertEqual(feedback_obj.message_warning, 'No search results found.')
+
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, start_date)
+        self.assertEqual(feedback_obj.custom_end_date, end_date)
+
+    @xfail(reason="Bug 645850 - [input-stage] Internal Server Error - OverflowError: mktime argument out of range")
+    def test_feedback_custom_date_filter_with_future_end_date(self):
+        """
+        
+        This testcase covers # 13611 in Litmus
+        1.Verifies future end date filter data untill current day
+        
+        """
+
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        
+        start_date = ""
+        end_date = "01/01/2900"
+
+        feedback_obj.filter_by_custom_data(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, string.replace(start_date, '/', '%2F'))
+        self.assertEqual(feedback_obj.date_end_from_url, string.replace(end_date, '/', '%2F'))
+
+        self.assertTrue(feedback_obj.is_text_present('Search Results'))
+
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, start_date)
+        self.assertEqual(feedback_obj.custom_end_date, end_date)
+     
+    def test_beta_feedback_custom_date_filter_with_end_date_lower_than_start_date(self):
+        """
+        
+        This testcase covers # 13613, 13724 in Litmus
+        1. Verifies start_date > end_date get switched automatically and the results are shown from end date to start date 
+
+        """
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+
+        feedback_obj.go_to_feedback_page()
+
+        start_date = date.today() - timedelta(days=1)
+        end_date = date.today() - timedelta(days=3)
+
+        feedback_obj.filter_by_custom_dates(start_date, end_date)
+        # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
+        self.assertEqual(feedback_obj.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
+        self.assertEqual(feedback_obj.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
+        # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
+
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, start_date.strftime('%m/%d/%Y'))
+        self.assertEqual(feedback_obj.custom_end_date, end_date.strftime('%m/%d/%Y'))
+
+    def test_feedback_custom_date_filter_with_ydm_format(self):
+        """
+        
+        This testcase covers # 13614 in Litmus
+        1.Verifies custom date fields do not accept yyyy-dd-mm format
+                
+        """
+        feedback_obj = feedback_page.FeedbackPage(self.selenium)
+        
+        feedback_obj.go_to_feedback_page()
+        
+        start_date = '2011-22-04'
+        end_date = ''
+        
+        feedback_obj.filter_by_custom_data_using_type_keys(start_date, end_date)
+        self.assertEqual(feedback_obj.date_start_from_url, string.replace(start_date, '-', ''))
+        self.assertEqual(feedback_obj.date_end_from_url, '')
+        
+        self.assertEqual(feedback_obj.message_warning, 'No search results found.')
+         
+        feedback_obj.click_custom_dates()
+        self.assertEqual(feedback_obj.custom_start_date, string.replace(start_date, '-', ''))
+        self.assertEqual(feedback_obj.custom_end_date, '')
+        self.assertEqual(feedback_obj.custom_date_only_error, 'Enter a valid date.')
+
+    
 if __name__ == "__main__":
     unittest.main()

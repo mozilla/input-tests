@@ -23,6 +23,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Bebe <florin.strugariu2softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -43,6 +44,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
+import submit_feedback_page
 import submit_happy_feedback_page
 import thanks_page
 
@@ -57,6 +59,29 @@ class TestFeedback(unittest.TestCase):
 
     def tearDown(self):
         self.selenium.stop()
+
+
+    def test_submit_feedback(self):
+        """
+        Litmus 13651 - Input: Submit feedback page
+        """
+
+        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(self.selenium)
+        submit_feedback_pg.go_to_submit_feedback_page()
+
+        submit_feedback_pg.click_happy_feedback()
+        self.assertEqual(submit_feedback_pg.get_url_current_page(), "http://input.stage.mozilla.com/en-US/happy")
+
+        submit_feedback_pg.go_back()
+
+        submit_feedback_pg.click_sad_feedback()
+        self.assertEqual(submit_feedback_pg.get_url_current_page(), "http://input.stage.mozilla.com/en-US/sad")
+
+        submit_feedback_pg.go_back()
+
+        submit_feedback_pg.click_support_page()
+        self.assertEqual( submit_feedback_pg.get_url_current_page(), "http://support.mozilla.com/en-US/home")
+
 
     def test_submitting_same_feedback_twice(self):
         """
@@ -77,6 +102,7 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.submit_feedback()
         self.assertEqual(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
 
+
     def test_submitting_feedback_with_unicode_characters(self):
         """
         This testcase covers # 15061 in Litmus
@@ -89,6 +115,7 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
         submit_happy_feedback_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
+
 
     def test_remaining_character_count(self):
         """

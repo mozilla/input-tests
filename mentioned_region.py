@@ -19,8 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Dave Hunt <dhunt@mozilla.com>
-#                 Bebe <florin.strugariu@softvision.ro>
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,8 +34,9 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
+
 '''
-Created on Mar 18, 2011
+Created on 19 Apr, 2011
 '''
 from page import Page
 from vars import ConnectionParameters
@@ -44,28 +44,33 @@ from vars import ConnectionParameters
 page_load_timeout = ConnectionParameters.page_load_timeout
 
 
-class PlatformFilter(Page):
+class MentionedRegion(Page):
 
-    _platforms_locator = "id('filter_platform')//li"
+    _mentioned_locator = "id('filter_themes')"
 
     @property
-    def platform_count(self):
-        return int(self.selenium.get_xpath_count(self._platforms_locator))
+    def mentioned_header(self):
 
-    def platform(self, lookup):
-        return self.Platform(self.selenium, lookup)
+        return self.selenium.get_text("xpath=%s/h3" % self._mentioned_locator )
 
-    def contains_platform(self, lookup):
+    @property
+    def mentioned_count(self):
+        return int(self.selenium.get_xpath_count("%s//li" % self._mentioned_locator))
+
+    def mentioned(self, lookup):
+        return self.Mentioned(self.selenium, lookup)
+    
+    def contains_mentioned(self, lookup):
         try :
-            self.selenium.get_text("css=#filter_platform li:contains(%s) label > strong" % lookup )
+            self.selenium.get_text("css=#filter_themes li:contains(%s) a > strong" % lookup )
+
             return True
         except :
             return False
 
-    class Platform(object):
+    class Mentioned(object):
 
-        _checkbox_locator = " input"
-        _name_locator = " label > strong"
+        _name_locator = " a > strong"
         _message_count_locator = " .count"
 
         def __init__(self, selenium, lookup):
@@ -79,27 +84,19 @@ class PlatformFilter(Page):
         def root_locator(self):
             if type(self.lookup) == int:
                 # lookup by index
-                return "css=#filter_platform li:nth(%s)" % self.lookup
+                return "css=#filter_themes li:nth(%s)" % self.lookup
             else:
                 # lookup by name
-                return "css=#filter_platform li:contains(%s)" % self.lookup
-
-        @property
-        def is_selected(self):
-            return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+                return "css=#filter_themes li:contains(%s)" % self.lookup
 
         @property
         def name(self):
             return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
         @property
-        def code(self):
-            return self.selenium.get_attribute(self.absolute_locator(self._checkbox_locator + "@value"))
-
-        @property
         def message_count(self):
             return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
 
         def select(self):
-            self.selenium.click(self.absolute_locator(self._checkbox_locator))
+            self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(page_load_timeout)

@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 David Burns
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe<florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -195,6 +196,27 @@ class TestProductFilter(unittest.TestCase):
             self.assertEqual(sites_pg.product_filter.selected_version(), version)
             self.assertEqual(sites_pg.product_from_url, product)
             self.assertEqual(sites_pg.version_from_url, version)
+
+    """
+    Litmus 13654 - Input: latest beta auto-selected/defaulted to, when switching Products
+    """
+    def test_the_latest_version(self):
+        
+        _latest_beta_firefox_version = "4.0b12"
+        _latest_beta_mobile_version = "4.0b5"
+        
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg.go_to_feedback_page()
+
+        product_fil = feedback_pg.product_filter
+
+        product_fil.select_product("mobile")
+        self.assertEqual(product_fil.versions[0], "-- all --")
+        self.assertEqual(product_fil.selected_version(), _latest_beta_mobile_version)
+
+        product_fil.select_product("firefox")
+        self.assertEqual(product_fil.versions[0], "-- all --")
+        self.assertEqual(product_fil.selected_version(), _latest_beta_firefox_version)
 
 if __name__ == "__main__":
     unittest.main()

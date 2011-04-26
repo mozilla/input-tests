@@ -84,6 +84,30 @@ class Page(object):
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
 
+    """
+    Clicks the link and verifies that the page title is correct 
+    """
+    def click_and_check(self, locator, _page_title):
+        self.selenium.click(locator)
+        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
+        return self.is_the_current_page_and_title(_page_title)  
+ 
+    def go_back(self):
+        self.selenium.go_back()
+        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
+        
+
+    def is_the_current_page_and_title(self, _page_title):
+        page_title = self.selenium.get_title()
+        if not page_title == _page_title:
+            self.record_error()
+            try:
+                raise Exception("Expected page title to be: '" + _page_title + "' but it was: '" + page_title + "'")
+            except Exception:
+                raise Exception('Expected page title does not match actual page title.')
+        else:
+            return True
+
     def type(self, locator, str):
         self.selenium.type(locator, str)
 
@@ -91,6 +115,22 @@ class Page(object):
         self.selenium.click(button)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
+
+    def get_atribute(self, locator, atribute):
+        """
+        Returns the value of a atribute
+        Locator = the locator with the atribute
+        atribute = the atribute to be returned
+
+        Ex get_atribute("id=example", "href")
+        """
+        return self.selenium.get_attribute(locator + "@" + atribute)
+
+    def contains_item(self,list,item):
+        for itm in list:
+            if itm == item:
+                return True
+        return False
 
     def get_url_current_page(self):
         return(self.selenium.get_location())

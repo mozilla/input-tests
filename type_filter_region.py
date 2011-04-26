@@ -48,6 +48,14 @@ class TypeFilter(Page):
     class ButtonFilter(object):
 
         _selected_type_locator = "css=#filter_type a.selected"
+        _types_locator = "id('filter_type')//li"
+
+        def __init__(self, selenium):
+            self.selenium = selenium
+        
+        @property
+        def type_count(self):
+            return int(self.selenium.get_xpath_count(self._types_locator))
 
         @property
         def selected_type(self):
@@ -56,3 +64,43 @@ class TypeFilter(Page):
         def select_type(self, type):
             self.selenium.click("css=#filter_type a:contains(%s)" % type)
             self.selenium.wait_for_page_to_load(page_load_timeout)
+
+        def types(self):
+            return [self.Type(self.selenium, i)for i in range(self.type_count)]
+
+        class Type(object):
+            
+            _selected_locator = " selected"
+            _name_locator = " a"
+            
+            def __init__(self, selenium, lookup):
+                self.selenium = selenium
+                self.lookup = lookup
+                
+            def absolute_locator(self, relative_locator):
+                return self.root_locator + relative_locator
+
+            @property
+            def root_locator(self):
+                if type(self.lookup) == int:
+                    # lookup by index
+                    return "css=#filter_type li:nth(%s)" % self.lookup
+                else:
+                    # lookup by name
+                    return "css=#filter_type li:contains(%s)" % self.lookup
+            
+            @property
+            def is_selected(self):
+                try:
+                    self.selenium.get_attribute(self.absolute_locator(self._name_locator)+ "@class")
+                    return True
+                except:
+                    return False
+
+            @property
+            def name(self):
+                return self.selenium.get_text(self.root_locator)
+            
+            def select(self):
+                self.selenium.click(self.absolute_locator(self._name_locator))
+                self.selenium.wait_for_page_to_load(page_load_timeout)

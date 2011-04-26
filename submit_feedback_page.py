@@ -53,6 +53,28 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     _remaining_character_count_locator = 'css=#count'
     _submit_feedback_locator = 'css=button[type=submit]'
 
+
+    _happy_feedback_locator = "xpath=//section[@id='main-content']/div[1]/a"
+    _sad_feddback_locator = "xpath=//section[@id='main-content']/div[2]/a"
+    _support_page_locator = "link=support page"
+
+
+    def go_to_submit_feedback_page(self):
+        self.selenium.open('/feedback/')
+        self.is_the_current_page
+
+    def click_happy_feedback(self):
+        self.click(self._happy_feedback_locator, True)
+        self.is_the_current_page
+        
+    def click_sad_feedback(self):
+        self.click(self._sad_feddback_locator,True)
+        self.is_the_current_page
+    
+    def click_support_page(self):
+        self.click(self._support_page_locator, True)
+        self.is_the_current_page_and_title("Firefox Support Home Page | Firefox Help")
+
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
         self.selenium.key_up(self._feedback_locator, feedback[-1:])

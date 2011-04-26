@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -58,6 +59,17 @@ class ProductFilter(Page):
             return self.selenium.get_select_options(self._product_dropdown_locator)
 
         @property
+        def verify_location(self):
+            """
+            returns true if the dropdowns exists
+            """
+
+            if (self.selenium.is_visible(self._product_dropdown_locator) and self.selenium.is_visible(self._version_dropdown_locator)):
+                return True
+            else:
+                return False
+
+        @property
         def selected_product(self):
             """
             returns the currently selected product
@@ -92,4 +104,64 @@ class ProductFilter(Page):
             """
             if not lookup == self.selected_version(by):
                 self.selenium.select(self._version_dropdown_locator, "%s=%s" % (by, lookup))
+                self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    class ButtonFilter(object):
+
+        _selected_product_locator = "css=#filter_product a.selected"
+        _product_locator = "id('filter_product')//li"
+
+        def __init__(self, selenium):
+            self.selenium = selenium
+        
+        @property
+        def product_count(self):
+            return int(self.selenium.get_xpath_count(self._product_locator))
+            
+        @property
+        def selected_product(self):
+            return self.selenium.get_text(self._selected_product_locator)
+
+        def select_product(self, product):
+            self.selenium.click("css=#filter_product a:contains(%s)" % product)
+            self.selenium.wait_for_page_to_load(page_load_timeout)
+
+        def products(self):
+            return [self.Product(self.selenium, i)for i in range(self.product_count)]
+
+        class Product(object):
+            
+            _selected_locator = " selected"
+            _name_locator = " a"
+            
+            def __init__(self, selenium, lookup):
+                self.selenium = selenium
+                self.lookup = lookup
+                
+            def absolute_locator(self, relative_locator):
+                return self.root_locator + relative_locator
+
+            @property
+            def root_locator(self):
+                if type(self.lookup) == int:
+                    # lookup by index
+                    return "css=#filter_product li:nth(%s)" % self.lookup
+                else:
+                    # lookup by name
+                    return "css=#filter_product li:contains(%s)" % self.lookup
+            
+            @property
+            def is_selected(self):
+                try:
+                    self.selenium.get_attribute(self.absolute_locator(self._name_locator)+ "@class")
+                    return True
+                except:
+                    return False
+
+            @property
+            def name(self):
+                return self.selenium.get_text(self.root_locator)
+            
+            def select(self):
+                self.selenium.click(self.absolute_locator(self._name_locator))
                 self.selenium.wait_for_page_to_load(page_load_timeout)

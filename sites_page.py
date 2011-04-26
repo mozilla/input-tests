@@ -43,6 +43,7 @@ import input_base_page
 from vars import ConnectionParameters
 
 import product_filter_region
+import type_filter_region
 
 page_load_timeout = ConnectionParameters.page_load_timeout
 
@@ -53,13 +54,46 @@ class SitesPage(input_base_page.InputBasePage):
 
     _sites_locator = "id('themes')//li[@class='site']"
 
+    _feedback_link_locator = "css=a.dashboard"
+    _themes_link_locator = "css=a.themes"
+    _firefox_link_locator = "link=Firefox Input Dashboard"
+    _sites_link_locator = "css=a.issues"
+
+    _type_list = ("All",
+                  "Praise",
+                  "Issues",
+                  "Ideas")
     def go_to_sites_page(self):
         self.selenium.open('/sites/')
         self.is_the_current_page
 
     @property
+    def get_type_list(self):
+        return self._type_list
+
+    @property
+    def get_feedback_link(self):
+        return self._feedback_link_locator
+
+    @property
+    def get_themes_link(self):
+        return self._themes_link_locator
+
+    @property
+    def get_firefox_link(self):
+        return self._firefox_link_locator
+
+    @property
+    def get_sites_link(self):
+        return self._sites_link_locator
+
+    @property
     def product_filter(self):
         return product_filter_region.ProductFilter.ComboFilter(self.selenium)
+
+    @property
+    def type_filter(self):
+        return type_filter_region.TypeFilter.ButtonFilter(self.selenium)
 
     @property
     def site_count(self):
@@ -75,6 +109,7 @@ class SitesPage(input_base_page.InputBasePage):
     class Site(object):
 
         _name_locator = " .name a"
+        _ssh_locator = " .name span"
 
         def __init__(self, selenium, index):
             self.selenium = selenium
@@ -87,6 +122,9 @@ class SitesPage(input_base_page.InputBasePage):
         def root_locator(self):
             return "css=#themes .site:nth(%s)" % (self.index - 1)
 
+        def href_atribute_locator(self, _locator):
+            return _locator + "@href"
+
         @property
         def name(self):
             return self.selenium.get_text(self.absolute_locator(self._name_locator))
@@ -94,3 +132,18 @@ class SitesPage(input_base_page.InputBasePage):
         def click_name(self):
             self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(page_load_timeout)
+
+        @property
+        def url(self):
+            return self.selenium.get_attribute(self.href_atribute_locator(self.absolute_locator(self._name_locator)))
+
+        @property
+        def is_ssh(self):
+            if "https" in self.url:
+                try:
+                    self.selenium.get_text(self.absolute_locator(self._ssh_locator))
+                    return True
+                except:
+                    return False
+            else:
+                return False

@@ -139,3 +139,10 @@ class InputBasePage(Page):
         Returns the locale value from the current location URL
         """
         return self._value_from_url("locale")
+
+    @property
+    def search_from_url(self):
+        """
+        Returns the locale value from the current location URL
+        """
+        return self._value_from_url("q")

@@ -45,6 +45,7 @@ import pytest
 xfail = pytest.mark.xfail
 
 import themes_page
+import feedback_page
 
 
 class TestPagination(unittest.TestCase):
@@ -68,7 +69,7 @@ class TestPagination(unittest.TestCase):
         3. Verifies the results of the filter
 
         """
-        themes_ppg = themes_page.ThemesPage(self.selenium)
+        themes_pg = themes_page.ThemesPage(self.selenium)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")
@@ -76,6 +77,23 @@ class TestPagination(unittest.TestCase):
         self.assertEqual(themes_pg.feedback_type_from_url, "issue")
         self.assertEqual(themes_pg.type_filter.selected_type, "Issues")
         [self.assertEqual(theme.type, "Issue") for theme in themes_pg.themes]
+
+
+    """
+    Litmus 13636 - Input: Verify Search results have pagination
+    """
+    def test_search_pagination(self):
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+    #TODO: breaks after the click
+        self.assertTrue(feedback_pg.open_link_and_check("/en-US/search/?product=firefox&q=facebook", "Search Results :: Firefox Input"))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_feedback_next))
+        self.assertTrue(feedback_pg.is_text_present(u"\xab Newer Messages"))
+        for int in  range(10):
+            feedback_pg.click(feedback_pg.get_feedback_next,True)
+            self.assertEqual(feedback_pg.product_from_url, "firefox")
+            self.assertEqual(feedback_pg.search_from_url, "facebook")
+            self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_feedback_previous))
+            self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_feedback_next))
 
 if __name__ == "__main__":
     unittest.main()

@@ -45,7 +45,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import beta_feedback_page
+import feedback_page
 
 
 class TestSearch(unittest.TestCase):
@@ -59,30 +59,30 @@ class TestSearch(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_that_empty_search_of_beta_feedback_returns_some_data(self):
+    def test_that_empty_search_of_feedback_returns_some_data(self):
         '''
             Litmus 13847
         '''
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.search_for('')
-        self.assertTrue(0 < beta_feedback_pg.message_count)
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.search_for('')
+        self.assertTrue(0 < feedback_pg.message_count)
 
-    def test_that_we_can_search_beta_feedback_with_unicode(self):
+    def test_that_we_can_search_feedback_with_unicode(self):
         '''
             Litmus 13697
         '''
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_pg.go_to_beta_feedback_page()
-        # Select the Firefox beta version that is 1 less than the newest to ensure the unicode
+        feedback_pg.go_to_feedback_page()
+        # Select the Firefox version that is 1 less than the newest to ensure the unicode
         # search returns at least 1 result.
-        beta_feedback_pg.product_filter.select_product('firefox')
-        beta_feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.product_filter.select_product('firefox')
+        feedback_pg.product_filter.select_version('--')
 
-        beta_feedback_pg.search_for(u"rapidit\xe9")
-        self.assertTrue(0 < beta_feedback_pg.message_count)
+        feedback_pg.search_for(u"rapidit\xe9")
+        self.assertTrue(0 < feedback_pg.message_count)
 
 if __name__ == "__main__":
     unittest.main()

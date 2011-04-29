@@ -41,7 +41,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import beta_feedback_page
+import feedback_page
 
 
 class TestLocaleFilter(unittest.TestCase):
@@ -55,30 +55,30 @@ class TestLocaleFilter(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_beta_feedback_can_be_filtered_by_locale(self):
+    def test_feedback_can_be_filtered_by_locale(self):
         """
         This testcase covers # 15120 in Litmus
         1. Verify that the number of messages in the locale list matches the number of messages returned
         2. Verify that the locale short code appears in the URL
         3. Verify that the locale for all messages on the first page of results is correct
         """
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.product_filter.select_product('firefox')
-        beta_feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.product_filter.select_product('firefox')
+        feedback_pg.product_filter.select_version('--')
 
         locale_name = "Russian"
-        locale = beta_feedback_pg.locale_filter.locale(locale_name)
+        locale = feedback_pg.locale_filter.locale(locale_name)
         locale_message_count = locale.message_count
         locale_code = locale.code
         locale.select()
 
-        self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), locale_message_count)
-        self.assertEqual(beta_feedback_pg.locale_from_url, locale_code)
-        [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
+        self.assertEqual(feedback_pg.total_message_count.replace(',', ''), locale_message_count)
+        self.assertEqual(feedback_pg.locale_from_url, locale_code)
+        [self.assertEqual(message.locale, locale_name) for message in feedback_pg.messages]
 
-    def test_beta_feedback_can_be_filtered_by_locale_from_expanded_list(self):
+    def test_feedback_can_be_filtered_by_locale_from_expanded_list(self):
         """
         This testcase covers # 15087 & 15120 in Litmus
         1. Verify the initial locale count is 10
@@ -88,25 +88,25 @@ class TestLocaleFilter(unittest.TestCase):
         5. Verify that the locale short code appears in the URL
         6. Verify that the locale for all messages on the first page of results is correct
         """
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.product_filter.select_product('firefox')
-        beta_feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.product_filter.select_product('firefox')
+        feedback_pg.product_filter.select_version('--')
 
-        self.assertEqual(beta_feedback_pg.locale_filter.locale_count, 10)
-        beta_feedback_pg.locale_filter.show_extra_locales()
-        self.assertTrue(beta_feedback_pg.locale_filter.locale_count > 10)
+        self.assertEqual(feedback_pg.locale_filter.locale_count, 10)
+        feedback_pg.locale_filter.show_extra_locales()
+        self.assertTrue(feedback_pg.locale_filter.locale_count > 10)
 
-        locale = beta_feedback_pg.locale_filter.locale(11)
+        locale = feedback_pg.locale_filter.locale(11)
         locale_name = locale.name
         locale_message_count = locale.message_count
         locale_code = locale.code
         locale.select()
 
-        self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), locale_message_count)
-        self.assertEqual(beta_feedback_pg.locale_from_url, locale_code)
-        [self.assertEqual(message.locale, locale_name) for message in beta_feedback_pg.messages]
+        self.assertEqual(feedback_pg.total_message_count.replace(',', ''), locale_message_count)
+        self.assertEqual(feedback_pg.locale_from_url, locale_code)
+        [self.assertEqual(message.locale, locale_name) for message in feedback_pg.messages]
 
 if __name__ == "__main__":
     unittest.main()

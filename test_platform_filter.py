@@ -40,7 +40,7 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 
-import beta_feedback_page
+import feedback_page
 
 
 class TestPlatformFilter(unittest.TestCase):
@@ -54,7 +54,7 @@ class TestPlatformFilter(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    def test_beta_feedback_can_be_filtered_by_platform(self):
+    def test_feedback_can_be_filtered_by_platform(self):
         """
         This testcase covers # 15215 in Litmus
         1. Verify that the selected platform is the only one to appear in the list and is selected
@@ -62,23 +62,23 @@ class TestPlatformFilter(unittest.TestCase):
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
-        beta_feedback_pg = beta_feedback_page.BetaFeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
-        beta_feedback_pg.go_to_beta_feedback_page()
-        beta_feedback_pg.product_filter.select_product('firefox')
-        beta_feedback_pg.product_filter.select_version(2, by='index')
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.product_filter.select_product('firefox')
+        feedback_pg.product_filter.select_version('--')
 
         platform_name = "Mac OS X"
-        platform = beta_feedback_pg.platform_filter.platform(platform_name)
+        platform = feedback_pg.platform_filter.platform(platform_name)
         platform_message_count = platform.message_count
         platform_code = platform.code
         platform.select()
 
-        self.assertEqual(beta_feedback_pg.platform_filter.platform_count, 1)
+        self.assertEqual(feedback_pg.platform_filter.platform_count, 1)
         self.assertTrue(platform.is_selected)
-        self.assertEqual(beta_feedback_pg.total_message_count.replace(',', ''), platform_message_count)
-        self.assertEqual(beta_feedback_pg.platform_from_url, platform_code)
-        [self.assertEqual(message.platform, platform_name) for message in beta_feedback_pg.messages]
+        self.assertEqual(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
+        self.assertEqual(feedback_pg.platform_from_url, platform_code)
+        [self.assertEqual(message.platform, platform_name) for message in feedback_pg.messages]
 
 if __name__ == "__main__":
     unittest.main()

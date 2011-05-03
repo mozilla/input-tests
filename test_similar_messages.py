@@ -69,7 +69,7 @@ class TestSimilarMessages(unittest.TestCase):
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')
-        sites_pg.product_filter.select_version(3, by='index')
+        sites_pg.product_filter.select_version(2, by='index')
 
         #store the first site's name and click in
         site = sites_pg.site(1)

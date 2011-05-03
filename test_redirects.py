@@ -44,7 +44,7 @@ xfail = pytest.mark.xfail
 
 class TestRedirects(unittest.TestCase):
 
-    _user_agent_firefox = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0) Gecko/20100101 Firefox/4.0'
+    _user_agent_firefox = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1'
     _user_agent_safari = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'
 
     def _check_redirect(self, start_url, end_url, user_agent=_user_agent_firefox, locale='en-US'):

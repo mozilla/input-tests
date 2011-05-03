@@ -43,8 +43,6 @@ Created on Nov 24, 2010
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
-import pytest
-xfail = pytest.mark.xfail
 
 import feedback_page
 import sites_page
@@ -162,7 +160,7 @@ class TestProductFilter(unittest.TestCase):
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
         [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 3)
+        self.assertTrue(len(versions) > 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
@@ -171,7 +169,6 @@ class TestProductFilter(unittest.TestCase):
             self.assertEqual(sites_pg.product_from_url, product)
             self.assertEqual(sites_pg.version_from_url, version)
 
-    @xfail(reason="Bug 650917 - Unable to select mobile product from Sites page")
     def test_sites_can_be_filtered_by_mobile_versions(self):
         """
         This testcase covers # 15043 & 15044 in Litmus
@@ -187,7 +184,7 @@ class TestProductFilter(unittest.TestCase):
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
         [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 3)
+        self.assertTrue(len(versions) > 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)

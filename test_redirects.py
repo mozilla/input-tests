@@ -38,8 +38,6 @@
 from vars import ConnectionParameters
 import unittest
 import urllib2
-import pytest
-xfail = pytest.mark.xfail
 
 
 class TestRedirects(unittest.TestCase):

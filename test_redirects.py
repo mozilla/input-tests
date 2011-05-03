@@ -77,133 +77,105 @@ class TestRedirects(unittest.TestCase):
     def test_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
         self._check_redirect('/search?sentiment=happy', '/en-US/search?sentiment=happy')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
         self._check_redirect('/beta/search?sentiment=sad', '/en-US/search?sentiment=sad')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self):
         self._check_redirect('/en-US/beta/search?sentiment=idea', '/en-US/search?sentiment=idea')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
         self._check_redirect('/release/search?sentiment=happy', '/en-US/search?sentiment=happy')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self):
         self._check_redirect('/en-US/release/search?sentiment=sad', '/en-US/search?sentiment=sad')
 
     def test_themes_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/themes/', '/en-US/themes/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_themes_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/beta/themes/', '/en-US/themes/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_themes_with_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/en-US/beta/themes/', '/en-US/themes/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_themes_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/release/themes/', '/en-US/themes/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_themes_with_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/en-US/release/themes/', '/en-US/themes/')
 
     def test_sites_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/sites/', '/en-US/sites/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_sites_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/beta/sites/', '/en-US/sites/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_sites_with_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/en-US/beta/sites/', '/en-US/sites/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_sites_without_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/release/sites/', '/en-US/sites/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_sites_with_locale_redirects_to_themes_with_locale(self):
         self._check_redirect('/en-US/release/sites/', '/en-US/sites/')
 
     def test_idea_without_locale_redirects_to_idea_with_locale(self):
         self._check_redirect('/idea/', '/en-US/idea/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_idea_without_locale_redirects_to_idea_with_locale(self):
         self._check_redirect('/beta/idea/', '/en-US/idea/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_idea_with_locale_redirects_to_idea_with_locale(self):
         self._check_redirect('/en-US/beta/idea/', '/en-US/idea/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_idea_without_locale_redirects_to_idea_with_locale(self):
         self._check_redirect('/release/idea/', '/en-US/idea/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_idea_with_locale_redirects_to_idea_with_locale(self):
         self._check_redirect('/en-US/release/idea/', '/en-US/idea/')
 
     def test_happy_without_locale_redirects_to_happy_with_locale(self):
         self._check_redirect('/happy/', '/en-US/happy/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_happy_without_locale_redirects_to_happy_with_locale(self):
         self._check_redirect('/beta/happy/', '/en-US/happy/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_happy_with_locale_redirects_to_happy_with_locale(self):
         self._check_redirect('/en-US/beta/happy/', '/en-US/happy/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_happy_without_locale_redirects_to_happy_with_locale(self):
         self._check_redirect('/release/happy/', '/en-US/happy/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_happy_with_locale_redirects_to_happy_with_locale(self):
         self._check_redirect('/en-US/release/happy/', '/en-US/happy/')
 
     def test_sad_without_locale_redirects_to_sad_with_locale(self):
         self._check_redirect('/sad/', '/en-US/sad/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_sad_without_locale_redirects_to_sad_with_locale(self):
         self._check_redirect('/beta/sad/', '/en-US/sad/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_sad_with_locale_redirects_to_sad_with_locale(self):
         self._check_redirect('/en-US/beta/sad/', '/en-US/sad/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_sad_without_locale_redirects_to_sad_with_locale(self):
         self._check_redirect('/release/sad/', '/en-US/sad/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_sad_with_locale_redirects_to_sad_with_locale(self):
         self._check_redirect('/en-US/release/sad/', '/en-US/sad/')
 
     def test_feedback_without_locale_redirects_to_feedback_with_locale(self):
         self._check_redirect('/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_feedback_without_locale_redirects_to_feedback_with_locale(self):
         self._check_redirect('/beta/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_beta_feedback_with_locale_redirects_to_feedback_with_locale(self):
         self._check_redirect('/en-US/beta/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_feedback_without_locale_redirects_to_feedback_with_locale(self):
         self._check_redirect('/release/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 651055 - URLs with the release channel in are not redirecting correctly")
     def test_release_feedback_with_locale_redirects_to_feedback_with_locale(self):
         self._check_redirect('/en-US/release/feedback/', '/en-US/feedback/')
 

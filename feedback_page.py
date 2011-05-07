@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Soren Jones
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,6 +43,7 @@ import re
 
 import input_base_page
 import product_filter_region
+import type_filter_region
 import locale_filter_region
 import platform_filter_region
 import message_region
@@ -70,6 +72,7 @@ class FeedbackPage(input_base_page.InputBasePage):
     _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
     _datepicker_day_locator_suffix = ")"
 
+    _type_filters_locator = "id('filter_type')//li"
     _type_issues_locator = "css=#filters a:contains(Issues)"
 
     _search_box = "id_q"
@@ -243,6 +246,27 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.select_date(end_date)
         self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    @property
+    def type_filters_count(self):
+        """
+
+        Returns a count of feedback types in the Feedback by Type filter bar
+
+        """
+        return int(self.selenium.get_xpath_count(self._type_filters_locator))
+
+    @property
+    def type_filters(self):
+        """
+
+        Returns a list of feedback type names from the the Feedback by Type filter bar
+
+        """
+        return [type_filter_region.TypeFilter.FilterOption(self.selenium, i + 1) for i in range(self.type_filters_count)]
+
+    def type_filter(self, index):
+        return type_filter_region.TypeFilter.FilterOption(self.selenium, index)
 
     @property
     def locale_filter(self):

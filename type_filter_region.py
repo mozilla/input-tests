@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Soren Jones
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -56,3 +57,43 @@ class TypeFilter(Page):
         def select_type(self, type):
             self.selenium.click("css=#filter_type a:contains(%s)" % type)
             self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    class FilterOption(object):
+
+        _chart_locator = "css=svg g:nth-child(8) > * tspan"
+        _name_locator = " > label strong"
+        _root_locator = "css=#filter_type li"
+
+        def __init__(self, selenium, index):
+            self.selenium = selenium
+            self.index = index
+
+        def absolute_locator(self, relative_locator):
+            return self.root_locator + relative_locator
+
+        @property
+        def chart_locator(self):
+            """
+
+            Returns the locator for the specified type name in the chart legend
+
+            """
+            return self._chart_locator + ":contains(%s)" % (self.name)
+
+        @property
+        def name(self):
+            """
+
+            Returns the name of a feedback type in the Feedback by Type filter bar
+
+            """
+            return self.selenium.get_text(self.absolute_locator(self._name_locator))
+
+        @property
+        def root_locator(self):
+            """
+
+            Returns the locator for the nth type name in the Feedback by Type filter bar
+
+            """
+            return self._root_locator + ":nth-child(%s)" % (self.index)

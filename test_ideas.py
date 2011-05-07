@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Bob Silverberg <bob.silverberg@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -69,21 +70,27 @@ class SubmitIdea(unittest.TestCase):
 
         """
         submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
-        thanks_pg = thanks_page.ThanksPage(self.selenium)
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         submit_idea_pg.go_to_submit_idea_page()
-        idea = 'Automated idea ' + str(time.time()).split('.')[0]
+        idea = 'Automated idea %s' % str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
-        submit_idea_pg.submit_feedback()
+        thanks_pg = submit_idea_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
 
-        # A delay prevents us from checking that the idea appears on the site
-        #feedback_pg.go_to_feedback_page()
-        #first_message = feedback_pg.message(1)
-        #self.assertEqual(first_message.type, "Idea")
-        #self.assertEqual(first_message.body, idea)
-        #self.assertEqual(first_message.time, "just now")
+    def test_submitting_idea_with_unicode_characters(self):
+        """
+
+        This testcase covers # 15061 in Litmus
+        1. Verifies the thank you page is loaded
+        
+        """
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
+        submit_idea_pg.set_feedback(idea)
+        thanks_pg = submit_idea_pg.submit_feedback()
+        self.assertTrue(thanks_pg.is_the_current_page)
 
     def test_remaining_character_count(self):
         """
@@ -137,6 +144,26 @@ class SubmitIdea(unittest.TestCase):
         self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
         self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
         self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
+
+
+    def test_submitting_same_idea_twice_generates_error_message(self):
+        """
+
+        This testcase covers # 15119 in Litmus
+        1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
+
+        """
+        idea = 'Automated idea %s' % str(time.time()).split('.')[0]
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+
+        submit_idea_pg.go_to_submit_idea_page()
+        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.submit_feedback()
+
+        submit_idea_pg.go_to_submit_idea_page()
+        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.submit_feedback(expected_result='failure')
+        self.assertEqual(submit_idea_pg.error_message, 'We already got your feedback! Thanks.')
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,4 +42,4 @@ import input_base_page
 
 class ThanksPage(input_base_page.InputBasePage):
 
-    _page_title = u'Thanks for Your Feedback \u2014 Firefox Input'
+    _page_title = u'Thanks :: Firefox Input'

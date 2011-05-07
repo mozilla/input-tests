@@ -21,6 +21,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Bob Silverberg <bob.silverberg@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,6 +40,7 @@
 Created on Jan 28, 2011
 '''
 import input_base_page
+import thanks_page
 import vars
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
@@ -46,12 +48,9 @@ page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 class SubmitFeedbackPage(input_base_page.InputBasePage):
 
-    _page_title = u'Submit Feedback \u2014 Firefox Input'
+    _page_title = u'Submit Feedback :: Firefox Input'
 
-    _error_locator = 'css=ul.errorlist>li'
-    _feedback_locator = 'id=id_description'
-    _remaining_character_count_locator = 'css=#count'
-    _submit_feedback_locator = 'css=button[type=submit]'
+    _idea_page_locator = 'id=idea'
 
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
@@ -80,10 +79,10 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
         except:
             return False
 
-    @property
-    def is_submit_feedback_enabled(self):
-        return self.selenium.is_editable(self._submit_feedback_locator)
-
-    def submit_feedback(self):
+    def submit_feedback(self, expected_result='success'):
         self.selenium.click(self._submit_feedback_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
+        if expected_result == 'success':
+            return thanks_page.ThanksPage(self.selenium)
+        else:
+            self.wait_for_element_visible(self._error_locator)

@@ -65,11 +65,10 @@ class TestFeedback(unittest.TestCase):
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
         submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
-        thanks_pg = thanks_page.ThanksPage(self.selenium)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
-        submit_happy_feedback_pg.submit_feedback()
+        thanks_pg = submit_happy_feedback_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()

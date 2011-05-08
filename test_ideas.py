@@ -158,7 +158,8 @@ class SubmitIdea(unittest.TestCase):
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)
-        submit_idea_pg.submit_feedback()
+        thanks_pg = submit_idea_pg.submit_feedback()
+        self.assertTrue(thanks_pg.is_the_current_page)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

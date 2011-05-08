@@ -51,6 +51,7 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
     _page_title = u'Submit Feedback :: Firefox Input'
 
     _idea_page_locator = 'id=idea'
+    _happy_page_locator = 'id=happy'
 
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)

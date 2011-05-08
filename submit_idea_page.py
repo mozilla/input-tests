@@ -57,6 +57,8 @@ class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
     def go_to_submit_idea_page(self):
         self.selenium.open('/feedback#idea')
+        self.is_the_current_page
+        self.wait_for_element_visible(self._idea_page_locator)
 
     @property
     def is_submit_feedback_enabled(self):

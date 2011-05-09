@@ -83,6 +83,29 @@ class TestSearch(unittest.TestCase):
 
         feedback_pg.search_for(u"rapidit\xe9")
         self.assertTrue(0 < feedback_pg.message_count)
+    
+    def test_search_box_default_text(self):
+        '''
+            Litmus 13845
+        1. Verify that there is a search field appearing in Latest Feedback 
+        section it shows by default "Search by keyword"
+        '''
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+
+        feedback_pg.go_to_feedback_page()
+        self.assertEqual(self.selenium.get_value(feedback_pg.search_box()), "Search by keyword")
+    
+    def test_search_box_text_disappears_on_click(self):
+        '''
+            Litmus 13846
+        1. Verify that on clicking in the text field default text 
+        "Search by keyword" disappears
+        '''
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+
+        feedback_pg.go_to_feedback_page()
+        self.selenium.click(feedback_pg.search_box())
+        self.assertEqual(self.selenium.get_value(feedback_pg.search_box()), "")
 
 if __name__ == "__main__":
     unittest.main()

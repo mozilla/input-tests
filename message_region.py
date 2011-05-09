@@ -38,7 +38,6 @@
 Created on Mar 28, 2011
 '''
 
-
 class Message(object):
 
     _type_locator = " .type"
@@ -59,7 +58,23 @@ class Message(object):
 
     def absolute_locator(self, relative_locator):
         return self.root_locator + relative_locator
+    
+    def is_platform_visble(self):
+        """
+        Returns True if the platform
+         in an individual theme page is visible
+        """
+        platforms = ("Mac OS X, Windows 7, Windows XP, Windows Vista, Linux, Android, Maemo")
+        return platforms.find(self.platform) > -1
 
+    def is_language_visible(self):
+        """
+        Returns True if the language in an individual theme page is visible
+        """
+        language = ("English (US), Spanish, English (British), Portuguese (Brazilian)" +
+                    "German, French, Russian, Italian, Polish, Turkish, Hungarian")
+        return language.find(self.locale) > -1
+                
     @property
     def root_locator(self):
         return "css=#messages .message:nth(" + str(self.index - 1) + ")"
@@ -79,7 +94,7 @@ class Message(object):
     @property
     def platform(self):
         return self.selenium.get_text(self.absolute_locator(self._platform_locator))
-
+        
     @property
     def locale(self):
         return self.selenium.get_text(self.absolute_locator(self._locale_locator))

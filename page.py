@@ -162,3 +162,13 @@ class Page(object):
         f.write(base64.decodestring(
             self.selenium.capture_entire_page_screenshot_to_string('')))
         f.close()
+        
+    def get_attribute(self, locator, atribute):
+        """
+        Returns the value of an atribute
+        locator = the locator with the atribute
+        atribute = the atribute to be returned
+
+        Ex get_atribute("id=example", "href")
+        """
+        return self.selenium.get_attribute(locator + "@" + atribute)

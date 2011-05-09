@@ -144,6 +144,46 @@ class FeedbackPage(input_base_page.InputBasePage):
         """
         return self.selenium.is_visible(self._custom_dates_locator)
 
+    def is_datepicker_visible(self):
+        """
+
+        Returns True if the datepicker pop up is visible
+
+        """
+        date_picker = self.get_attribute(self._datepicker_locator, "style")
+        if (date_picker.find("block") == -1) :
+            return False
+        else:
+            return True
+        
+    def is_custom_start_date_visible(self):
+        """
+
+        Returns True if the custom start date input form is visible
+
+        """
+        return self.selenium.is_visible(self._custom_start_date_locator)
+    
+    def is_custom_end_date_visible(self):
+        """
+
+        Returns True if the custom end date input form is visible
+
+        """
+        return self.selenium.is_visible(self._custom_end_date_locator)
+        
+    def is_next_month_button_disabled(self):
+        """
+        
+        Check if forward button of the calendar pop up is disabled
+        
+        """
+        month_button = self.selenium.get_attribute("xpath=//div[@id='ui-datepicker-div']/div/a[2]/@class")
+        if (month_button.find("disabled") == -1) :
+            return False
+        else:
+            return True
+           
     def wait_for_datepicker_to_finish_animating(self):
         self.selenium.wait_for_condition(
             "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
@@ -268,6 +308,18 @@ class FeedbackPage(input_base_page.InputBasePage):
     @property
     def messages(self):
         return [message_region.Message(self.selenium, i + 1) for i in range(self.message_count)]
+    
+    @property
+    def custom_start_date(self):
+        return self.selenium.get_value(self._custom_start_date_locator)
+    
+    @property
+    def custom_end_date(self):
+        return self.selenium.get_value(self._custom_end_date_locator)
+    
+    @property
+    def search_box(self):
+        return self.selenium.get_value(self._search_box)
 
     def message(self, index):
         return message_region.Message(self.selenium, index)

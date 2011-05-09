@@ -37,14 +37,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
-
-
 import themes_page
-
 
 class TestThemes(unittest.TestCase):
 
@@ -58,37 +54,35 @@ class TestThemes(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    """
-    Litmus 13722 - input:Verify the layout of Themes page(Themes tab)
-    """
     def test_the_heder_layout(self):
+        """
+        Litmus 13722 - input:Verify the layout of Themes page(Themes tab)
+        """
         themes = themes_page.ThemesPage(self.selenium)
         themes.go_to_themes_page()
 
-        self.assertTrue(themes.is_element_visible(themes.get_firefox_link))
-        self.assertEqual(themes.get_atribute(themes.get_firefox_link, "href"),
+        self.assertTrue(themes.is_element_visible(themes.firefox_link))
+        self.assertEqual(themes.get_atribute(themes.firefox_link, "href"),
                         "/en-US/")
-        themes.click_and_check(themes.get_firefox_link,"Welcome :: Firefox Input")
+        themes.click_and_check(themes.firefox_link, "Welcome :: Firefox Input")
         themes.go_back()
 
-        self.assertTrue(themes.is_element_visible(themes.get_themes_link))
-        self.assertEqual(themes.get_atribute(themes.get_themes_link, "href"),
+        self.assertTrue(themes.is_element_visible(themes.themes_link))
+        self.assertEqual(themes.get_atribute(themes.themes_link, "href"),
                          "/en-US/themes")
-        themes.click_and_check(themes.get_themes_link,"Themes :: Firefox Input")
+        themes.click_and_check(themes.themes_link, "Themes :: Firefox Input")
 
-        self.assertTrue(themes.is_element_visible(themes.get_feedback_link))
-        self.assertEqual(themes.get_atribute(themes.get_feedback_link, "href"),
+        self.assertTrue(themes.is_element_visible(themes.feedback_link))
+        self.assertEqual(themes.get_atribute(themes.feedback_link, "href"),
                          "/en-US/")
-        themes.click_and_check(themes.get_feedback_link,"Welcome :: Firefox Input")
+        themes.click_and_check(themes.feedback_link, "Welcome :: Firefox Input")
         themes.go_back()
 
-        self.assertTrue(themes.is_element_visible(themes.get_sites_link))
-        self.assertEqual(themes.get_atribute(themes.get_sites_link, "href"),
+        self.assertTrue(themes.is_element_visible(themes.sites_link))
+        self.assertEqual(themes.get_atribute(themes.sites_link, "href"),
                          "/en-US/sites")
-        themes.click_and_check(themes.get_sites_link,"Sites :: Firefox Input")
+        themes.click_and_check(themes.sites_link, "Sites :: Firefox Input")
         themes.go_back()
-
-
 
     def test_product_and_type_filter(self):
 
@@ -100,26 +94,22 @@ class TestThemes(unittest.TestCase):
         for p in products:
             p.select()
             self.assertTrue(p.is_selected)
-            self.assertTrue(themes.contains_item(themes.get_product_list, p.name))
+            self.assertTrue(themes.contains_item(themes.product_list, p.name))
 
 
         types = themes.type_filter.types()
         for t in types:
             t.select()
             self.assertTrue(t.is_selected)
-            self.assertTrue(themes.contains_item(themes.get_type_list, t.name))
+            self.assertTrue(themes.contains_item(themes.type_list, t.name))
 
-        #TODO Platform filter
-
-        
     def test_themes_section(self):
-        
+
         themes = themes_page.ThemesPage(self.selenium)
         themes.go_to_themes_page()
-        
-        self.assertEqual(themes.get_messages_title, "Common Themes")
-        self.assertEqual(themes.theme_count , 20)
-        
+
+        self.assertEqual(themes.messages_title, "Common Themes")
+        self.assertNotEqual(themes.theme_count , 0)
 
 if __name__ == "__main__":
     unittest.main()

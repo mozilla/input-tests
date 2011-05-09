@@ -54,8 +54,8 @@ class ThemesPage(input_base_page.InputBasePage):
     _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
 
     _themes_title_locator = "xpath=//div[@id='messages']//h2[.='Common Themes']"
-    
-    
+
+
     _feedback_link_locator = "css=a.dashboard"
     _themes_link_locator = "css=a.themes"
     _firefox_link_locator = "link=Firefox Input Dashboard"
@@ -73,27 +73,27 @@ class ThemesPage(input_base_page.InputBasePage):
         self.is_the_current_page
 
     @property
-    def get_product_list(self):
+    def product_list(self):
         return self._product_list
-    
+
     @property
-    def get_type_list(self):
+    def type_list(self):
         return self._type_list
 
     @property
-    def get_feedback_link(self):
+    def feedback_link(self):
         return self._feedback_link_locator
 
     @property
-    def get_themes_link(self):
+    def themes_link(self):
         return self._themes_link_locator
 
     @property
-    def get_firefox_link(self):
+    def firefox_link(self):
         return self._firefox_link_locator
 
     @property
-    def get_sites_link(self):
+    def sites_link(self):
         return self._sites_link_locator
 
     @property
@@ -111,11 +111,11 @@ class ThemesPage(input_base_page.InputBasePage):
     @property
     def themes(self):
         return [self.Theme(self.selenium, i + 1) for i in range(self.theme_count)]
-    
+
     @property
-    def get_messages_title(self):
+    def messages_title(self):
         return self.selenium.get_text(self._themes_title_locator)
- 
+
     def theme(self, index):
         return self.Theme(self.selenium, index)
 

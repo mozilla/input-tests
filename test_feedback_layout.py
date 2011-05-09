@@ -57,65 +57,75 @@ class Test_Feedback_Layout(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    """
-    Litmus 13594 - input:Verify the layout of header area
-    Litmus 13599 - input:Check the links in header area
-    """
-
     def test_the_heder_layout(self):
+        """
+        Litmus 13594 - input:Verify the layout of header area
+        Litmus 13599 - input:Check the links in header area
+        """
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_firefox_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.get_firefox_link, "href"),
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.firefox_link))
+        self.assertEqual(feedback_pg.get_atribute(feedback_pg.firefox_link, "href"),
                         "/en-US/")
-        feedback_pg.click_and_check(feedback_pg.get_firefox_link,"Welcome :: Firefox Input")
+        feedback_pg.click_and_check(feedback_pg.firefox_link, "Welcome :: Firefox Input")
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_themes_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.get_themes_link, "href"),
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.themes_link))
+        self.assertEqual(feedback_pg.get_atribute(feedback_pg.themes_link, "href"),
                          "/en-US/themes")
-        feedback_pg.click_and_check(feedback_pg.get_themes_link,"Themes :: Firefox Input")
+        feedback_pg.click_and_check(feedback_pg.themes_link, "Themes :: Firefox Input")
         feedback_pg.go_back()
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_feedback_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.get_feedback_link, "href"),
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.feedback_link))
+        self.assertEqual(feedback_pg.get_atribute(feedback_pg.feedback_link, "href"),
                          "/en-US/")
-        feedback_pg.click_and_check(feedback_pg.get_feedback_link,"Welcome :: Firefox Input")
+        feedback_pg.click_and_check(feedback_pg.feedback_link, "Welcome :: Firefox Input")
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_sites_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.get_sites_link, "href"),
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.sites_link))
+        self.assertEqual(feedback_pg.get_atribute(feedback_pg.sites_link, "href"),
                          "/en-US/sites")
-        feedback_pg.click_and_check(feedback_pg.get_sites_link,"Sites :: Firefox Input")
+        feedback_pg.click_and_check(feedback_pg.sites_link, "Sites :: Firefox Input")
         feedback_pg.go_back()
 
-
-    """
-    Litmus 13595 - input:Verify the layout of the left hand side section containing various
-    filtering options
-    """
     def test_the_left_panel_layout(self):
+        """
+        Litmus 13595 - input:Verify the layout of the left hand side section containing various
+        filtering options
+            
+        Litmus 13600 - input:Verify the applications drop down in Product
+        """
 
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertTrue( feedback_pg.product_filter.verify_location)
+        self.assertTrue(feedback_pg.product_filter.verify_location)
         self.assertTrue (feedback_pg.is_days_visible)
 
         feedback_pg.click_custom_dates()
 
         self.assertTrue(feedback_pg.is_custom_date_filter_visible())
 
-        self.assertNotEqual(feedback_pg.platform_filter.platform_count,0)
-        
+        self.assertNotEqual(feedback_pg.platform_filter.platform_count, 0)
+        self.assertEqual (feedback_pg.product_filter.products , [u'Firefox', u'Mobile'])
+
+        type_enum = ("Praise",
+                    "Issues",
+                    "Ideas")
+        for type in type_enum:
+            self.assertTrue(feedback_pg.type_filter.contains_type(type))
+
+
+
         platform_names = ("Windows 7",
                          "Windows XP",
                          "Windows Vista",
                          "Mac OS X",
                          "Linux")
+
         for lock in platform_names:
             self.assertTrue(feedback_pg.platform_filter.contains_platform(lock))
 
-        self.assertNotEqual(feedback_pg.locale_filter.locale_count,0)
+        self.assertNotEqual(feedback_pg.locale_filter.locale_count, 0)
 
         locale_names = ("English (US)",
                         "German",
@@ -123,40 +133,33 @@ class Test_Feedback_Layout(unittest.TestCase):
                         "French")
 
         for lock in locale_names:
-            self.assertTrue( feedback_pg.locale_filter.contains_locale(lock))
-
-
-
-    """
-    Litmus 13596 - input:Verify the layout of Latest Feedback section
-    Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
-    """
+            self.assertTrue(feedback_pg.locale_filter.contains_locale(lock))
 
     def test_the_feedback_page(self):
-
+        """
+        Litmus 13596 - input:Verify the layout of Latest Feedback section
+        Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
+        """
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
-        #TODO fails at click
+
         self.assertTrue(feedback_pg.check_feedback_navigation())
-        self.assertEqual(feedback_pg.get_feeedback_search_placeholder_value(), "Search by keyword")
-        self.assertNotEqual(feedback_pg.message_count,0)
-        
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_feedback_chart))
+        self.assertEqual(feedback_pg.feeedback_search_placeholder_value(), "Search by keyword")
+        self.assertNotEqual(feedback_pg.message_count, 0)
 
-
-
-    """
-    Litmus 13597 - input:Verify the layout of right hand section containing statistics data
-    Litmus 13716 - input:Verify while visiting section
-    """
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.feedback_chart))
 
     def test_the_right_panel_layout(self):
+        """
+        Litmus 13597 - input:Verify the layout of right hand section containing statistics data
+        Litmus 13716 - input:Verify while visiting section
+        """
 
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertEqual(feedback_pg.get_message_total_header(), "Messages")
-        self.assertNotEqual(feedback_pg.get_message_total_count, 0)
+        self.assertEqual(feedback_pg.message_total_header(), "Messages")
+        self.assertNotEqual(feedback_pg.message_total_count, 0)
 
         self.assertEqual(feedback_pg.mentioned_filter.mentioned_header, "Often Mentioned Toggle")
         self.assertNotEqual(feedback_pg.mentioned_filter.mentioned_count, 0)
@@ -164,26 +167,20 @@ class Test_Feedback_Layout(unittest.TestCase):
         self.assertEqual(feedback_pg.visiting_filter.visiting_header , "While Visiting Toggle")
         self.assertNotEqual(feedback_pg.visiting_filter.visiting_count, 0)
 
-
-
-    """
-    Litmus 13598 - input:Verify the layout of footer area
-    """
-
     def test_the_footer_area_layout(self):
+        """
+        Litmus 13598 - input:Verify the layout of footer area
+        """
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        #TODO: check css background for image
-        #self.selenium.get_text("css=#funnel")
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_creative_cmmons_attribution_share_alike_license))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_legal_notices))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_noted))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_privacy_policy))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_report_trademark_abuse))
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_creative_cmmons_attribution_share_alike_license))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_legal_notices))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_noted))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_privacy_policy))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_report_trademark_abuse))
-
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.get_footer_language_dropdown))
+        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_language_dropdown))
 
 
 if __name__ == "__main__":

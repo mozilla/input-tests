@@ -33,7 +33,6 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-from pip.locations import site_packages
 
 """
 Litmus 13644 - Input: Verify that secure/SSL/HTTPS URLs in Sites have (SSL) to the right of their URLs
@@ -43,17 +42,22 @@ from selenium import selenium
 from vars import ConnectionParameters
 import unittest
 import pytest
-xfail = pytest.mark.xfail
 
-#import release_sites
+
 import sites_page
 
 class TestSites(unittest.TestCase):
 
-    _products = (
-                 {"name": "firefox", "versions": ("-- all --", "6.0a1", "5.0a2", "4.0", "4.0b12")},
-                 {"name": "mobile", "versions": ("-- all --", "4.0", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1")}
-                  )
+    _products = ({"name": "firefox",
+                                    "versions": ("6.0a1", "5.0a2", "4.0", "4.0b12") ,
+                                    "types": ("", "Praise", "Issues") ,
+                                    "platforms": ("All", "vista", "winxp", "win7", "mac", "linux")
+                },
+                 {"name": "mobile",
+                                    "versions": ("4.0", "4.0b5", "4.0b4", "4.0b3", "4.0b2", "4.0b1"),
+                                    "types": ("", "Praise", "Issues"),
+                                    "platforms":("All", "maemo", "android")
+                })
 
     def setUp(self):
         self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
@@ -64,11 +68,11 @@ class TestSites(unittest.TestCase):
     def tearDown(self):
         self.selenium.stop()
 
-    """
-    Litmus 13644 - Input: Verify that secure/SSL/HTTPS URLs in Sites have (SSL) to the right of their URLs
-    """
+
     def test_ssh(self):
-        
+        """
+        Litmus 13644 - Input: Verify that secure/SSL/HTTPS URLs in Sites have (SSL) to the right of their URLs
+        """
         site_page = sites_page.SitesPage(self.selenium)
         site_page.go_to_sites_page()
 
@@ -84,72 +88,95 @@ class TestSites(unittest.TestCase):
 
 
 
-    
-    """
-    Litmus 13718 - input:Verify Product controls in sites homepage
-    """
+
+
     def test_products_values(self):
-        
-        site_page = sites_page.SitesPage(self.selenium)
-        site_page.go_to_sites_page()
-        
-        products = site_page.product_filter.products
-        self.assertEqual(products[0],"Firefox")
-        self.assertEqual(products[1],"Mobile")
+        """
+        Litmus 13718 - input:Verify Product controls in sites homepage
+        """
+        site = sites_page.SitesPage(self.selenium)
+        site.go_to_sites_page()
+
+        self.assertTrue(site.product_filter.verify_location)
+
+        products = site.product_filter.products
+        self.assertEqual(products[0], "Firefox")
+        self.assertEqual(products[1], "Mobile")
 
 
 
-    """
-    Litmus 13723 - input:Verify the layout of Sites page(Sites tab)
-    """
-    
+
     def test_the_heder_layout(self):
+        """
+        Litmus 13723 - input:Verify the layout of Sites page(Sites tab)
+        """
         sites = sites_page.SitesPage(self.selenium)
         sites.go_to_sites_page()
 
-        self.assertTrue(sites.is_element_visible(sites.get_firefox_link))
-        self.assertEqual(sites.get_atribute(sites.get_firefox_link, "href"),
+        self.assertTrue(sites.is_element_visible(sites.firefox_link))
+        self.assertEqual(sites.get_atribute(sites.firefox_link, "href"),
                         "/en-US/")
-        sites.click_and_check(sites.get_firefox_link,"Welcome :: Firefox Input")
+        sites.click_and_check(sites.firefox_link, "Welcome :: Firefox Input")
         sites.go_back()
 
-        self.assertTrue(sites.is_element_visible(sites.get_themes_link))
-        self.assertEqual(sites.get_atribute(sites.get_themes_link, "href"),
+        self.assertTrue(sites.is_element_visible(sites.themes_link))
+        self.assertEqual(sites.get_atribute(sites.themes_link, "href"),
                          "/en-US/themes")
-        sites.click_and_check(sites.get_themes_link,"Themes :: Firefox Input")
+        sites.click_and_check(sites.themes_link, "Themes :: Firefox Input")
         sites.go_back()
 
-        self.assertTrue(sites.is_element_visible(sites.get_feedback_link))
-        self.assertEqual(sites.get_atribute(sites.get_feedback_link, "href"),
+        self.assertTrue(sites.is_element_visible(sites.feedback_link))
+        self.assertEqual(sites.get_atribute(sites.feedback_link, "href"),
                          "/en-US/")
-        sites.click_and_check(sites.get_feedback_link,"Welcome :: Firefox Input")
+        sites.click_and_check(sites.feedback_link, "Welcome :: Firefox Input")
         sites.go_back(
                       )
-        self.assertTrue(sites.is_element_visible(sites.get_sites_link))
-        self.assertEqual(sites.get_atribute(sites.get_sites_link, "href"),
+        self.assertTrue(sites.is_element_visible(sites.sites_link))
+        self.assertEqual(sites.get_atribute(sites.sites_link, "href"),
                          "/en-US/sites")
-        sites.click_and_check(sites.get_sites_link,"Sites :: Firefox Input")
+        sites.click_and_check(sites.sites_link, "Sites :: Firefox Input")
 
-
-    @xfail(reason="Bug 650917 - Unable to select mobile product from Sites page")
-    def test_product_and_type_filter(self):
+    def test_type_filter(self):
 
         sites = sites_page.SitesPage(self.selenium)
         sites.go_to_sites_page()
 
         types = sites.type_filter.types()
+
         for t in types:
             t.select()
             self.assertTrue(t.is_selected)
-            self.assertTrue(sites.contains_item(sites.get_type_list, t.name))
+            if t.name != "All":
+                #ISSUE: type of feedback:  u'happy' != u'Praise'?????
+                self.assertTrue(sites.contains_item(sites.type_list, t.name))
+            else:
+                self.assertEqual(sites.type_of_feedback_from_url, "")
+
+    def test_product_filter(self):
+
+        sites = sites_page.SitesPage(self.selenium)
+        sites.go_to_sites_page()
 
         self.assertEqual(len(sites.product_filter.products), len(self._products))
+        #select the a product except the default one
+        sites.product_filter.select_product("mobile")
 
         for product in self._products:
-            versions = list(product["versions"])
             sites.product_filter.select_product(product["name"])
-            self.assertEqual(len(sites.product_filter.versions), len(versions))
-        #TODO Platform filter
+            self.assertTrue(sites.product_from_url, product["name"])
+            self.assertNotEqual(len(sites.product_filter.versions), 0)
+
+    def test_platform_filter(self):
+
+        sites = sites_page.SitesPage(self.selenium)
+        sites.go_to_sites_page()
+
+        for product in self._products:
+            sites.product_filter.select_product(product["name"])
+            platforms = sites.platform_filter.platforms()
+            for platform in platforms:
+                self.assertTrue(sites.contains_item(product["platforms"], platform.name))
+
 
 if __name__ == "__main__":
     unittest.main()

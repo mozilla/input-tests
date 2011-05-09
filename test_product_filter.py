@@ -172,7 +172,7 @@ class TestProductFilter(unittest.TestCase):
             self.assertEqual(sites_pg.product_from_url, product)
             self.assertEqual(sites_pg.version_from_url, version)
 
-    @xfail(reason="Bug 650917 - Unable to select mobile product from Sites page")
+    @xfail(reason = "Bug 650917 - Unable to select mobile product from Sites page")
     def test_sites_can_be_filtered_by_mobile_versions(self):
         """
         This testcase covers # 15043 & 15044 in Litmus
@@ -197,14 +197,14 @@ class TestProductFilter(unittest.TestCase):
             self.assertEqual(sites_pg.product_from_url, product)
             self.assertEqual(sites_pg.version_from_url, version)
 
-    """
-    Litmus 13654 - Input: latest beta auto-selected/defaulted to, when switching Products
-    """
+
     def test_the_latest_version(self):
-        
+        """
+        Litmus 13654 - Input: latest beta auto-selected/defaulted to, when switching Products
+        """
         _latest_beta_firefox_version = "4.0b12"
         _latest_beta_mobile_version = "4.0b5"
-        
+
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 

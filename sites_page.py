@@ -44,6 +44,7 @@ from vars import ConnectionParameters
 
 import product_filter_region
 import type_filter_region
+import platform_filter_region
 
 page_load_timeout = ConnectionParameters.page_load_timeout
 
@@ -54,6 +55,8 @@ class SitesPage(input_base_page.InputBasePage):
 
     _sites_locator = "id('themes')//li[@class='site']"
 
+    _uncomon_sites_locator = "id('uncommon-sites')//li"
+
     _feedback_link_locator = "css=a.dashboard"
     _themes_link_locator = "css=a.themes"
     _firefox_link_locator = "link=Firefox Input Dashboard"
@@ -61,35 +64,38 @@ class SitesPage(input_base_page.InputBasePage):
 
     _type_list = ("All",
                   "Praise",
-                  "Issues",
-                  "Ideas")
+                  "Issues")
     def go_to_sites_page(self):
         self.selenium.open('/sites/')
         self.is_the_current_page
 
     @property
-    def get_type_list(self):
+    def type_list(self):
         return self._type_list
 
     @property
-    def get_feedback_link(self):
+    def feedback_link(self):
         return self._feedback_link_locator
 
     @property
-    def get_themes_link(self):
+    def themes_link(self):
         return self._themes_link_locator
 
     @property
-    def get_firefox_link(self):
+    def firefox_link(self):
         return self._firefox_link_locator
 
     @property
-    def get_sites_link(self):
+    def sites_link(self):
         return self._sites_link_locator
 
     @property
     def product_filter(self):
         return product_filter_region.ProductFilter.ComboFilter(self.selenium)
+
+    @property
+    def platform_filter(self):
+        return platform_filter_region.PlatformFilter.ButtonFilter(self.selenium)
 
     @property
     def type_filter(self):

@@ -74,12 +74,12 @@ class Page(object):
         else:
             return True
 
-    def click_link(self, link, wait_flag=False, timeout=80000):
+    def click_link(self, link, wait_flag = False, timeout = 80000):
         self.selenium.click("link=%s" % (link))
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
 
-    def click(self, locator, wait_flag=False, timeout=80000):
+    def click(self, locator, wait_flag = False, timeout = 80000):
         self.selenium.click(locator)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
@@ -90,12 +90,12 @@ class Page(object):
     def click_and_check(self, locator, _page_title):
         self.selenium.click(locator)
         self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-        return self.is_the_current_page_and_title(_page_title)  
- 
+        return self.is_the_current_page_and_title(_page_title)
+
     def go_back(self):
         self.selenium.go_back()
         self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-        
+
 
     def is_the_current_page_and_title(self, _page_title):
         page_title = self.selenium.get_title()
@@ -111,7 +111,7 @@ class Page(object):
     def type(self, locator, str):
         self.selenium.type(locator, str)
 
-    def click_button(self, button, wait_flag=False, timeout=80000):
+    def click_button(self, button, wait_flag = False, timeout = 80000):
         self.selenium.click(button)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
@@ -126,7 +126,7 @@ class Page(object):
         """
         return self.selenium.get_attribute(locator + "@" + atribute)
 
-    def contains_item(self,list,item):
+    def contains_item(self, list, item):
         for itm in list:
             if itm == item:
                 return True
@@ -144,7 +144,7 @@ class Page(object):
     def is_text_present(self, text):
         return self.selenium.is_text_present(text)
 
-    def refresh(self, timeout=80000):
+    def refresh(self, timeout = 80000):
         self.selenium.refresh()
         self.selenium.wait_for_page_to_load(timeout)
 

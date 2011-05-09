@@ -92,13 +92,13 @@ class ProductFilter(Page):
             """
             return self.selenium.get_select_options(self._version_dropdown_locator)
 
-        def selected_version(self, type='value'):
+        def selected_version(self, type = 'value'):
             """
             returns the currently selected product version
             """
             return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
-        def select_version(self, lookup, by='value'):
+        def select_version(self, lookup, by = 'value'):
             """
             selects product version
             """
@@ -113,11 +113,11 @@ class ProductFilter(Page):
 
         def __init__(self, selenium):
             self.selenium = selenium
-        
+
         @property
         def product_count(self):
             return int(self.selenium.get_xpath_count(self._product_locator))
-            
+
         @property
         def selected_product(self):
             return self.selenium.get_text(self._selected_product_locator)
@@ -130,14 +130,14 @@ class ProductFilter(Page):
             return [self.Product(self.selenium, i)for i in range(self.product_count)]
 
         class Product(object):
-            
+
             _selected_locator = " selected"
             _name_locator = " a"
-            
+
             def __init__(self, selenium, lookup):
                 self.selenium = selenium
                 self.lookup = lookup
-                
+
             def absolute_locator(self, relative_locator):
                 return self.root_locator + relative_locator
 
@@ -149,19 +149,21 @@ class ProductFilter(Page):
                 else:
                     # lookup by name
                     return "css=#filter_product li:contains(%s)" % self.lookup
-            
+
             @property
             def is_selected(self):
                 try:
-                    self.selenium.get_attribute(self.absolute_locator(self._name_locator)+ "@class")
-                    return True
+                    if self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class") == "selected":
+                        return True
+                    else:
+                        return False
                 except:
                     return False
 
             @property
             def name(self):
                 return self.selenium.get_text(self.root_locator)
-            
+
             def select(self):
                 self.selenium.click(self.absolute_locator(self._name_locator))
                 self.selenium.wait_for_page_to_load(page_load_timeout)

@@ -143,6 +143,13 @@ class InputBasePage(Page):
     @property
     def search_from_url(self):
         """
-        Returns the locale value from the current location URL
+        Returns the search value from the current location URL
         """
         return self._value_from_url("q")
+
+    @property
+    def type_of_feedback_from_url(self):
+        """
+        Returns the feedback type (praise, issues, ideas) from the current location URL
+        """
+        return self._value_from_url("sentiment")

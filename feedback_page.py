@@ -50,6 +50,7 @@ import message_region
 import mentioned_region
 import visiting_region
 import vars
+import type_filter_region
 
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
@@ -89,8 +90,8 @@ class FeedbackPage(input_base_page.InputBasePage):
     _feedback_chart_locator = "id=feedback-chart"
     _feedback_header_locator = "xpath=//div[@id='messages']//h2[.='Latest Feedback']"
     _feedback_search_locator = "id=id_q"
-    _feedback_next_locator = u"link=Older Messages \xbb"
-    _feedback_previous_locator = u"link=\xab Newer Messages"
+    _feedback_next_locator = "css=a.next"  #u"link=Older Messages \xbb"
+    _feedback_previous_locator = "css=a.prev" #u"link=\xab Newer Messages"
     _feedback_messages_locator = "id=messages"
 
     _message_total_count_locator = "id('big-count')"
@@ -279,14 +280,13 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    #TODO: Make finish the Next click function
     def check_feedback_navigation(self):
         try:
             self.selenium.is_visible(self._feedback_next_locator)
             self.click_feedback_next()
 
             self.selenium.is_visible(self._feedback_next_locator)
-            #TO DO ISSUE
+
             self.click_feedback_next()
             self.selenium.is_visible(self._feedback_previous_locator)
             return True
@@ -307,19 +307,19 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.click(self._feedback_previous_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def get_feeedback_search_placeholder_value(self):
+    def feeedback_search_placeholder_value(self):
         return self.selenium.get_attribute(self._feedback_search_locator + "@placeholder")
 
     """
     Get the left messages header value
     """
-    def get_message_total_header(self):
+    def message_total_header(self):
         return self.selenium.get_text("xpath=" + self._message_total_count_locator + "/h3")
 
     """
     Get the left messages number value
     """
-    def get_message_total_count(self):
+    def message_total_count(self):
         return self.selenium.get_text("xpath=" + self._message_total_count_locator + "/p")
 
     """
@@ -343,13 +343,17 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
 
     @property
+    def type_filter(self):
+        return type_filter_region.TypeFilter.ComboFilter(self.selenium)
+
+
+    @property
     def locale_filter(self):
         return locale_filter_region.LocaleFilter(self.selenium)
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter(self.selenium)
-    
+        return platform_filter_region.PlatformFilter.ComboFilter(self.selenium)
     @property
     def mentioned_filter(self):
         return mentioned_region.MentionedRegion(self.selenium)
@@ -379,69 +383,69 @@ class FeedbackPage(input_base_page.InputBasePage):
         return message_region.Message(self.selenium, index)
 
     @property
-    def get_feedback_heder(self):
+    def feedback_heder(self):
         return self._feedback_header_locator
 
     @property
-    def get_feedback_search(self):
+    def feedback_search(self):
         return self._feedback_search_locator
 
     @property
-    def get_feedback_next(self):
+    def feedback_next(self):
         return self._feedback_next_locator
 
     @property
-    def get_feedback_previous(self):
+    def feedback_previous(self):
         return self._feedback_previous_locator
 
     @property
-    def get_feedback_messages(self):
+    def feedback_messages(self):
         return self._feedback_messages_locator
 
     @property
-    def get_messages_total_count(self):
+    def messages_total_count(self):
         return self._message_total_count_locator
 
     @property
-    def get_footer_privacy_policy(self):
+    def footer_privacy_policy(self):
         return self._footer_privacy_policy_locator
 
     @property
-    def get_footer_legal_notices(self):
+    def footer_legal_notices(self):
         return self._footer_legal_notices_locator
 
     @property
-    def get_footer_report_trademark_abuse(self):
+    def footer_report_trademark_abuse(self):
         return self._footer_report_trademark_abuse_locator
 
     @property
-    def get_footer_noted(self):
+    def footer_noted(self):
         return self._footer_noted_locator
 
     @property
-    def get_footer_creative_cmmons_attribution_share_alike_license(self):
+    def footer_creative_cmmons_attribution_share_alike_license(self):
         return self._footer_creative_cmmons_attribution_share_alike_license_locator
 
     @property
-    def get_footer_language_dropdown(self):
+    def footer_language_dropdown(self):
         return self._footer_language_dropdown_locator
 
     @property
-    def get_feedback_link(self):
+    def feedback_link(self):
         return self._feedback_link_locator
 
     @property
-    def get_themes_link(self):
+    def themes_link(self):
         return self._themes_link_locator
 
     @property
-    def get_firefox_link(self):
+    def firefox_link(self):
         return self._firefox_link_locator
 
     @property
-    def get_sites_link(self):
+    def sites_link(self):
         return self._sites_link_lokator
 
     @property
-    def get_feedback_chart(self):
+    def feedback_chart(self):
         return self._feedback_chart_locator

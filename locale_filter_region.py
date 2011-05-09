@@ -53,7 +53,7 @@ class LocaleFilter(Page):
     _total_message_count_locator = "css=#filter_locale .bars"
 
     @property
-    def get_total_message_count(self):
+    def total_message_count(self):
         return self.get_atribute(self._total_message_count_locator, "data-total")
 
     @property
@@ -74,7 +74,7 @@ class LocaleFilter(Page):
 
     def contains_locale(self, lookup):
         try :
-            self.selenium.get_text("css=#filter_locale div li:contains(%s)" % lookup )
+            self.selenium.get_text("css=#filter_locale div li:contains(%s)" % lookup)
             return True
         except :
             return False
@@ -135,4 +135,4 @@ class LocaleFilter(Page):
         def percentage(self, total_messages):
                 return round((float(self.message_count) / float(total_messages)) * 100)
 
-    
+

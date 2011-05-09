@@ -111,11 +111,12 @@ class TestLocaleFilter(unittest.TestCase):
         self.assertEqual(feedback_pg.locale_from_url, locale_code)
         [self.assertEqual(message.locale, locale_name) for message in feedback_pg.messages]
 
-    """
-    Litmus 13719 - input:Verify the Percentage # for Platform and Locale
-    """
-    @xfail(reason="Bug 651493 - the Percentage # for Platform and Locale is not shown on the staging component")
+
+    @xfail(reason = "Bug 651493 - the Percentage # for Platform and Locale is not shown on the staging component")
     def test_percentage(self):
+        """
+        Litmus 13719 - input:Verify the Percentage # for Platform and Locale
+        """
         fb_pg = feedback_page.FeedbackPage(self.selenium)
         fb_pg.go_to_feedback_page()
 
@@ -123,7 +124,7 @@ class TestLocaleFilter(unittest.TestCase):
 
         local.show_extra_locales()
         for locale in local.locales():
-                self.assertEqual( locale.percentage(local.get_total_message_count), 
+                self.assertEqual(locale.percentage(local.total_message_count),
                                   int(locale.message_percentage.split("%")[0]))
 
 if __name__ == "__main__":

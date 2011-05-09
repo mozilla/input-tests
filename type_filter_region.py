@@ -52,7 +52,7 @@ class TypeFilter(Page):
 
         def __init__(self, selenium):
             self.selenium = selenium
-        
+
         @property
         def type_count(self):
             return int(self.selenium.get_xpath_count(self._types_locator))
@@ -69,14 +69,14 @@ class TypeFilter(Page):
             return [self.Type(self.selenium, i)for i in range(self.type_count)]
 
         class Type(object):
-            
+
             _selected_locator = " selected"
             _name_locator = " a"
-            
+
             def __init__(self, selenium, lookup):
                 self.selenium = selenium
                 self.lookup = lookup
-                
+
             def absolute_locator(self, relative_locator):
                 return self.root_locator + relative_locator
 
@@ -88,19 +88,85 @@ class TypeFilter(Page):
                 else:
                     # lookup by name
                     return "css=#filter_type li:contains(%s)" % self.lookup
-            
+
             @property
             def is_selected(self):
                 try:
-                    self.selenium.get_attribute(self.absolute_locator(self._name_locator)+ "@class")
-                    return True
+                    if self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class").strip() == "selected":
+                        return True
+                    else:
+                        return False
                 except:
                     return False
 
             @property
             def name(self):
                 return self.selenium.get_text(self.root_locator)
-            
+
             def select(self):
                 self.selenium.click(self.absolute_locator(self._name_locator))
+                self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    class ComboFilter(Page):
+
+        _type_filter_locator = "id('filter_type')//li"
+
+        @property
+        def type_count(self):
+            return int(self.selenium.get_xpath_count(self._type_filter_locator))
+
+        def type(self, lookup):
+            return self.Type(self.selenium, lookup)
+
+        def contains_type(self, lookup):
+            try :
+                self.selenium.get_text("css=#filter_type li:contains(%s) label > strong" % lookup)
+                return True
+            except :
+                return False
+
+        def types(self):
+            return [self.Type(self.selenium, i)for i in range(self.type_count)]
+
+        class Type(object):
+
+            _checkbox_locator = " input"
+            _name_locator = " label > strong"
+            _message_count_locator = " .count"
+            _percent_locator = " .perc"
+
+            def __init__(self, selenium, lookup):
+                self.selenium = selenium
+                self.lookup = lookup
+
+            def absolute_locator(self, relative_locator):
+                return self.root_locator + relative_locator
+
+            @property
+            def root_locator(self):
+                if type(self.lookup) == int:
+                    # lookup by index
+                    return "css=#filter_type li:nth(%s)" % self.lookup
+                else:
+                    # lookup by name
+                    return "css=#filter_type li:contains(%s)" % self.lookup
+
+            @property
+            def is_selected(self):
+                return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+
+            @property
+            def name(self):
+                return self.selenium.get_text(self.absolute_locator(self._name_locator))
+
+            @property
+            def message_count(self):
+                return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+
+            @property
+            def percent(self):
+                return self.selenium.get_text(self.absolute_locator(self._percent_locator))
+
+            def select(self):
+                self.selenium.click(self.absolute_locator(self._checkbox_locator))
                 self.selenium.wait_for_page_to_load(page_load_timeout)

@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
 #                 David Burns
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -49,7 +50,6 @@ import base64
 page_load_timeout = vars.ConnectionParameters.page_load_timeout
 base_url = vars.ConnectionParameters.baseurl
 http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
-
 
 class Page(object):
     '''
@@ -84,29 +84,9 @@ class Page(object):
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
 
-    """
-    Clicks the link and verifies that the page title is correct 
-    """
-    def click_and_check(self, locator, _page_title):
-        self.selenium.click(locator)
-        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-        return self.is_the_current_page_and_title(_page_title)
-
     def go_back(self):
         self.selenium.go_back()
         self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-
-
-    def is_the_current_page_and_title(self, _page_title):
-        page_title = self.selenium.get_title()
-        if not page_title == _page_title:
-            self.record_error()
-            try:
-                raise Exception("Expected page title to be: '" + _page_title + "' but it was: '" + page_title + "'")
-            except Exception:
-                raise Exception('Expected page title does not match actual page title.')
-        else:
-            return True
 
     def type(self, locator, str):
         self.selenium.type(locator, str)
@@ -115,6 +95,9 @@ class Page(object):
         self.selenium.click(button)
         if(wait_flag):
             self.selenium.wait_for_page_to_load(timeout)
+
+    def get_title(self):
+        return self.selenium.get_title()
 
     def get_atribute(self, locator, atribute):
         """

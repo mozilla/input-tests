@@ -80,28 +80,13 @@ class FeedbackPage(input_base_page.InputBasePage):
     _search_box = "id_q"
 
     _total_message_count_locator = "css=#big-count p"
+    _total_message_count_heading_locator = "css=#big-count h3"
+
     _messages_locator = "id('messages')//li[@class='message']"
 
-    _feedback_link_locator = "css=a.dashboard"
-    _themes_link_locator = "css=a.themes"
-    _firefox_link_locator = "link=Firefox Input Dashboard"
-    _sites_link_lokator = "css=a.issues"
-
-    _feedback_chart_locator = "id=feedback-chart"
-    _feedback_header_locator = "xpath=//div[@id='messages']//h2[.='Latest Feedback']"
-    _feedback_search_locator = "id=id_q"
-    _feedback_next_locator = "css=a.next"  #u"link=Older Messages \xbb"
-    _feedback_previous_locator = "css=a.prev" #u"link=\xab Newer Messages"
-    _feedback_messages_locator = "id=messages"
-
-    _message_total_count_locator = "id('big-count')"
-
-    _footer_privacy_policy_locator = "link=Privacy Policy"
-    _footer_legal_notices_locator = "link=Legal Notices"
-    _footer_report_trademark_abuse_locator = "link=Report Trademark Abuse"
-    _footer_noted_locator = "link=noted"
-    _footer_creative_cmmons_attribution_share_alike_license_locator = "link=Creative Commons Attribution Share-Alike License v3.0"
-    _footer_language_dropdown_locator = "id=language"
+    _chart_locator = "id=feedback-chart"
+    _messages_heading_locator = "css=#messages h2"
+    _search_locator = "id=id_q"
 
     def go_to_feedback_page(self):
         self.selenium.open('/')
@@ -113,9 +98,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def get_current_days(self):
         """
-
         Returns the link text of the currently applied days filter
-
         """
         if self.selenium.is_element_present(self._current_when_link_locator):
             return self.selenium.get_text(self._current_when_link_locator)
@@ -124,9 +107,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def get_days_tooltip(self, days):
         """
-
         Returns the tooltip for the days link 1d/7d/30d
-
         """
         for time in self._when_links:
             if re.search(days, time, re.IGNORECASE) is None:
@@ -149,7 +130,6 @@ class FeedbackPage(input_base_page.InputBasePage):
         """
         Verifys if the 1d/7d/30d are visible
         """
-
         for time in self._when_links:
             if not self.selenium.is_visible(time):
                 return False
@@ -157,26 +137,20 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def get_custom_dates_tooltip(self):
         """
-
         Returns the tooltip for the custom dates filter link 1d/7d/30d
-
         """
         return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
 
     def click_custom_dates(self):
         """
-
         Clicks the custom date filter button and waits for the form to appear
-
         """
         self.selenium.click(self._show_custom_dates_locator)
         self.wait_for_element_visible(self._custom_dates_locator)
 
     def is_custom_date_filter_visible(self):
         """
-
         Returns True if the custom date filter form is visible
-
         """
         return self.selenium.is_visible(self._custom_dates_locator)
 
@@ -186,44 +160,34 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def click_start_date(self):
         """
-
         Clicks the start date in the custom date filter form and waits for the datepicker to appear
-
         """
         self.selenium.click(self._custom_start_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
     def click_end_date(self):
         """
-
         Clicks the end date in the custom date filter form and waits for the datepicker to appear
-
         """
         self.selenium.click(self._custom_end_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
     def click_previous_month(self):
         """
-
         Clicks the previous month button in the datepicker
-
         """
         self.selenium.click(self._datepicker_previous_month_locator)
 
     def click_next_month(self):
         """
-
         Clicks the next month button in the datepicker
-
         """
         # TODO: Throw an error if the next month button is disabled
         self.selenium.click(self._datepicker_next_month_locator)
 
     def click_day(self, day):
         """
-
         Clicks the day in the datepicker and waits for the datepicker to disappear
-
         """
         # TODO: Throw an error if the day button is disabled
         self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
@@ -232,9 +196,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def select_date(self, target_date):
         """
-
         Navigates to the target month in the datepicker and clicks the target day
-
         """
         currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
         targetYear = target_date.year
@@ -268,9 +230,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def filter_by_custom_dates(self, start_date, end_date):
         """
-
         Filters by a custom date range
-
         """
         self.click_custom_dates()
         self.click_start_date()
@@ -280,72 +240,19 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
 
-    def check_feedback_navigation(self):
-        try:
-            self.selenium.is_visible(self._feedback_next_locator)
-            self.click_feedback_next()
+    def search_box_placeholder(self):
+        return self.selenium.get_attribute(self._search_locator + "@placeholder")
 
-            self.selenium.is_visible(self._feedback_next_locator)
-
-            self.click_feedback_next()
-            self.selenium.is_visible(self._feedback_previous_locator)
-            return True
-        except:
-            return False
-
-    def click_feedback_next(self):
+    @property
+    def total_message_count_heading(self):
         """
-        Clicks the feedback next button and waits for the form to appear
+        Get the total messages header value
         """
-        self.click(self._feedback_next_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def click_feedback_prev(self):
-        """
-        Clicks the feedback previous button and waits for the form to appear
-        """
-        self.selenium.click(self._feedback_previous_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
-
-    def feeedback_search_placeholder_value(self):
-        return self.selenium.get_attribute(self._feedback_search_locator + "@placeholder")
-
-    """
-    Get the left messages header value
-    """
-    def message_total_header(self):
-        return self.selenium.get_text("xpath=" + self._message_total_count_locator + "/h3")
-
-    """
-    Get the left messages number value
-    """
-    def message_total_count(self):
-        return self.selenium.get_text("xpath=" + self._message_total_count_locator + "/p")
-
-    """
-    Clicks the link and verifies that the page title is correct 
-    """
-    def click_and_check(self, locator, _page_title):
-        self.selenium.click(locator)
-        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-        return self.is_the_current_page_and_title(_page_title)
-
-    """
-    opens the link and verifies that the page title is correct 
-    """
-    def open_link_and_check(self, _link, _page_title):
-        self.selenium.open(_link)
-        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
-        return self.is_the_current_page_and_title(_page_title)
-
-    def go_back(self):
-        self.selenium.go_back()
-        self.selenium.wait_for_page_to_load(vars.ConnectionParameters.page_load_timeout)
+        return self.selenium.get_text(self._total_message_count_heading_locator)
 
     @property
     def type_filter(self):
         return type_filter_region.TypeFilter.ComboFilter(self.selenium)
-
 
     @property
     def locale_filter(self):
@@ -383,69 +290,5 @@ class FeedbackPage(input_base_page.InputBasePage):
         return message_region.Message(self.selenium, index)
 
     @property
-    def feedback_heder(self):
-        return self._feedback_header_locator
-
-    @property
-    def feedback_search(self):
-        return self._feedback_search_locator
-
-    @property
-    def feedback_next(self):
-        return self._feedback_next_locator
-
-    @property
-    def feedback_previous(self):
-        return self._feedback_previous_locator
-
-    @property
-    def feedback_messages(self):
-        return self._feedback_messages_locator
-
-    @property
-    def messages_total_count(self):
-        return self._message_total_count_locator
-
-    @property
-    def footer_privacy_policy(self):
-        return self._footer_privacy_policy_locator
-
-    @property
-    def footer_legal_notices(self):
-        return self._footer_legal_notices_locator
-
-    @property
-    def footer_report_trademark_abuse(self):
-        return self._footer_report_trademark_abuse_locator
-
-    @property
-    def footer_noted(self):
-        return self._footer_noted_locator
-
-    @property
-    def footer_creative_cmmons_attribution_share_alike_license(self):
-        return self._footer_creative_cmmons_attribution_share_alike_license_locator
-
-    @property
-    def footer_language_dropdown(self):
-        return self._footer_language_dropdown_locator
-
-    @property
-    def feedback_link(self):
-        return self._feedback_link_locator
-
-    @property
-    def themes_link(self):
-        return self._themes_link_locator
-
-    @property
-    def firefox_link(self):
-        return self._firefox_link_locator
-
-    @property
-    def sites_link(self):
-        return self._sites_link_lokator
-
-    @property
-    def feedback_chart(self):
-        return self._feedback_chart_locator
+    def is_chart_visible(self):
+        return self.is_element_visible(self._chart_locator)

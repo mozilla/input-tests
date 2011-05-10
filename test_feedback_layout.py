@@ -15,7 +15,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Bebe <florin.strugariu@softvision.ro>
@@ -65,33 +65,42 @@ class Test_Feedback_Layout(unittest.TestCase):
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.firefox_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.firefox_link, "href"),
-                        "/en-US/")
-        feedback_pg.click_and_check(feedback_pg.firefox_link, "Welcome :: Firefox Input")
+        self.assertTrue(feedback_pg.is_feedback_link_visible)
+        feedback_pg.click_feedback_link()
+        self.assertEqual(feedback_pg.get_title(), "Welcome :: Firefox Input")
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.themes_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.themes_link, "href"),
-                         "/en-US/themes")
-        feedback_pg.click_and_check(feedback_pg.themes_link, "Themes :: Firefox Input")
+        self.assertTrue(feedback_pg.is_themes_link_visible)
+        feedback_pg.click_themes_link()
+        self.assertEqual(feedback_pg.get_title(), "Themes :: Firefox Input")
         feedback_pg.go_back()
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.feedback_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.feedback_link, "href"),
-                         "/en-US/")
-        feedback_pg.click_and_check(feedback_pg.feedback_link, "Welcome :: Firefox Input")
-
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.sites_link))
-        self.assertEqual(feedback_pg.get_atribute(feedback_pg.sites_link, "href"),
-                         "/en-US/sites")
-        feedback_pg.click_and_check(feedback_pg.sites_link, "Sites :: Firefox Input")
+        self.assertTrue(feedback_pg.is_sites_link_visible)
+        feedback_pg.click_sites_link()
+        self.assertEqual(feedback_pg.get_title(), "Sites :: Firefox Input")
         feedback_pg.go_back()
+
+        self.assertTrue(feedback_pg.is_main_heading_link_visible)
+        feedback_pg.click_main_heading_link()
+        self.assertEqual(feedback_pg.get_title(), "Welcome :: Firefox Input")
+
+    def test_the_footer_area_layout(self):
+        """
+        Litmus 13598 - input:Verify the layout of footer area
+        """
+        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg.go_to_feedback_page()
+
+        self.assertTrue(feedback_pg.is_footer_privacy_policy_visible)
+        self.assertTrue(feedback_pg.is_footer_legal_notices_visible)
+        self.assertTrue(feedback_pg.is_footer_report_trademark_abuse_link_visible)
+        self.assertTrue(feedback_pg.is_footer_unless_otherwise_noted_visible)
+        self.assertTrue(feedback_pg.is_footer_creative_commons_link_visible)
+        self.assertTrue(feedback_pg.is_footer_language_dropdown_visible)
 
     def test_the_left_panel_layout(self):
         """
         Litmus 13595 - input:Verify the layout of the left hand side section containing various
         filtering options
-            
         Litmus 13600 - input:Verify the applications drop down in Product
         """
 
@@ -114,8 +123,6 @@ class Test_Feedback_Layout(unittest.TestCase):
         for type in type_enum:
             self.assertTrue(feedback_pg.type_filter.contains_type(type))
 
-
-
         platform_names = ("Windows 7",
                          "Windows XP",
                          "Windows Vista",
@@ -135,7 +142,7 @@ class Test_Feedback_Layout(unittest.TestCase):
         for lock in locale_names:
             self.assertTrue(feedback_pg.locale_filter.contains_locale(lock))
 
-    def test_the_feedback_page(self):
+    def test_the_middle_section_page(self):
         """
         Litmus 13596 - input:Verify the layout of Latest Feedback section
         Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
@@ -143,11 +150,24 @@ class Test_Feedback_Layout(unittest.TestCase):
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertTrue(feedback_pg.check_feedback_navigation())
-        self.assertEqual(feedback_pg.feeedback_search_placeholder_value(), "Search by keyword")
+        self.assertEqual(feedback_pg.search_box_placeholder(), "Search by keyword")
         self.assertNotEqual(feedback_pg.message_count, 0)
 
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.feedback_chart))
+        self.assertTrue(feedback_pg.is_chart_visible)
+
+        self.assertTrue(feedback_pg.is_next_page_visible)
+        self.assertTrue(feedback_pg.is_previous_page_visible)
+        #this is is "intended" 
+        feedback_pg.click_next_page()
+        feedback_pg.click_next_page()
+
+        self.assertTrue(feedback_pg.is_next_page_visible)
+        self.assertTrue(feedback_pg.is_previous_page_visible)
+
+        feedback_pg.click_previous_page()
+
+        self.assertTrue(feedback_pg.is_next_page_visible)
+        self.assertTrue(feedback_pg.is_previous_page_visible)
 
     def test_the_right_panel_layout(self):
         """
@@ -158,30 +178,14 @@ class Test_Feedback_Layout(unittest.TestCase):
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
         feedback_pg.go_to_feedback_page()
 
-        self.assertEqual(feedback_pg.message_total_header(), "Messages")
-        self.assertNotEqual(feedback_pg.message_total_count, 0)
+        self.assertEqual(feedback_pg.total_message_count_heading, "Messages")
+        self.assertNotEqual(feedback_pg.total_message_count, 0)
 
         self.assertEqual(feedback_pg.mentioned_filter.mentioned_header, "Often Mentioned Toggle")
         self.assertNotEqual(feedback_pg.mentioned_filter.mentioned_count, 0)
 
         self.assertEqual(feedback_pg.visiting_filter.visiting_header , "While Visiting Toggle")
         self.assertNotEqual(feedback_pg.visiting_filter.visiting_count, 0)
-
-    def test_the_footer_area_layout(self):
-        """
-        Litmus 13598 - input:Verify the layout of footer area
-        """
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
-        feedback_pg.go_to_feedback_page()
-
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_creative_cmmons_attribution_share_alike_license))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_legal_notices))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_noted))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_privacy_policy))
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_report_trademark_abuse))
-
-        self.assertTrue(feedback_pg.is_element_visible(feedback_pg.footer_language_dropdown))
-
 
 if __name__ == "__main__":
     unittest.main()

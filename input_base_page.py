@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
 # ***** BEGIN LICENSE BLOCK *****
@@ -24,6 +23,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -56,6 +56,18 @@ class InputBasePage(Page):
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
 
+    _feedback_link_locator = "css=a.dashboard"
+    _themes_link_locator = "css=a.themes"
+    _main_heading_link_locator = "link=Firefox Input Dashboard"
+    _sites_link_locator = "css=a.issues"
+
+    _footer_privacy_policy_locator = "link=Privacy Policy"
+    _footer_legal_notices_locator = "link=Legal Notices"
+    _footer_report_trademark_abuse_link_locator = "link=Report Trademark Abuse"
+    _footer_unless_otherwise_noted_locator = "link=noted"
+    _footer_creative_commons_link_locator = "link=Creative Commons Attribution Share-Alike License v3.0"
+    _footer_language_dropdown_locator = "id=language"
+
     def click_previous_page(self):
         """
         Navigates to the previous page of results
@@ -69,6 +81,14 @@ class InputBasePage(Page):
         """
         self.selenium.click(self._next_page_locator)
         self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    @property
+    def is_next_page_visible(self):
+        return self.is_element_visible(self._next_page_locator)
+
+    @property
+    def is_previous_page_visible(self):
+        return self.is_element_visible(self._previous_page_locator)
 
     def _value_from_url(self, param):
         """
@@ -141,7 +161,7 @@ class InputBasePage(Page):
         return self._value_from_url("locale")
 
     @property
-    def search_from_url(self):
+    def search_term_from_url(self):
         """
         Returns the search value from the current location URL
         """
@@ -153,3 +173,60 @@ class InputBasePage(Page):
         Returns the feedback type (praise, issues, ideas) from the current location URL
         """
         return self._value_from_url("sentiment")
+
+    def click_feedback_link(self):
+        self.selenium.click(self._feedback_link_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_themes_link(self):
+        self.selenium.click(self._themes_link_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_main_heading_link(self):
+        self.selenium.click(self._main_heading_link_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    def click_sites_link(self):
+        self.selenium.click(self._sites_link_locator)
+        self.selenium.wait_for_page_to_load(page_load_timeout)
+
+    @property
+    def is_feedback_link_visible(self):
+        return self.is_element_visible(self._feedback_link_locator)
+
+    @property
+    def is_themes_link_visible(self):
+        return self.is_element_visible(self._themes_link_locator)
+
+    @property
+    def is_main_heading_link_visible(self):
+        return self.is_element_visible(self._main_heading_link_locator)
+
+    @property
+    def is_sites_link_visible(self):
+        return self.is_element_visible(self._sites_link_locator)
+
+    @property
+    def is_footer_privacy_policy_visible(self):
+        return self.is_element_visible(self._footer_privacy_policy_locator)
+
+    @property
+    def is_footer_legal_notices_visible(self):
+        return self.is_element_visible(self._footer_legal_notices_locator)
+
+    @property
+    def is_footer_report_trademark_abuse_link_visible(self):
+        return self.is_element_visible(self._footer_report_trademark_abuse_link_locator)
+
+    @property
+    def is_footer_unless_otherwise_noted_visible(self):
+        return self.is_element_visible(self._footer_unless_otherwise_noted_locator)
+
+    @property
+    def is_footer_creative_commons_link_visible(self):
+        return self.is_element_visible(self._footer_creative_commons_link_locator)
+
+    @property
+    def is_footer_language_dropdown_visible(self):
+        return self.is_element_visible(self._footer_language_dropdown_locator)
+

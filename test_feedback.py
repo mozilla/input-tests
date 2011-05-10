@@ -42,6 +42,8 @@
 from selenium import selenium
 from vars import ConnectionParameters
 import unittest
+import pytest
+xfail = pytest.mark.xfail
 
 import submit_happy_feedback_page
 import thanks_page
@@ -89,6 +91,7 @@ class TestFeedback(unittest.TestCase):
         submit_happy_feedback_pg.submit_feedback()
         self.assertTrue(thanks_pg.is_the_current_page)
 
+    @xfail(reason="Bug 655738 - Character count on feedback forms is gone.")
     def test_remaining_character_count(self):
         """
         This testcase covers # 13806 in Litmus

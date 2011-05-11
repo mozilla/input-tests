@@ -42,6 +42,11 @@ import submit_feedback_page
 
 class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
+    _feedback_locator = 'id=happy-description'
+    _submit_feedback_locator = 'css=#happy .submit span'
+    _error_locator = 'css=#happy .errorlist li'
+
     def go_to_submit_happy_feedback_page(self):
-        self.selenium.open('/happy/')
+        self.selenium.open('/feedback#happy')
         self.is_the_current_page
+        self.wait_for_element_visible(self._happy_page_locator)

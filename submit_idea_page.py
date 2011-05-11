@@ -22,6 +22,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Bob Silverberg <bob.silverberg@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,11 +42,24 @@
 Created on Dec 22, 2010
 
 '''
+import vars
 import submit_feedback_page
+
+page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
+    _feedback_locator = 'id=idea-description'
+    _remaining_character_count_locator = 'css=#count-idea-desc'
+    _submit_feedback_locator = 'css=#idea .submit span'
+    _error_locator = 'css=#idea .errorlist li'
+
     def go_to_submit_idea_page(self):
-        self.selenium.open('/ideas/')
+        self.selenium.open('/feedback#idea')
         self.is_the_current_page
+        self.wait_for_element_visible(self._idea_page_locator)
+
+    @property
+    def is_submit_feedback_enabled(self):
+        return not self.selenium.is_element_present('css=#idea .submit a.disabled')

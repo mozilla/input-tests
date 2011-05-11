@@ -62,4 +62,4 @@ class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
     @property
     def is_submit_feedback_enabled(self):
-        return self.selenium.is_element_present('css=#idea .submit a.disabled') == False
+        return not self.selenium.is_element_present('css=#idea .submit a.disabled')

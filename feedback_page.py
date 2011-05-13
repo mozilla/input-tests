@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -45,9 +45,6 @@ import product_filter_region
 import locale_filter_region
 import platform_filter_region
 import message_region
-import vars
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class FeedbackPage(input_base_page.InputBasePage):
@@ -83,7 +80,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def product_filter(self):
-        return product_filter_region.ProductFilter.ComboFilter(self.selenium)
+        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
 
     def get_current_days(self):
         """
@@ -116,7 +113,7 @@ class FeedbackPage(input_base_page.InputBasePage):
             if not re.search(days, time, re.IGNORECASE) is None:
                 if not self.get_current_days() == time:
                     self.selenium.click(time)
-                    self.selenium.wait_for_page_to_load(page_load_timeout)
+                    self.selenium.wait_for_page_to_load(self.timeout)
                     break
 
     def get_custom_dates_tooltip(self):
@@ -242,20 +239,20 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.click_end_date()
         self.select_date(end_date)
         self.selenium.click(self._set_custom_date_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
     def locale_filter(self):
-        return locale_filter_region.LocaleFilter(self.selenium)
+        return locale_filter_region.LocaleFilter(self.testsetup)
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter(self.selenium)
+        return platform_filter_region.PlatformFilter(self.testsetup)
 
     def search_for(self, search_string):
         self.selenium.type(self._search_box, search_string)
         self.selenium.key_press(self._search_box, '\\13')
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
     def total_message_count(self):
@@ -267,7 +264,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def messages(self):
-        return [message_region.Message(self.selenium, i + 1) for i in range(self.message_count)]
+        return [message_region.Message(self.testsetup, i + 1) for i in range(self.message_count)]
 
     def message(self, index):
-        return message_region.Message(self.selenium, index)
+        return message_region.Message(self.testsetup, index)

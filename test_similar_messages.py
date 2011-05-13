@@ -39,33 +39,22 @@
 Created on Jan 26, 2011
 '''
 
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
+from unittestzero import Assert
 
 import sites_page
 import themes_page
 import theme_page
 
 
-class TestSimilarMessages(unittest.TestCase):
+class TestSimilarMessages:
 
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
-
-    def test_similar_messages(self):
+    def test_similar_messages(self, testsetup):
         """
         This testcase covers # 13807 in Litmus
         """
-        sites_pg = sites_page.SitesPage(self.selenium)
-        themes_pg = themes_page.ThemesPage(self.selenium)
-        theme_pg = theme_page.ThemePage(self.selenium)
+        sites_pg = sites_page.SitesPage(testsetup)
+        themes_pg = themes_page.ThemesPage(testsetup)
+        theme_pg = theme_page.ThemePage(testsetup)
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')
@@ -80,12 +69,9 @@ class TestSimilarMessages(unittest.TestCase):
         themes_pg.theme(1).click_similar_messages()
         theme_pg.click_next_page()
 
-        self.assertEqual(theme_pg.messages_heading, 'Theme')
-        self.assertEqual(theme_pg.page_from_url, '2')
-        self.assertEqual(theme_pg.theme_callout, 'Theme for ' + site_name)
-        self.assertTrue(theme_pg.message_count > 0)
-        self.assertEqual(theme_pg.back_link, u'Back to %s \xbb' % site_name)
-        [self.assertTrue(site_name in message.site) for message in theme_pg.messages]
-
-if __name__ == "__main__":
-    unittest.main()
+        Assert.equal(theme_pg.messages_heading, 'Theme')
+        Assert.equal(theme_pg.page_from_url, '2')
+        Assert.equal(theme_pg.theme_callout, 'Theme for ' + site_name)
+        Assert.true(theme_pg.message_count > 0)
+        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
+        [Assert.true(site_name in message.site) for message in theme_pg.messages]

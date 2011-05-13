@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -39,11 +39,8 @@
 '''
 Created on Nov 24, 2010
 '''
-from vars import ConnectionParameters
 import input_base_page
 import type_filter_region
-
-page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class ThemesPage(input_base_page.InputBasePage):
@@ -58,7 +55,7 @@ class ThemesPage(input_base_page.InputBasePage):
 
     @property
     def type_filter(self):
-        return type_filter_region.TypeFilter.ButtonFilter(self.selenium)
+        return type_filter_region.TypeFilter.ButtonFilter(testsetup)
 
     @property
     def theme_count(self):
@@ -93,4 +90,4 @@ class ThemesPage(input_base_page.InputBasePage):
 
         def click_similar_messages(self):
             self.selenium.click(self.absolute_locator(self._similar_messages_locator))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+            self.selenium.wait_for_page_to_load(self.timeout)

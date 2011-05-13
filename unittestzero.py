@@ -12,14 +12,14 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Mozilla WebQA Selenium Tests.
+# The Original Code is UnittestZero.
 #
 # The Initial Developer of the Original Code is
-# Mozilla.
 # Portions created by the Initial Developer are Copyright (C) 2011
+
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): David Burns
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,35 +36,32 @@
 # ***** END LICENSE BLOCK *****
 
 
-from unittestzero import Assert
+class Assert:
 
-import feedback_page
+    @classmethod
+    def equal(self, first, second, msg=None):
+        assert first == second, msg
 
+    @classmethod
+    def not_equal(self, first, second, msg=None):
+        assert first != second, msg
 
-class TestPlatformFilter:
+    @classmethod
+    def true(self, first, msg=None):
+        assert first is True, msg
 
-    def test_feedback_can_be_filtered_by_platform(self, testsetup):
-        """
-        This testcase covers # 15215 in Litmus
-        1. Verify that the selected platform is the only one to appear in the list and is selected
-        2. Verify that the number of messages in the platform list matches the number of messages returned
-        3. Verify that the platform appears in the URL
-        4. Verify that the platform for all messages on the first page of results is correct
-        """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+    @classmethod
+    def false(self, first, msg=None):
+        assert first is False, msg
 
-        feedback_pg.go_to_feedback_page()
-        feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
+    @classmethod
+    def none(self, first, msg=None):
+        assert first is None, msg
 
-        platform_name = "Mac OS X"
-        platform = feedback_pg.platform_filter.platform(platform_name)
-        platform_message_count = platform.message_count
-        platform_code = platform.code
-        platform.select()
+    @classmethod
+    def not_none(self, first, msg=None):
+        assert first is not None, msg
 
-        Assert.equal(feedback_pg.platform_filter.platform_count, 1)
-        Assert.true(platform.is_selected)
-        Assert.equal(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
-        Assert.equal(feedback_pg.platform_from_url, platform_code)
-        [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]
+    @classmethod
+    def fail(self, msg):
+        raise AssertionError(msg)

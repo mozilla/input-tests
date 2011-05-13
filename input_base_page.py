@@ -19,7 +19,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -45,10 +45,6 @@ Created on Nov 19, 2010
 from urlparse import urlparse
 
 from page import Page
-import vars
-
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class InputBasePage(Page):
@@ -61,14 +57,14 @@ class InputBasePage(Page):
         Navigates to the previous page of results
         """
         self.selenium.click(self._previous_page_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def click_next_page(self):
         """
         Navigates to the next page of results
         """
         self.selenium.click(self._next_page_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     def _value_from_url(self, param):
         """

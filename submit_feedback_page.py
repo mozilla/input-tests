@@ -41,9 +41,6 @@ Created on Jan 28, 2011
 '''
 import input_base_page
 import thanks_page
-import vars
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class SubmitFeedbackPage(input_base_page.InputBasePage):
@@ -82,8 +79,8 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
 
     def submit_feedback(self, expected_result='success'):
         self.selenium.click(self._submit_feedback_locator)
-        self.selenium.wait_for_page_to_load(page_load_timeout)
+        self.selenium.wait_for_page_to_load(self.timeout)
         if expected_result == 'success':
-            return thanks_page.ThanksPage(self.selenium)
+            return thanks_page.ThanksPage(self.testsetup)
         else:
             self.wait_for_element_visible(self._error_locator)

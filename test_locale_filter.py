@@ -51,8 +51,7 @@ class TestLocaleFilter:
         2. Verify that the locale short code appears in the URL
         3. Verify that the locale for all messages on the first page of results is correct
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
@@ -78,8 +77,7 @@ class TestLocaleFilter:
         5. Verify that the locale short code appears in the URL
         6. Verify that the locale for all messages on the first page of results is correct
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')

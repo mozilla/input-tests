@@ -61,8 +61,7 @@ class TestSubmitIdea:
         1. Verifies the thank you page is loaded
 
         """
-        self.selenium = testsetup.selenium
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
@@ -77,8 +76,7 @@ class TestSubmitIdea:
         1. Verifies the thank you page is loaded
         
         """
-        self.selenium = testsetup.selenium
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
@@ -96,8 +94,7 @@ class TestSubmitIdea:
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        self.selenium = testsetup.selenium
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         Assert.equal(submit_idea_pg.remaining_character_count, "250")
@@ -149,9 +146,8 @@ class TestSubmitIdea:
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
 
         """
-        self.selenium = testsetup.selenium
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

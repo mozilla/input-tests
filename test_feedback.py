@@ -54,9 +54,8 @@ class TestFeedback:
         This testcase covers # 15119 in Litmus
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
         """
-        self.selenium = testsetup.selenium
         text = 'I submit this feedback twice within a five minute window and it should fail.'
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
@@ -73,13 +72,11 @@ class TestFeedback:
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
         """
-        self.selenium = testsetup.selenium
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
-        thanks_pg = thanks_page.ThanksPage(self.selenium)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
-        submit_happy_feedback_pg.submit_feedback()
+        thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
     @xfail(reason="Bug 655738 - Character count on feedback forms is gone.")
@@ -90,8 +87,7 @@ class TestFeedback:
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
         """
-        self.selenium = testsetup.selenium
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(self.selenium)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "140")

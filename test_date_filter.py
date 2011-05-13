@@ -57,8 +57,7 @@ class TestSearchDates:
         1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.get_current_days(), None)
@@ -81,8 +80,7 @@ class TestSearchDates:
         2. Verifies date-start=<date> and end-date=<date> in the url
 
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.get_custom_dates_tooltip(), "Custom")

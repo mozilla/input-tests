@@ -51,8 +51,7 @@ class TestPlatformFilter:
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')

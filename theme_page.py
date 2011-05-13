@@ -75,7 +75,7 @@ class ThemePage(input_base_page.InputBasePage):
 
     @property
     def messages(self):
-        return [message_region.Message(self.selenium, i + 1) for i in range(self.message_count)]
+        return [message_region.Message(self.testsetup, i + 1) for i in range(self.message_count)]
 
     def message(self, index):
-        return message_region.Message(self.selenium, index)
+        return message_region.Message(self.testsetup, index)

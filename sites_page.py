@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -40,11 +40,7 @@
 Created on Nov 24, 2010
 '''
 import input_base_page
-from vars import ConnectionParameters
-
 import product_filter_region
-
-page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class SitesPage(input_base_page.InputBasePage):
@@ -59,7 +55,7 @@ class SitesPage(input_base_page.InputBasePage):
 
     @property
     def product_filter(self):
-        return product_filter_region.ProductFilter.ComboFilter(self.selenium)
+        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
 
     @property
     def site_count(self):
@@ -70,14 +66,14 @@ class SitesPage(input_base_page.InputBasePage):
         return [self.Site(self.selenium, i + 1) for i in range(self.site_count)]
 
     def site(self, index):
-        return self.Site(self.selenium, index)
+        return self.Site(self.testsetup, index)
 
-    class Site(object):
+    class Site(Page):
 
         _name_locator = " .name a"
 
-        def __init__(self, selenium, index):
-            self.selenium = selenium
+        def __init__(self, testsetup, index):
+            Page.__init__(self, testsetup)
             self.index = index
 
         def absolute_locator(self, relative_locator):
@@ -93,4 +89,4 @@ class SitesPage(input_base_page.InputBasePage):
 
         def click_name(self):
             self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+            self.selenium.wait_for_page_to_load(self.timeout)

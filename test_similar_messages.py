@@ -52,10 +52,9 @@ class TestSimilarMessages:
         """
         This testcase covers # 13807 in Litmus
         """
-        self.selenium = testsetup.selenium
-        sites_pg = sites_page.SitesPage(self.selenium)
-        themes_pg = themes_page.ThemesPage(self.selenium)
-        theme_pg = theme_page.ThemePage(self.selenium)
+        sites_pg = sites_page.SitesPage(testsetup)
+        themes_pg = themes_page.ThemesPage(testsetup)
+        theme_pg = theme_page.ThemePage(testsetup)
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')

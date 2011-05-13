@@ -56,8 +56,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         product = "firefox"
         feedback_pg.go_to_feedback_page()
@@ -80,8 +79,7 @@ class TestProductFilter:
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         product = "firefox"
         version = "--"
@@ -101,8 +99,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         product = "mobile"
         feedback_pg.go_to_feedback_page()
@@ -125,8 +122,7 @@ class TestProductFilter:
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         product = "mobile"
         version = "--"
@@ -146,8 +142,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        sites_pg = sites_page.SitesPage(self.selenium)
+        sites_pg = sites_page.SitesPage(testsetup)
 
         product = "firefox"
         sites_pg.go_to_sites_page()
@@ -171,8 +166,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        self.selenium = testsetup.selenium
-        sites_pg = sites_page.SitesPage(self.selenium)
+        sites_pg = sites_page.SitesPage(testsetup)
 
         product = "mobile"
         sites_pg.go_to_sites_page()

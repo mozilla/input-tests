@@ -52,8 +52,7 @@ class TestSearch:
         '''
             Litmus 13847
         '''
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for('')
@@ -63,8 +62,7 @@ class TestSearch:
         '''
             Litmus 13697
         '''
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         # Select the Firefox version that is 1 less than the newest to ensure the unicode

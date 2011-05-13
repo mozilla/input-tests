@@ -38,9 +38,6 @@
 Created on Mar 25, 2011
 '''
 from page import Page
-from vars import ConnectionParameters
-
-page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class ProductFilter(Page):
@@ -71,7 +68,7 @@ class ProductFilter(Page):
             """
             if not product == self.selected_product:
                 self.selenium.select(self._product_dropdown_locator, "value=%s" % product)
-                self.selenium.wait_for_page_to_load(page_load_timeout)
+                self.selenium.wait_for_page_to_load(self.timeout)
 
         @property
         def versions(self):
@@ -92,4 +89,4 @@ class ProductFilter(Page):
             """
             if not lookup == self.selected_version(by):
                 self.selenium.select(self._version_dropdown_locator, "%s=%s" % (by, lookup))
-                self.selenium.wait_for_page_to_load(page_load_timeout)
+                self.selenium.wait_for_page_to_load(self.timeout)

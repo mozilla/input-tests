@@ -57,8 +57,7 @@ class TestPagination:
         3. Verifies the results of the filter
 
         """
-        self.selenium = testsetup.selenium
-        themes_ppg = themes_page.ThemesPage(self.selenium)
+        themes_ppg = themes_page.ThemesPage(testsetup)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")

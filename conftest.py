@@ -8,7 +8,7 @@ def pytest_runtest_setup(item):
     item.browser = item.config.option.browser
     item.port = item.config.option.port
     TestSetup.base_url = item.config.option.site
-    item.timeout = item.config.option.timeout
+    TestSetup.timeout = item.config.option.timeout
 
     if not 'skip_selenium' in item.keywords:
         TestSetup.skip_selenium = False
@@ -16,7 +16,7 @@ def pytest_runtest_setup(item):
             item.browser, TestSetup.base_url)
 
         TestSetup.selenium.start()
-        TestSetup.selenium.set_timeout(item.timeout)
+        TestSetup.selenium.set_timeout(TestSetup.timeout)
     else:
         TestSetup.skip_selenium = True
 

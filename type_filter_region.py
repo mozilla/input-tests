@@ -38,9 +38,6 @@
 Created on Mar 24, 2011
 '''
 from page import Page
-from vars import ConnectionParameters
-
-page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class TypeFilter(Page):
@@ -55,4 +52,4 @@ class TypeFilter(Page):
 
         def select_type(self, type):
             self.selenium.click("css=#filter_type a:contains(%s)" % type)
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+            self.selenium.wait_for_page_to_load(self.timeout)

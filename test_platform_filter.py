@@ -36,25 +36,14 @@
 # ***** END LICENSE BLOCK *****
 
 
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
+from unittestzero import Assert
 
 import feedback_page
 
 
-class TestPlatformFilter(unittest.TestCase):
+class TestPlatformFilter:
 
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
-
-    def test_feedback_can_be_filtered_by_platform(self):
+    def test_feedback_can_be_filtered_by_platform(self, testsetup):
         """
         This testcase covers # 15215 in Litmus
         1. Verify that the selected platform is the only one to appear in the list and is selected
@@ -62,6 +51,7 @@ class TestPlatformFilter(unittest.TestCase):
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
+        self.selenium = testsetup.selenium
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         feedback_pg.go_to_feedback_page()
@@ -74,11 +64,8 @@ class TestPlatformFilter(unittest.TestCase):
         platform_code = platform.code
         platform.select()
 
-        self.assertEqual(feedback_pg.platform_filter.platform_count, 1)
-        self.assertTrue(platform.is_selected)
-        self.assertEqual(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
-        self.assertEqual(feedback_pg.platform_from_url, platform_code)
-        [self.assertEqual(message.platform, platform_name) for message in feedback_pg.messages]
-
-if __name__ == "__main__":
-    unittest.main()
+        Assert.equal(feedback_pg.platform_filter.platform_count, 1)
+        Assert.true(platform.is_selected)
+        Assert.equal(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
+        Assert.equal(feedback_pg.platform_from_url, platform_code)
+        [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]

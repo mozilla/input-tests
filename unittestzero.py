@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-
-# -*- coding: utf-8 -*-
-
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -15,16 +12,14 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Mozilla WebQA Selenium Tests.
+# The Original Code is UnittestZero.
 #
 # The Initial Developer of the Original Code is
-# Mozilla.
 # Portions created by the Initial Developer are Copyright (C) 2011
+
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
-#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,36 +36,32 @@
 # ***** END LICENSE BLOCK *****
 
 
-from unittestzero import Assert
+class Assert:
 
-import feedback_page
+    @classmethod
+    def equal(self, first, second, msg=None):
+        assert first == second, msg
 
+    @classmethod
+    def not_equal(self, first, second, msg=None):
+        assert first != second, msg
 
-class TestSearch:
+    @classmethod
+    def true(self, first, msg=None):
+        assert first is True, msg
 
-    def test_that_empty_search_of_feedback_returns_some_data(self, testsetup):
-        '''
-            Litmus 13847
-        '''
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+    @classmethod
+    def false(self, first, msg=None):
+        assert first is False, msg
 
-        feedback_pg.go_to_feedback_page()
-        feedback_pg.search_for('')
-        Assert.true(0 < feedback_pg.message_count)
+    @classmethod
+    def none(self, first, msg=None):
+        assert first is None, msg
 
-    def test_that_we_can_search_feedback_with_unicode(self, testsetup):
-        '''
-            Litmus 13697
-        '''
-        self.selenium = testsetup.selenium
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+    @classmethod
+    def not_none(self, first, msg=None):
+        assert first is not None, msg
 
-        feedback_pg.go_to_feedback_page()
-        # Select the Firefox version that is 1 less than the newest to ensure the unicode
-        # search returns at least 1 result.
-        feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
-
-        feedback_pg.search_for(u"rapidit\xe9")
-        Assert.true(0 < feedback_pg.message_count)
+    @classmethod
+    def fail(self, msg):
+        raise AssertionError(msg)

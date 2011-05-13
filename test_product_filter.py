@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Vishal
@@ -40,26 +40,15 @@
 Created on Nov 24, 2010
 '''
 
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
+from unittestzero import Assert
 
 import feedback_page
 import sites_page
 
 
-class TestProductFilter(unittest.TestCase):
+class TestProductFilter:
 
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
-
-    def test_feedback_can_be_filtered_by_firefox_versions(self):
+    def test_feedback_can_be_filtered_by_firefox_versions(self, testsetup):
         """
         This testcase covers # 13602 & 13603 in Litmus
         1. Verify that at least three firefox versions exist
@@ -67,29 +56,31 @@ class TestProductFilter(unittest.TestCase):
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         product = "firefox"
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product(product)
         versions = feedback_pg.product_filter.versions
-        [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 3)
+        [Assert.not_equal(version, "") for version in versions]
+        Assert.true(len(versions) > 3)
         for version in [versions[2], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
-            self.assertEqual(feedback_pg.product_filter.selected_product, product)
-            self.assertEqual(feedback_pg.product_filter.selected_version(), version)
-            self.assertEqual(feedback_pg.product_from_url, product)
-            self.assertEqual(feedback_pg.version_from_url, version)
+            Assert.equal(feedback_pg.product_filter.selected_product, product)
+            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_from_url, product)
+            Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_displayed_for_all_firefox_versions(self):
+    def test_feedback_can_be_displayed_for_all_firefox_versions(self, testsetup):
         """
         This testcase covers # 15149 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         product = "firefox"
@@ -97,12 +88,12 @@ class TestProductFilter(unittest.TestCase):
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
-        self.assertEqual(feedback_pg.product_filter.selected_product, product)
-        self.assertEqual(feedback_pg.product_filter.selected_version(), version)
-        self.assertEqual(feedback_pg.product_from_url, product)
-        self.assertEqual(feedback_pg.version_from_url, version)
+        Assert.equal(feedback_pg.product_filter.selected_product, product)
+        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_from_url, product)
+        Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_filtered_by_mobile_versions(self):
+    def test_feedback_can_be_filtered_by_mobile_versions(self, testsetup):
         """
         This testcase covers # 13602 & 13604 in Litmus
         1. Verify that at least three mobile versions exist
@@ -110,29 +101,31 @@ class TestProductFilter(unittest.TestCase):
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         product = "mobile"
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product(product)
         versions = feedback_pg.product_filter.versions
-        [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 3)
+        [Assert.not_equal(version, "") for version in versions]
+        Assert.true(len(versions) > 3)
         for version in [versions[2], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
-            self.assertEqual(feedback_pg.product_filter.selected_product, product)
-            self.assertEqual(feedback_pg.product_filter.selected_version(), version)
-            self.assertEqual(feedback_pg.product_from_url, product)
-            self.assertEqual(feedback_pg.version_from_url, version)
+            Assert.equal(feedback_pg.product_filter.selected_product, product)
+            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_from_url, product)
+            Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_displayed_for_all_mobile_versions(self):
+    def test_feedback_can_be_displayed_for_all_mobile_versions(self, testsetup):
         """
         This testcase covers # 15377 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         feedback_pg = feedback_page.FeedbackPage(self.selenium)
 
         product = "mobile"
@@ -140,12 +133,12 @@ class TestProductFilter(unittest.TestCase):
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
-        self.assertEqual(feedback_pg.product_filter.selected_product, product)
-        self.assertEqual(feedback_pg.product_filter.selected_version(), version)
-        self.assertEqual(feedback_pg.product_from_url, product)
-        self.assertEqual(feedback_pg.version_from_url, version)
+        Assert.equal(feedback_pg.product_filter.selected_product, product)
+        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_from_url, product)
+        Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_sites_can_be_filtered_by_firefox_versions(self):
+    def test_sites_can_be_filtered_by_firefox_versions(self, testsetup):
         """
         This testcase covers # 15043 & 15045 in Litmus
         1. Verify that at least three firefox versions exist
@@ -153,23 +146,24 @@ class TestProductFilter(unittest.TestCase):
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         sites_pg = sites_page.SitesPage(self.selenium)
 
         product = "firefox"
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
-        [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 2)
+        [Assert.not_equal(version, "") for version in versions]
+        Assert.true(len(versions) > 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
-            self.assertEqual(sites_pg.product_filter.selected_product, product)
-            self.assertEqual(sites_pg.product_filter.selected_version(), version)
-            self.assertEqual(sites_pg.product_from_url, product)
-            self.assertEqual(sites_pg.version_from_url, version)
+            Assert.equal(sites_pg.product_filter.selected_product, product)
+            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_from_url, product)
+            Assert.equal(sites_pg.version_from_url, version)
 
-    def test_sites_can_be_filtered_by_mobile_versions(self):
+    def test_sites_can_be_filtered_by_mobile_versions(self, testsetup):
         """
         This testcase covers # 15043 & 15044 in Litmus
         1. Verify that at least three mobile versions exist
@@ -177,21 +171,19 @@ class TestProductFilter(unittest.TestCase):
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
+        self.selenium = testsetup.selenium
         sites_pg = sites_page.SitesPage(self.selenium)
 
         product = "mobile"
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
-        [self.assertNotEqual(version, "") for version in versions]
-        self.assertTrue(len(versions) > 2)
+        [Assert.not_equal(version, "") for version in versions]
+        Assert.true(len(versions) > 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
-            self.assertEqual(sites_pg.product_filter.selected_product, product)
-            self.assertEqual(sites_pg.product_filter.selected_version(), version)
-            self.assertEqual(sites_pg.product_from_url, product)
-            self.assertEqual(sites_pg.version_from_url, version)
-
-if __name__ == "__main__":
-    unittest.main()
+            Assert.equal(sites_pg.product_filter.selected_product, product)
+            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_from_url, product)
+            Assert.equal(sites_pg.version_from_url, version)

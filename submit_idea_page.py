@@ -18,7 +18,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
@@ -42,10 +42,7 @@
 Created on Dec 22, 2010
 
 '''
-import vars
 import submit_feedback_page
-
-page_load_timeout = vars.ConnectionParameters.page_load_timeout
 
 
 class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):

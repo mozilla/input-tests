@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
@@ -42,60 +42,50 @@ Created on Dec 22, 2010
 '''
 
 import time
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
+
 import pytest
 xfail = pytest.mark.xfail
+from unittestzero import Assert
 
 import submit_idea_page
 import thanks_page
 import feedback_page
 
 
-class SubmitIdea(unittest.TestCase):
+class TestSubmitIdea:
 
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
-
-    def test_submitting_idea(self):
+    def test_submitting_idea(self, testsetup):
         """
 
         This testcase covers # 15104 in Litmus
         1. Verifies the thank you page is loaded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
-        self.assertTrue(thanks_pg.is_the_current_page)
+        Assert.true(thanks_pg.is_the_current_page)
 
-    def test_submitting_idea_with_unicode_characters(self):
+    def test_submitting_idea_with_unicode_characters(self, testsetup):
         """
 
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
         
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
         submit_idea_pg.set_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
-        self.assertTrue(thanks_pg.is_the_current_page)
+        Assert.true(thanks_pg.is_the_current_page)
 
     @xfail(reason="Bug 655738 - Character count on feedback forms is gone.")
-    def test_remaining_character_count(self):
+    def test_remaining_character_count(self, testsetup):
         """
 
         This testcase covers # 15029 in Litmus
@@ -104,52 +94,52 @@ class SubmitIdea(unittest.TestCase):
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
-        self.assertEqual(submit_idea_pg.remaining_character_count, "250")
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "250")
+        Assert.false(submit_idea_pg.is_remaining_character_count_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("a" * 199)
-        self.assertEqual(submit_idea_pg.remaining_character_count, "51")
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "51")
+        Assert.false(submit_idea_pg.is_remaining_character_count_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("b")
-        self.assertEqual(submit_idea_pg.remaining_character_count, "50")
-        self.assertTrue(submit_idea_pg.is_remaining_character_count_low)
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "50")
+        Assert.true(submit_idea_pg.is_remaining_character_count_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("c" * 24)
-        self.assertEqual(submit_idea_pg.remaining_character_count, "26")
-        self.assertTrue(submit_idea_pg.is_remaining_character_count_low)
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "26")
+        Assert.true(submit_idea_pg.is_remaining_character_count_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("d")
-        self.assertEqual(submit_idea_pg.remaining_character_count, "25")
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
-        self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "25")
+        Assert.false(submit_idea_pg.is_remaining_character_count_low)
+        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("e" * 25)
-        self.assertEqual(submit_idea_pg.remaining_character_count, "0")
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
-        self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertTrue(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "0")
+        Assert.false(submit_idea_pg.is_remaining_character_count_low)
+        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("f")
-        self.assertEqual(submit_idea_pg.remaining_character_count, "-1")
-        self.assertFalse(submit_idea_pg.is_remaining_character_count_low)
-        self.assertTrue(submit_idea_pg.is_remaining_character_count_very_low)
-        self.assertFalse(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.equal(submit_idea_pg.remaining_character_count, "-1")
+        Assert.false(submit_idea_pg.is_remaining_character_count_low)
+        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
 
-    def test_submitting_same_idea_twice_generates_error_message(self):
+    def test_submitting_same_idea_twice_generates_error_message(self, testsetup):
         """
 
         This testcase covers # 15119 in Litmus
@@ -157,17 +147,14 @@ class SubmitIdea(unittest.TestCase):
 
         """
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(self.selenium)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
-        self.assertTrue(thanks_pg.is_the_current_page)
+        Assert.true(thanks_pg.is_the_current_page)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)
         submit_idea_pg.submit_feedback(expected_result='failure')
-        self.assertEqual(submit_idea_pg.error_message, 'We already got your feedback! Thanks.')
-
-if __name__ == "__main__":
-    unittest.main()
+        Assert.equal(submit_idea_pg.error_message, 'We already got your feedback! Thanks.')

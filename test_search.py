@@ -19,7 +19,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): David Burns
@@ -41,39 +41,28 @@
 # ***** END LICENSE BLOCK *****
 
 
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
+from unittestzero import Assert
 
 import feedback_page
 
 
-class TestSearch(unittest.TestCase):
+class TestSearch:
 
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
-
-    def test_that_empty_search_of_feedback_returns_some_data(self):
+    def test_that_empty_search_of_feedback_returns_some_data(self, testsetup):
         '''
             Litmus 13847
         '''
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for('')
-        self.assertTrue(0 < feedback_pg.message_count)
+        Assert.true(0 < feedback_pg.message_count)
 
-    def test_that_we_can_search_feedback_with_unicode(self):
+    def test_that_we_can_search_feedback_with_unicode(self, testsetup):
         '''
             Litmus 13697
         '''
-        feedback_pg = feedback_page.FeedbackPage(self.selenium)
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
         # Select the Firefox version that is 1 less than the newest to ensure the unicode
@@ -82,7 +71,4 @@ class TestSearch(unittest.TestCase):
         feedback_pg.product_filter.select_version('--')
 
         feedback_pg.search_for(u"rapidit\xe9")
-        self.assertTrue(0 < feedback_pg.message_count)
-
-if __name__ == "__main__":
-    unittest.main()
+        Assert.true(0 < feedback_pg.message_count)

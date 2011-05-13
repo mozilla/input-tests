@@ -16,7 +16,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla Corp.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
@@ -35,159 +35,197 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from vars import ConnectionParameters
-import unittest
 import urllib2
+import pytest
+xfail = pytest.mark.xfail
+from unittestzero import Assert
 
 
-class TestRedirects(unittest.TestCase):
+class TestRedirects:
 
     _user_agent_firefox = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1'
     _user_agent_safari = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'
 
-    def _check_redirect(self, start_url, end_url, user_agent=_user_agent_firefox, locale='en-US'):
-        request = urllib2.Request(ConnectionParameters.baseurl + start_url)
-        opener = urllib2.build_opener()
-        request.add_header('User-Agent', user_agent)
-        request.add_header('Accept-Language', locale)
-        f = opener.open(request)
-        opener.close()
-        self.assertEqual(f.url, ConnectionParameters.baseurl + end_url)
+    def _check_redirect(self, testsetup, start_url, end_url, user_agent=_user_agent_firefox, locale='en-US'):
+        if not testsetup.skip_selenium:
+            self.selenium = testsetup.selenium
+            self.selenium.open(start_url)
+            Assert.equal(self.selenium.get_location(), testsetup.base_url + end_url)
+        else:
+            request = urllib2.Request(testsetup.base_url + start_url)
+            opener = urllib2.build_opener()
+            request.add_header('User-Agent', user_agent)
+            request.add_header('Accept-Language', locale)
+            f = opener.open(request)
+            opener.close()
+            Assert.equal(f.url, testsetup.base_url + end_url)
 
-    def test_root_without_locale_redirects_to_root_with_german_locale(self):
-        self._check_redirect('/', '/de/', locale='de')
+    @pytest.mark.skip_selenium
+    def test_root_without_locale_redirects_to_root_with_german_locale(self, testsetup):
+        self._check_redirect(testsetup, '/', '/de/', locale='de')
 
-    def test_root_without_locale_redirects_to_root_with_locale(self):
-        self._check_redirect('/', '/en-US/')
+    @pytest.mark.skip_selenium
+    def test_root_without_locale_redirects_to_root_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/', '/en-US/')
 
-    def test_beta_without_locale_redirects_to_root_with_locale(self):
-        self._check_redirect('/beta/', '/en-US/')
+    @pytest.mark.skip_selenium
+    def test_beta_without_locale_redirects_to_root_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/', '/en-US/')
 
-    def test_beta_with_locale_redirects_to_root_with_locale(self):
-        self._check_redirect('/en-US/beta/', '/en-US/')
+    @pytest.mark.skip_selenium
+    def test_beta_with_locale_redirects_to_root_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/', '/en-US/')
 
-    def test_release_without_locale_redirects_to_root_with_locale(self):
-        self._check_redirect('/release/', '/en-US/')
+    @pytest.mark.skip_selenium
+    def test_release_without_locale_redirects_to_root_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/', '/en-US/')
 
-    def test_release_with_locale_redirects_to_root_with_locale(self):
-        self._check_redirect('/en-US/release/', '/en-US/')
+    @pytest.mark.skip_selenium
+    def test_release_with_locale_redirects_to_root_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/', '/en-US/')
 
-    def test_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
-        self._check_redirect('/search?sentiment=happy', '/en-US/search?sentiment=happy')
+    @pytest.mark.skip_selenium
+    def test_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/search?sentiment=happy', '/en-US/search?sentiment=happy')
 
-    def test_beta_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
-        self._check_redirect('/beta/search?sentiment=sad', '/en-US/search?sentiment=sad')
+    @pytest.mark.skip_selenium
+    def test_beta_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/search?sentiment=sad', '/en-US/search?sentiment=sad')
 
-    def test_beta_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self):
-        self._check_redirect('/en-US/beta/search?sentiment=idea', '/en-US/search?sentiment=idea')
+    @pytest.mark.skip_selenium
+    def test_beta_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/search?sentiment=idea', '/en-US/search?sentiment=idea')
 
-    def test_release_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self):
-        self._check_redirect('/release/search?sentiment=happy', '/en-US/search?sentiment=happy')
+    @pytest.mark.skip_selenium
+    def test_release_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/search?sentiment=happy', '/en-US/search?sentiment=happy')
 
-    def test_release_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self):
-        self._check_redirect('/en-US/release/search?sentiment=sad', '/en-US/search?sentiment=sad')
+    @pytest.mark.skip_selenium
+    def test_release_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/search?sentiment=sad', '/en-US/search?sentiment=sad')
 
-    def test_themes_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/themes/', '/en-US/themes/')
+    @pytest.mark.skip_selenium
+    def test_themes_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/themes/', '/en-US/themes/')
 
-    def test_beta_themes_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/beta/themes/', '/en-US/themes/')
+    @pytest.mark.skip_selenium
+    def test_beta_themes_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/themes/', '/en-US/themes/')
 
-    def test_beta_themes_with_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/en-US/beta/themes/', '/en-US/themes/')
+    @pytest.mark.skip_selenium
+    def test_beta_themes_with_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/themes/', '/en-US/themes/')
 
-    def test_release_themes_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/release/themes/', '/en-US/themes/')
+    @pytest.mark.skip_selenium
+    def test_release_themes_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/themes/', '/en-US/themes/')
 
-    def test_release_themes_with_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/en-US/release/themes/', '/en-US/themes/')
+    @pytest.mark.skip_selenium
+    def test_release_themes_with_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/themes/', '/en-US/themes/')
 
-    def test_sites_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/sites/', '/en-US/sites/')
+    @pytest.mark.skip_selenium
+    def test_sites_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/sites/', '/en-US/sites/')
 
-    def test_beta_sites_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/beta/sites/', '/en-US/sites/')
+    @pytest.mark.skip_selenium
+    def test_beta_sites_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/sites/', '/en-US/sites/')
 
-    def test_beta_sites_with_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/en-US/beta/sites/', '/en-US/sites/')
+    @pytest.mark.skip_selenium
+    def test_beta_sites_with_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/sites/', '/en-US/sites/')
 
-    def test_release_sites_without_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/release/sites/', '/en-US/sites/')
+    @pytest.mark.skip_selenium
+    def test_release_sites_without_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/sites/', '/en-US/sites/')
 
-    def test_release_sites_with_locale_redirects_to_themes_with_locale(self):
-        self._check_redirect('/en-US/release/sites/', '/en-US/sites/')
+    @pytest.mark.skip_selenium
+    def test_release_sites_with_locale_redirects_to_themes_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/sites/', '/en-US/sites/')
 
-    def test_idea_without_locale_redirects_to_idea_with_locale(self):
-        self._check_redirect('/idea/', '/en-US/idea/')
+    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
+    def test_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/idea/', '/en-US/feedback#idea')
 
-    def test_beta_idea_without_locale_redirects_to_idea_with_locale(self):
-        self._check_redirect('/beta/idea/', '/en-US/idea/')
+    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
+    def test_beta_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/idea/', '/en-US/feedback#idea')
 
-    def test_beta_idea_with_locale_redirects_to_idea_with_locale(self):
-        self._check_redirect('/en-US/beta/idea/', '/en-US/idea/')
+    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
+    def test_beta_idea_with_locale_redirects_to_idea_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/idea/', '/en-US/feedback#idea')
 
-    def test_release_idea_without_locale_redirects_to_idea_with_locale(self):
-        self._check_redirect('/release/idea/', '/en-US/idea/')
+    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
+    def test_release_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/idea/', '/en-US/feedback#idea')
 
-    def test_release_idea_with_locale_redirects_to_idea_with_locale(self):
-        self._check_redirect('/en-US/release/idea/', '/en-US/idea/')
+    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
+    def test_release_idea_with_locale_redirects_to_idea_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/idea/', '/en-US/feedback#idea')
 
-    def test_happy_without_locale_redirects_to_happy_with_locale(self):
-        self._check_redirect('/happy/', '/en-US/happy/')
+    def test_happy_without_locale_redirects_to_happy_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/happy/', '/en-US/feedback#happy')
 
-    def test_beta_happy_without_locale_redirects_to_happy_with_locale(self):
-        self._check_redirect('/beta/happy/', '/en-US/happy/')
+    def test_beta_happy_without_locale_redirects_to_happy_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/happy/', '/en-US/feedback#happy')
 
-    def test_beta_happy_with_locale_redirects_to_happy_with_locale(self):
-        self._check_redirect('/en-US/beta/happy/', '/en-US/happy/')
+    def test_beta_happy_with_locale_redirects_to_happy_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/happy/', '/en-US/feedback#happy')
 
-    def test_release_happy_without_locale_redirects_to_happy_with_locale(self):
-        self._check_redirect('/release/happy/', '/en-US/happy/')
+    def test_release_happy_without_locale_redirects_to_happy_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/happy/', '/en-US/feedback#happy')
 
-    def test_release_happy_with_locale_redirects_to_happy_with_locale(self):
-        self._check_redirect('/en-US/release/happy/', '/en-US/happy/')
+    def test_release_happy_with_locale_redirects_to_happy_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/happy/', '/en-US/feedback#happy')
 
-    def test_sad_without_locale_redirects_to_sad_with_locale(self):
-        self._check_redirect('/sad/', '/en-US/sad/')
+    def test_sad_without_locale_redirects_to_sad_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/sad/', '/en-US/feedback#sad')
 
-    def test_beta_sad_without_locale_redirects_to_sad_with_locale(self):
-        self._check_redirect('/beta/sad/', '/en-US/sad/')
+    def test_beta_sad_without_locale_redirects_to_sad_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/sad/', '/en-US/feedback#sad')
 
-    def test_beta_sad_with_locale_redirects_to_sad_with_locale(self):
-        self._check_redirect('/en-US/beta/sad/', '/en-US/sad/')
+    def test_beta_sad_with_locale_redirects_to_sad_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/sad/', '/en-US/feedback#sad')
 
-    def test_release_sad_without_locale_redirects_to_sad_with_locale(self):
-        self._check_redirect('/release/sad/', '/en-US/sad/')
+    def test_release_sad_without_locale_redirects_to_sad_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/sad/', '/en-US/feedback#sad')
 
-    def test_release_sad_with_locale_redirects_to_sad_with_locale(self):
-        self._check_redirect('/en-US/release/sad/', '/en-US/sad/')
+    def test_release_sad_with_locale_redirects_to_sad_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/sad/', '/en-US/feedback#sad')
 
-    def test_feedback_without_locale_redirects_to_feedback_with_locale(self):
-        self._check_redirect('/feedback/', '/en-US/feedback/')
+    @pytest.mark.skip_selenium
+    def test_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/feedback/', '/en-US/feedback/')
 
-    def test_beta_feedback_without_locale_redirects_to_feedback_with_locale(self):
-        self._check_redirect('/beta/feedback/', '/en-US/feedback/')
+    @pytest.mark.skip_selenium
+    def test_beta_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/beta/feedback/', '/en-US/feedback/')
 
-    def test_beta_feedback_with_locale_redirects_to_feedback_with_locale(self):
-        self._check_redirect('/en-US/beta/feedback/', '/en-US/feedback/')
+    @pytest.mark.skip_selenium
+    def test_beta_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/beta/feedback/', '/en-US/feedback/')
 
-    def test_release_feedback_without_locale_redirects_to_feedback_with_locale(self):
-        self._check_redirect('/release/feedback/', '/en-US/feedback/')
+    @pytest.mark.skip_selenium
+    def test_release_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/release/feedback/', '/en-US/feedback/')
 
-    def test_release_feedback_with_locale_redirects_to_feedback_with_locale(self):
-        self._check_redirect('/en-US/release/feedback/', '/en-US/feedback/')
+    @pytest.mark.skip_selenium
+    def test_release_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
+        self._check_redirect(testsetup, '/en-US/release/feedback/', '/en-US/feedback/')
 
-    def test_sad_redirects_to_download_when_not_using_firefox(self):
-        self._check_redirect('/sad/', '/en-US/download', user_agent=self._user_agent_safari)
+    @pytest.mark.skip_selenium
+    def test_sad_redirects_to_download_when_not_using_firefox(self, testsetup):
+        self._check_redirect(testsetup, '/sad/', '/en-US/download', user_agent=self._user_agent_safari)
 
-    def test_happy_redirects_to_download_when_not_using_firefox(self):
-        self._check_redirect('/happy/', '/en-US/download', user_agent=self._user_agent_safari)
+    @pytest.mark.skip_selenium
+    def test_happy_redirects_to_download_when_not_using_firefox(self, testsetup):
+        self._check_redirect(testsetup, '/happy/', '/en-US/download', user_agent=self._user_agent_safari)
 
-    def test_idea_redirects_to_download_when_not_using_firefox(self):
-        self._check_redirect('/idea/', '/en-US/download', user_agent=self._user_agent_safari)
+    @pytest.mark.skip_selenium
+    def test_idea_redirects_to_download_when_not_using_firefox(self, testsetup):
+        self._check_redirect(testsetup, '/idea/', '/en-US/download', user_agent=self._user_agent_safari)
 
-    def test_feedback_redirects_to_download_when_not_using_firefox(self):
-        self._check_redirect('/feedback/', '/en-US/download', user_agent=self._user_agent_safari)
-
-if __name__ == "__main__":
-    unittest.main()
+    @pytest.mark.skip_selenium
+    def test_feedback_redirects_to_download_when_not_using_firefox(self, testsetup):
+        self._check_redirect(testsetup, '/feedback/', '/en-US/download', user_agent=self._user_agent_safari)

@@ -38,9 +38,6 @@
 Created on Feb 24, 2011
 '''
 from page import Page
-from vars import ConnectionParameters
-
-page_load_timeout = ConnectionParameters.page_load_timeout
 
 
 class LocaleFilter(Page):
@@ -67,16 +64,16 @@ class LocaleFilter(Page):
         self.wait_for_element_visible(self._extra_locales_locator)
 
     def locale(self, lookup):
-        return self.Locale(self.selenium, lookup)
+        return self.Locale(self.testsetup, lookup)
 
-    class Locale(object):
+    class Locale(Page):
 
         _checkbox_locator = " input"
         _name_locator = " label > strong"
         _message_count_locator = " .count"
 
-        def __init__(self, selenium, lookup):
-            self.selenium = selenium
+        def __init__(self, testsetup, lookup):
+            Page.__init__(self, testsetup)
             self.lookup = lookup
 
         def absolute_locator(self, relative_locator):
@@ -105,4 +102,4 @@ class LocaleFilter(Page):
 
         def select(self):
             self.selenium.click(self.absolute_locator(self._checkbox_locator))
-            self.selenium.wait_for_page_to_load(page_load_timeout)
+            self.selenium.wait_for_page_to_load(self.timeout)

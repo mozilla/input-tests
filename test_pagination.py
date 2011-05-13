@@ -18,7 +18,7 @@
 #
 # The Initial Developer of the Original Code is
 # Mozilla.
-# Portions created by the Initial Developer are Copyright (C) 2010
+# Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
@@ -38,28 +38,17 @@
 # ***** END LICENSE BLOCK *****
 
 
-from selenium import selenium
-from vars import ConnectionParameters
-import unittest
 import pytest
 xfail = pytest.mark.xfail
+from unittestzero import Assert
 
 import themes_page
 
 
-class TestPagination(unittest.TestCase):
-
-    def setUp(self):
-        self.selenium = selenium(ConnectionParameters.server, ConnectionParameters.port,
-                                 ConnectionParameters.browser, ConnectionParameters.baseurl)
-        self.selenium.start()
-        self.selenium.set_timeout(ConnectionParameters.page_load_timeout)
-
-    def tearDown(self):
-        self.selenium.stop()
+class TestPagination:
 
     @xfail(reason="Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
-    def test_themes_filters_persist_when_paging_through_results(self):
+    def test_themes_filters_persist_when_paging_through_results(self, testsetup):
         """
 
         This testcase covers # 15018 in Litmus
@@ -68,14 +57,11 @@ class TestPagination(unittest.TestCase):
         3. Verifies the results of the filter
 
         """
-        themes_ppg = themes_page.ThemesPage(self.selenium)
+        themes_ppg = themes_page.ThemesPage(testsetup)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")
         themes_pg.click_next_page()
-        self.assertEqual(themes_pg.feedback_type_from_url, "issue")
-        self.assertEqual(themes_pg.type_filter.selected_type, "Issues")
-        [self.assertEqual(theme.type, "Issue") for theme in themes_pg.themes]
-
-if __name__ == "__main__":
-    unittest.main()
+        Assert.equal(themes_pg.feedback_type_from_url, "issue")
+        Assert.equal(themes_pg.type_filter.selected_type, "Issues")
+        [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]

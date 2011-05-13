@@ -37,9 +37,10 @@
 '''
 Created on Mar 28, 2011
 '''
+from page import Page
 
 
-class Message(object):
+class Message(Page):
 
     _type_locator = " .type"
     _body_locator = " .body"
@@ -53,8 +54,8 @@ class Message(object):
     _translate_message_locator = " li:nth(1) a"
     _tweet_this_locator = " .options .twitter"
 
-    def __init__(self, selenium, index):
-        self.selenium = selenium
+    def __init__(self, testsetup, index):
+        Page.__init__(self, testsetup)
         self.index = index
 
     def absolute_locator(self, relative_locator):

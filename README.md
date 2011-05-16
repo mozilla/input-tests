@@ -44,13 +44,17 @@ Change the path/name to the downloaded Selenium server file.
 
 [Selenium Downloads]: http://code.google.com/p/selenium/downloads/list
 
-### vars.py
-Edit the vars.py file to specify the browser you will want to run your tests in. Common values are *\*firefox*, *\*safari*, *\*iexplore*, *\*googlechrome*
+### Running tests locally
 
-Once the above prerequisites have been met you can run the tests using the
-following command:
+To run tests locally its a simple case of calling
 
-    py.test-2.6 .
+    ./runlocal.sh
+
+or
+
+    runlocal.bat
+
+depending on your platform.
 
 Writing Tests
 -------------

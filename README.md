@@ -46,9 +46,9 @@ Change the path/name to the downloaded Selenium server file.
 
 ### Running tests locally
 
-To run tests locally its a simple case of calling
+To run tests locally its a simple case of calling the command below from this directory
 
-    py.test 
+    py.test . 
 
 
 Writing Tests

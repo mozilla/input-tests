@@ -48,13 +48,8 @@ Change the path/name to the downloaded Selenium server file.
 
 To run tests locally its a simple case of calling
 
-    ./runlocal.sh
+    py.test 
 
-or
-
-    runlocal.bat
-
-depending on your platform.
 
 Writing Tests
 -------------

@@ -37,7 +37,7 @@ def pytest_addoption(parser):
         help="specify where to run")
     parser.addoption("--browser", action="store", default="*firefox",
         help="specify the browser")
-    parser.addoption("--site", action="store", default=None,
+    parser.addoption("--site", action="store", default="http://input.stage.mozilla.com",
         help="specify the AUT")
     parser.addoption("--timeout", action="store", default=120000,
         help="specify the timeout")

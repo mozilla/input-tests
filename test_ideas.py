@@ -84,7 +84,6 @@ class TestSubmitIdea:
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
-    @xfail(reason="Bug 655738 - Character count on feedback forms is gone.")
     def test_remaining_character_count(self, testsetup):
         """
 
@@ -98,44 +97,32 @@ class TestSubmitIdea:
 
         submit_idea_pg.go_to_submit_idea_page()
         Assert.equal(submit_idea_pg.remaining_character_count, "250")
-        Assert.false(submit_idea_pg.is_remaining_character_count_low)
-        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
-        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
+        Assert.false(submit_idea_pg.is_remaining_character_count_limited)
+        Assert.false(submit_idea_pg.is_remaining_character_count_negative)
+        Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("a" * 199)
         Assert.equal(submit_idea_pg.remaining_character_count, "51")
-        Assert.false(submit_idea_pg.is_remaining_character_count_low)
-        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_limited)
+        Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("b")
         Assert.equal(submit_idea_pg.remaining_character_count, "50")
-        Assert.true(submit_idea_pg.is_remaining_character_count_low)
-        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.true(submit_idea_pg.is_remaining_character_count_limited)
+        Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
-        submit_idea_pg.set_feedback("c" * 24)
-        Assert.equal(submit_idea_pg.remaining_character_count, "26")
-        Assert.true(submit_idea_pg.is_remaining_character_count_low)
-        Assert.false(submit_idea_pg.is_remaining_character_count_very_low)
+        submit_idea_pg.set_feedback("c" * 50)
+        Assert.equal(submit_idea_pg.remaining_character_count, "0")
+        Assert.true(submit_idea_pg.is_remaining_character_count_limited)
+        Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
         submit_idea_pg.set_feedback("d")
-        Assert.equal(submit_idea_pg.remaining_character_count, "25")
-        Assert.false(submit_idea_pg.is_remaining_character_count_low)
-        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
-        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
-
-        submit_idea_pg.set_feedback("e" * 25)
-        Assert.equal(submit_idea_pg.remaining_character_count, "0")
-        Assert.false(submit_idea_pg.is_remaining_character_count_low)
-        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
-        Assert.true(submit_idea_pg.is_submit_feedback_enabled)
-
-        submit_idea_pg.set_feedback("f")
         Assert.equal(submit_idea_pg.remaining_character_count, "-1")
-        Assert.false(submit_idea_pg.is_remaining_character_count_low)
-        Assert.true(submit_idea_pg.is_remaining_character_count_very_low)
+        Assert.false(submit_idea_pg.is_remaining_character_count_limited)
+        Assert.true(submit_idea_pg.is_remaining_character_count_negative)
         Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
 

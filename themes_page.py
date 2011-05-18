@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 David Burns
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,6 +40,7 @@
 '''
 Created on Nov 24, 2010
 '''
+from page import Page
 import input_base_page
 import type_filter_region
 
@@ -63,18 +65,18 @@ class ThemesPage(input_base_page.InputBasePage):
 
     @property
     def themes(self):
-        return [self.Theme(self.selenium, i + 1) for i in range(self.theme_count)]
+        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
 
     def theme(self, index):
-        return self.Theme(self.selenium, index)
+        return self.Theme(self.testsetup, index)
 
-    class Theme(object):
+    class Theme(Page):
 
         _type_locator = " .type"
         _similar_messages_locator = " .more"
 
-        def __init__(self, selenium, index):
-            self.selenium = selenium
+        def __init__(self, testsetup, index):
+            Page.__init__(self, testsetup)
             self.index = index
 
         def absolute_locator(self, relative_locator):

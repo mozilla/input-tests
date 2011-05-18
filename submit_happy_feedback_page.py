@@ -43,7 +43,7 @@ import submit_feedback_page
 class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
     _feedback_locator = 'id=happy-description'
-    _remaining_character_count_locator = 'id=happy-description-counter'
+    _remaining_character_count_locator = 'css=#happy-description-counter'
     _submit_feedback_locator = 'css=#happy .submit span'
     _error_locator = 'css=#happy .errorlist li'
 

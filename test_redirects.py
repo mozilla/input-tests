@@ -144,23 +144,18 @@ class TestRedirects:
     def test_release_sites_with_locale_redirects_to_themes_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/sites/', '/en-US/sites/')
 
-    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
     def test_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/idea/', '/en-US/feedback#idea')
 
-    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
     def test_beta_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/beta/idea/', '/en-US/feedback#idea')
 
-    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
     def test_beta_idea_with_locale_redirects_to_idea_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/beta/idea/', '/en-US/feedback#idea')
 
-    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
     def test_release_idea_without_locale_redirects_to_idea_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/release/idea/', '/en-US/feedback#idea')
 
-    @xfail(reason="Bug 656822 - Idea URLs redirect to feedback#issue instead of feedback#idea")
     def test_release_idea_with_locale_redirects_to_idea_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/idea/', '/en-US/feedback#idea')
 

@@ -43,6 +43,7 @@ import submit_feedback_page
 class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
 
     _feedback_locator = 'id=happy-description'
+    _remaining_character_count_locator = 'id=happy-description-counter'
     _submit_feedback_locator = 'css=#happy .submit span'
     _error_locator = 'css=#happy .errorlist li'
 
@@ -50,3 +51,7 @@ class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
         self.selenium.open('/feedback#happy')
         self.is_the_current_page
         self.wait_for_element_visible(self._happy_page_locator)
+
+    @property
+    def is_submit_feedback_enabled(self):
+        return not self.selenium.is_element_present('css=#happy .submit a.disabled')

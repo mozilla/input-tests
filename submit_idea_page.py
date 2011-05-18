@@ -48,7 +48,7 @@ import submit_feedback_page
 class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
 
     _feedback_locator = 'id=idea-description'
-    _remaining_character_count_locator = 'css=#count-idea-desc'
+    _remaining_character_count_locator = 'css=#idea-description-counter'
     _submit_feedback_locator = 'css=#idea .submit span'
     _error_locator = 'css=#idea .errorlist li'
 

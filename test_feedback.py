@@ -79,7 +79,6 @@ class TestFeedback:
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
-    @xfail(reason="Bug 655738 - Character count on feedback forms is gone.")
     def test_remaining_character_count(self, testsetup):
         """
         This testcase covers # 13806 in Litmus
@@ -91,42 +90,30 @@ class TestFeedback:
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "140")
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("a" * 111)
-        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "29")
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        submit_happy_feedback_pg.set_feedback("a" * 119)
+        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "21")
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
         submit_happy_feedback_pg.set_feedback("b")
-        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "28")
-        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "20")
+        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_limited)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("c" * 13)
-        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "15")
-        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        submit_happy_feedback_pg.set_feedback("c" * 20)
+        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "0")
+        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_limited)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
         submit_happy_feedback_pg.set_feedback("d")
-        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "14")
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_very_low)
-        Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
-
-        submit_happy_feedback_pg.set_feedback("e" * 14)
-        Assert.equal(submit_happy_feedback_pg.remaining_character_count, "0")
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_very_low)
-        Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
-
-        submit_happy_feedback_pg.set_feedback("f")
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "-1")
-        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_low)
-        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_very_low)
+        Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
+        Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)

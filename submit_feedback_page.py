@@ -64,16 +64,16 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._remaining_character_count_locator)
 
     @property
-    def is_remaining_character_count_low(self):
+    def is_remaining_character_count_limited(self):
         try:
-            return self.selenium.is_visible(self._remaining_character_count_locator + ".low")
+            return self.selenium.is_visible(self._remaining_character_count_locator + ".limited-characters-remaining:not(.no-characters-remaining)")
         except:
             return False
 
     @property
-    def is_remaining_character_count_very_low(self):
+    def is_remaining_character_count_negative(self):
         try:
-            return self.selenium.is_visible(self._remaining_character_count_locator + ".verylow")
+            return self.selenium.is_visible(self._remaining_character_count_locator + ".no-characters-remaining")
         except:
             return False
 

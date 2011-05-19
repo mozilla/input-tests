@@ -19,8 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Dave Hunt <dhunt@mozilla.com>
-#                 Bebe <florin.strugariu@softvision.ro>
+# Contributor(s): Bebe <florin.strugariu2softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,62 +35,37 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Feb 24, 2011
+Created on May 17, 2011
 '''
 from page import Page
 
 
-class LocaleFilter(Page):
+class MentionedRegion(Page):
 
-    _all_locales_locator = "id('filter_locale')//div/li"
-    _initial_locales_locator = "id('filter_locale')//div[not(@class='extra')]/li"
-    _more_locales_link_locator = "css=#filter_locale .more"
-    _extra_locales_locator = "css=#filter_locale .extra"
-    _total_message_count_locator = "css=#filter_locale .bars"
+    _mentioned_locator = "id('filter_themes')"
 
     @property
-    def total_message_count(self):
-        return self.get_atribute(self._total_message_count_locator, "data-total")
+    def mentioned_header(self):
+        return self.selenium.get_text("xpath=%s/h3" % self._mentioned_locator)
 
     @property
-    def is_extra_locales_visible(self):
-        return self.selenium.is_visible(self._extra_locales_locator)
+    def mentioned_count(self):
+        return int(self.selenium.get_xpath_count("%s//li" % self._mentioned_locator))
 
-    @property
-    def locale_count(self):
-        if self.is_extra_locales_visible:
-            return int(self.selenium.get_xpath_count(self._all_locales_locator))
-        else:
-            return int(self.selenium.get_xpath_count(self._initial_locales_locator))
+    def mentioned(self, lookup):
+        return self.Mentioned(self.testsetup, lookup)
 
-    def show_extra_locales(self):
-        self.selenium.click(self._more_locales_link_locator)
-        self.wait_for_element_not_visible(self._more_locales_link_locator)
-        self.wait_for_element_visible(self._extra_locales_locator)
-
-    def contains_locale(self, lookup):
+    def contains_mentioned(self, lookup):
         try :
-            self.selenium.get_text("css=#filter_locale div li:contains(%s)" % lookup)
+            self.selenium.get_text("css=#filter_themes li:contains(%s) a > strong" % lookup)
             return True
         except :
             return False
 
-    def locales(self):
-        res = []
-        for i in range(self.locale_count):
-            if i != 16:
-                res.append(self.Locale(self.testsetup, i))
-        return res
+    class Mentioned(Page):
 
-    def locale(self, lookup):
-        return self.Locale(self.testsetup, lookup)
-
-    class Locale(Page):
-
-        _checkbox_locator = " input"
-        _name_locator = " label > strong"
+        _name_locator = " a > strong"
         _message_count_locator = " .count"
-        _message_percentage_locator = " .perc"
 
         def __init__(self, testsetup, lookup):
             Page.__init__(self, testsetup)
@@ -104,30 +78,19 @@ class LocaleFilter(Page):
         def root_locator(self):
             if type(self.lookup) == int:
                 # lookup by index
-                return "css=#filter_locale div li:nth(" + str(self.lookup) + ")"
+                return "css=#filter_themes li:nth(%s)" % self.lookup
             else:
                 # lookup by name
-                return "css=#filter_locale div li:contains(" + self.lookup + ")"
+                return "css=#filter_themes li:contains(%s)" % self.lookup
 
         @property
         def name(self):
             return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
         @property
-        def code(self):
-            return self.selenium.get_attribute(self.absolute_locator(self._checkbox_locator + "@value"))
-
-        @property
         def message_count(self):
             return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
 
-        @property
-        def message_percentage(self):
-            return self.selenium.get_text(self.absolute_locator(self._message_percentage_locator))
-
         def select(self):
-            self.selenium.click(self.absolute_locator(self._checkbox_locator))
+            self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(self.timeout)
-
-        def percentage(self, total_messages):
-                return round((float(self.message_count) / float(total_messages)) * 100)

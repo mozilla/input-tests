@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,7 +46,9 @@ import product_filter_region
 import locale_filter_region
 import platform_filter_region
 import message_region
-
+import type_filter_region
+import mentioned_region
+import visiting_region
 
 class FeedbackPage(input_base_page.InputBasePage):
 
@@ -71,7 +74,11 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     _search_box = "id_q"
 
+    _chart_locator = "id=feedback-chart"
+
     _total_message_count_locator = "css=#big-count p"
+    _total_message_count_heading_locator = "css=#big-count h3"
+
     _messages_locator = "id('messages')//li[@class='message']"
 
     def go_to_feedback_page(self):
@@ -247,7 +254,19 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter(self.testsetup)
+        return platform_filter_region.PlatformFilter.ComboFilter(self.testsetup)
+
+    @property
+    def type_filter(self):
+        return type_filter_region.TypeFilter.ComboFilter(self.testsetup)
+
+    @property
+    def mentioned_filter(self):
+        return mentioned_region.MentionedRegion(self.testsetup)
+
+    @property
+    def visiting_filter(self):
+        return visiting_region.VisitingRegion(self.testsetup)
 
     def search_for(self, search_string):
         self.selenium.type(self._search_box, search_string)
@@ -259,6 +278,13 @@ class FeedbackPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._total_message_count_locator)
 
     @property
+    def total_message_count_heading(self):
+        """
+        Get the total messages header value
+        """
+        return self.selenium.get_text(self._total_message_count_heading_locator)
+
+    @property
     def message_count(self):
         return int(self.selenium.get_xpath_count(self._messages_locator))
 
@@ -268,3 +294,20 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def message(self, index):
         return message_region.Message(self.testsetup, index)
+
+    @property
+    def is_days_visible(self):
+        """
+        Verifys if the 1d/7d/30d are visible
+        """
+        for time in self._when_links:
+            if not self.selenium.is_visible(time):
+                return False
+        return True
+
+    def search_box_placeholder(self):
+        return self.selenium.get_attribute(self._search_box + "@placeholder")
+
+    @property
+    def is_chart_visible(self):
+        return self.is_element_visible(self._chart_locator)

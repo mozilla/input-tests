@@ -24,6 +24,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <Florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -52,6 +53,19 @@ class InputBasePage(Page):
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
 
+    _feedback_link_locator = "css=a.dashboard"
+    _themes_link_locator = "css=a.themes"
+    _main_heading_link_locator = "css=h1 > a"
+    _sites_link_locator = "css=a.issues"
+
+    _footer_privacy_policy_locator = "css=#footer-links > a:nth(0)"
+    _footer_legal_notices_locator = "css=#footer-links > a:nth(1)"
+    _footer_report_trademark_abuse_link_locator = "css=#footer-links > a:nth(2)"
+    _footer_about_input_locator = "css=#footer-links > a:nth(3)"
+    _footer_unless_otherwise_noted_locator = "css=#copyright > p:nth(1) > a:nth(0)"
+    _footer_creative_commons_link_locator = "css=#copyright > p:nth(1) > a:nth(1)"
+    _footer_language_dropdown_locator = "id=language"
+
     def click_previous_page(self):
         """
         Navigates to the previous page of results
@@ -65,6 +79,14 @@ class InputBasePage(Page):
         """
         self.selenium.click(self._next_page_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_next_page_visible(self):
+        return self.is_element_visible(self._next_page_locator)
+
+    @property
+    def is_previous_page_visible(self):
+        return self.is_element_visible(self._previous_page_locator)
 
     def _value_from_url(self, param):
         """
@@ -135,3 +157,87 @@ class InputBasePage(Page):
         Returns the locale value from the current location URL
         """
         return self._value_from_url("locale")
+
+    def click_feedback_link(self):
+        self.selenium.click(self._feedback_link_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_themes_link(self):
+        self.selenium.click(self._themes_link_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_main_heading_link(self):
+        self.selenium.click(self._main_heading_link_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_sites_link(self):
+        self.selenium.click(self._sites_link_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def is_feedback_link_visible(self):
+        return self.is_element_visible(self._feedback_link_locator)
+
+    @property
+    def is_themes_link_visible(self):
+        return self.is_element_visible(self._themes_link_locator)
+
+    @property
+    def is_main_heading_link_visible(self):
+        return self.is_element_visible(self._main_heading_link_locator)
+
+    @property
+    def is_sites_link_visible(self):
+        return self.is_element_visible(self._sites_link_locator)
+
+    @property
+    def is_footer_privacy_policy_visible(self):
+        return self.is_element_visible(self._footer_privacy_policy_locator)
+
+    @property
+    def is_footer_legal_notices_visible(self):
+        return self.is_element_visible(self._footer_legal_notices_locator)
+
+    @property
+    def is_footer_report_trademark_abuse_link_visible(self):
+        return self.is_element_visible(self._footer_report_trademark_abuse_link_locator)
+
+    @property
+    def is_footer_unless_otherwise_noted_visible(self):
+        return self.is_element_visible(self._footer_unless_otherwise_noted_locator)
+
+    @property
+    def is_footer_creative_commons_link_visible(self):
+        return self.is_element_visible(self._footer_creative_commons_link_locator)
+
+    @property
+    def is_footer_about_input_visible(self):
+        return self.is_element_visible(self._footer_about_input_locator)
+
+    @property
+    def is_footer_language_dropdown_visible(self):
+        return self.is_element_visible(self._footer_language_dropdown_locator)
+
+    @property
+    def footer_privacy_policy(self):
+        return self.selenium.get_text(self._footer_privacy_policy_locator)
+
+    @property
+    def footer_legal_notices(self):
+        return self.selenium.get_text(self._footer_legal_notices_locator)
+
+    @property
+    def footer_report_trademark_abuse(self):
+        return self.selenium.get_text(self._footer_report_trademark_abuse_link_locator)
+
+    @property
+    def footer_unless_otherwise_noted(self):
+        return self.selenium.get_text(self._footer_unless_otherwise_noted_locator)
+
+    @property
+    def footer_creative_commons(self):
+        return self.selenium.get_text(self._footer_creative_commons_link_locator)
+
+    @property
+    def footer_about_input(self):
+        return self.selenium.get_text(self._footer_about_input_locator)

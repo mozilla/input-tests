@@ -47,7 +47,7 @@ import feedback_page
 
 class Test_Feedback_Layout:
 
-    def test_the_heder_layout(self, testsetup):
+    def test_the_header _layout(self, testsetup):
         """
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area

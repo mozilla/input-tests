@@ -41,46 +41,46 @@ Created on Mar 24, 2011
 from page import Page
 
 
-class TypeFilter(Page):
+class TypeFilter( Page ):
 
-    class ButtonFilter(Page):
+    class ButtonFilter( Page ):
 
         _selected_type_locator = "css=#filter_type a.selected"
         _types_locator = "id('filter_type')//li"
 
-        def __init__(self, testsetup):
-           Page.__init__(self, testsetup)
+        def __init__( self, testsetup ):
+            Page.__init__( self, testsetup )
 
         @property
-        def type_count(self):
-            return int(self.selenium.get_xpath_count(self._types_locator))
+        def type_count( self ):
+            return int( self.selenium.get_xpath_count( self._types_locator ) )
 
         @property
-        def selected_type(self):
-            return self.selenium.get_text(self._selected_type_locator)
+        def selected_type( self ):
+            return self.selenium.get_text( self._selected_type_locator )
 
-        def select_type(self, type):
-            self.selenium.click("css=#filter_type a:contains(%s)" % type)
-            self.selenium.wait_for_page_to_load(self.timeout)
+        def select_type( self, type ):
+            self.selenium.click( "css=#filter_type a:contains(%s)" % type )
+            self.selenium.wait_for_page_to_load( self.timeout )
 
-        def types(self):
-            return [self.Type(self.testsetup, i)for i in range(self.type_count)]
+        def types( self ):
+            return [self.Type( self.testsetup, i )for i in range( self.type_count )]
 
-        class Type(Page):
+        class Type( Page ):
 
             _selected_locator = " selected"
             _name_locator = " a"
 
-            def __init__(self, testsetup, lookup):
-                Page.__init__(self, testsetup)
+            def __init__( self, testsetup, lookup ):
+                Page.__init__( self, testsetup )
                 self.lookup = lookup
 
-            def absolute_locator(self, relative_locator):
+            def absolute_locator( self, relative_locator ):
                 return self.root_locator + relative_locator
 
             @property
-            def root_locator(self):
-                if type(self.lookup) == int:
+            def root_locator( self ):
+                if type( self.lookup ) == int:
                     # lookup by index
                     return "css=#filter_type li:nth(%s)" % self.lookup
                 else:
@@ -88,9 +88,9 @@ class TypeFilter(Page):
                     return "css=#filter_type li:contains(%s)" % self.lookup
 
             @property
-            def is_selected(self):
+            def is_selected( self ):
                 try:
-                    if self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class").strip() == "selected":
+                    if self.selenium.get_attribute( self.absolute_locator( self._name_locator ) + "@class" ).strip() == "selected":
                         return True
                     else:
                         return False
@@ -98,51 +98,51 @@ class TypeFilter(Page):
                     return False
 
             @property
-            def name(self):
-                return self.selenium.get_text(self.root_locator)
+            def name( self ):
+                return self.selenium.get_text( self.root_locator )
 
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._name_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
+            def select( self ):
+                self.selenium.click( self.absolute_locator( self._name_locator ) )
+                self.selenium.wait_for_page_to_load( self.timeout )
 
-    class ComboFilter(Page):
+    class CheckboxFilter( Page ):
 
         _type_filter_locator = "id('filter_type')//li"
 
         @property
-        def type_count(self):
-            return int(self.selenium.get_xpath_count(self._type_filter_locator))
+        def type_count( self ):
+            return int( self.selenium.get_xpath_count( self._type_filter_locator ) )
 
-        def type(self, lookup):
-            return self.Type(self.testsetup, lookup)
+        def type( self, lookup ):
+            return self.Type( self.testsetup, lookup )
 
-        def contains_type(self, lookup):
+        def contains_type( self, lookup ):
             try :
-                self.selenium.get_text("css=#filter_type li:contains(%s) label > strong" % lookup)
+                self.selenium.get_text( "css=#filter_type li:contains(%s) label > strong" % lookup )
                 return True
             except :
                 return False
 
-        def types(self):
-            return [self.Type(self.testsetup, i)for i in range(self.type_count)]
+        def types( self ):
+            return [self.Type( self.testsetup, i )for i in range( self.type_count )]
 
-        class Type(Page):
+        class Type( Page ):
 
             _checkbox_locator = " input"
             _name_locator = " label > strong"
             _message_count_locator = " .count"
             _percent_locator = " .perc"
 
-            def __init__(self, testsetup, lookup):
-                Page.__init__(self, testsetup)
+            def __init__( self, testsetup, lookup ):
+                Page.__init__( self, testsetup )
                 self.lookup = lookup
 
-            def absolute_locator(self, relative_locator):
+            def absolute_locator( self, relative_locator ):
                 return self.root_locator + relative_locator
 
             @property
-            def root_locator(self):
-                if type(self.lookup) == int:
+            def root_locator( self ):
+                if type( self.lookup ) == int:
                     # lookup by index
                     return "css=#filter_type li:nth(%s)" % self.lookup
                 else:
@@ -150,21 +150,21 @@ class TypeFilter(Page):
                     return "css=#filter_type li:contains(%s)" % self.lookup
 
             @property
-            def is_selected(self):
-                return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+            def is_selected( self ):
+                return self.selenium.is_checked( self.absolute_locator( self._checkbox_locator ) )
 
             @property
-            def name(self):
-                return self.selenium.get_text(self.absolute_locator(self._name_locator))
+            def name( self ):
+                return self.selenium.get_text( self.absolute_locator( self._name_locator ) )
 
             @property
-            def message_count(self):
-                return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+            def message_count( self ):
+                return self.selenium.get_text( self.absolute_locator( self._message_count_locator ) )
 
             @property
-            def percent(self):
-                return self.selenium.get_text(self.absolute_locator(self._percent_locator))
+            def percent( self ):
+                return self.selenium.get_text( self.absolute_locator( self._percent_locator ) )
 
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._checkbox_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
+            def select( self ):
+                self.selenium.click( self.absolute_locator( self._checkbox_locator ) )
+                self.selenium.wait_for_page_to_load( self.timeout )

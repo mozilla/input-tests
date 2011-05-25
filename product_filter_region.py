@@ -41,107 +41,106 @@ Created on Mar 25, 2011
 from page import Page
 
 
-class ProductFilter(Page):
+class ProductFilter( Page ):
 
-    class ComboFilter(Page):
+    class ComboFilter( Page ):
 
         _product_dropdown_locator = "id=product"
         _version_dropdown_locator = "id=version"
 
         @property
-        def products(self):
+        def products( self ):
             """
             returns a list of available products
             """
-            return self.selenium.get_select_options(self._product_dropdown_locator)
+            return self.selenium.get_select_options( self._product_dropdown_locator )
 
-        @property
-        def verify_location(self):
+        def default_values( self, product, version ):
             """
             returns true if the dropdowns exists
             """
 
-            if self.selenium.is_visible(self._product_dropdown_locator) and\
-            self.selenium.is_visible(self._version_dropdown_locator):
+            if self.selected_product == product and\
+                self.selected_version() == version:
                 return True
             else:
                 return False
 
         @property
-        def selected_product(self):
+        def selected_product( self ):
             """
             returns the currently selected product
             """
-            self.wait_for_element_present(self._product_dropdown_locator)
-            return self.selenium.get_selected_value(self._product_dropdown_locator)
+            self.wait_for_element_present( self._product_dropdown_locator )
+            return self.selenium.get_selected_value( self._product_dropdown_locator )
 
-        def select_product(self, product):
+        def select_product( self, product ):
             """
             selects product
             """
             if not product == self.selected_product:
-                self.selenium.select(self._product_dropdown_locator, "value=%s" % product)
-                self.selenium.wait_for_page_to_load(self.timeout)
+                self.selenium.select( self._product_dropdown_locator, "value=%s" % product )
+                self.selenium.wait_for_page_to_load( self.timeout )
 
         @property
-        def versions(self):
+        def versions( self ):
             """
             returns a list of available versions
             """
-            return self.selenium.get_select_options(self._version_dropdown_locator)
+            return self.selenium.get_select_options( self._version_dropdown_locator )
 
-        def selected_version(self, type = 'value'):
+        def selected_version( self, type = 'value' ):
             """
             returns the currently selected product version
             """
-            return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
+            return getattr( self.selenium, "get_selected_" + type )( self._version_dropdown_locator )
 
-        def select_version(self, lookup, by = 'value'):
+        def select_version( self, lookup, by = 'value' ):
             """
             selects product version
             """
-            if not lookup == self.selected_version(by):
-                self.selenium.select(self._version_dropdown_locator, "%s=%s" % (by, lookup))
-                self.selenium.wait_for_page_to_load(self.timeout)
+            if not lookup == self.selected_version( by ):
+                self.selenium.select( self._version_dropdown_locator, "%s=%s" % ( by, lookup ) )
+                self.selenium.wait_for_page_to_load( self.timeout )
 
-    class ButtonFilter(Page):
+    class ButtonFilter( Page ):
 
         _selected_product_locator = "css=#filter_product a.selected"
         _product_locator = "id('filter_product')//li"
 
-        def __init__(self, testsetup):
-           Page.__init__(self, testsetup)
+        def __init__( self, testsetup ):
+            Page.__init__( self, testsetup )
 
         @property
-        def product_count(self):
-            return int(self.selenium.get_xpath_count(self._product_locator))
+        def product_count( self ):
+            return int( self.selenium.get_xpath_count( self._product_locator ) )
 
         @property
-        def selected_product(self):
-            return self.selenium.get_text(self._selected_product_locator)
+        def selected_product( self ):
+            return self.selenium.get_text( self._selected_product_locator )
 
-        def select_product(self, product):
-            self.selenium.click("css=#filter_product a:contains(%s)" % product)
-            self.selenium.wait_for_page_to_load(self.timeout)
+        def select_product( self, product ):
+            self.selenium.click( "css=#filter_product a:contains(%s)" % product )
+            self.selenium.wait_for_page_to_load( self.timeout )
 
-        def products(self):
-            return [self.Product(self.testsetup, i)for i in range(self.product_count)]
+        def products( self ):
+            return [self.Product( self.testsetup, i )for i in range( self.product_count )]
 
-        class Product(Page):
+        class Product( Page ):
 
             _selected_locator = " selected"
             _name_locator = " a"
 
-            def __init__(self, testsetup, lookup):
-                Page.__init__(self, testsetup)
+            def __init__( self, testsetup, lookup ):
+                Page.__init__( self, testsetup )
                 self.lookup = lookup
 
-            def absolute_locator(self, relative_locator):
+            def absolute_locator( self, relative_locator ):
                 return self.root_locator + relative_locator
 
             @property
-            def root_locator(self):
-                if type(self.lookup) == int:
+            def root_locator( self ):
+                if type( self.lookup ) == int:
                     # lookup by index
                     return "css=#filter_product li:nth(%s)" % self.lookup
                 else:
@@ -149,9 +148,9 @@ class ProductFilter(Page):
                     return "css=#filter_product li:contains(%s)" % self.lookup
 
             @property
-            def is_selected(self):
+            def is_selected( self ):
                 try:
-                    if self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class") == "selected":
+                    if self.selenium.get_attribute( self.absolute_locator( self._name_locator ) + "@class" ) == "selected":
                         return True
                     else:
                         return False
@@ -159,9 +158,9 @@ class ProductFilter(Page):
                     return False
 
             @property
-            def name(self):
-                return self.selenium.get_text(self.root_locator)
+            def name( self ):
+                return self.selenium.get_text( self.root_locator )
 
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._name_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
+            def select( self ):
+                self.selenium.click( self.absolute_locator( self._name_locator ) )
+                self.selenium.wait_for_page_to_load( self.timeout )

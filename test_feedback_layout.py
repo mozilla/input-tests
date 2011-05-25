@@ -34,9 +34,7 @@
 #
 # ***** END LICENSE BLOCK *****
 
-"""
-Litmus 13593 - input:Verify the layout of homepage
-"""
+
 
 import pytest
 xfail = pytest.mark.xfail
@@ -47,140 +45,137 @@ import feedback_page
 
 class Test_Feedback_Layout:
 
-    def test_the_header _layout(self, testsetup):
+    """
+    Litmus 13593 - input:Verify the layout of homepage
+    """
+    def test_the_header_layout( self, testsetup ):
         """
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
-        feedback_pg.go_to_feedback_page()
+        base_page = feedback_page.FeedbackPage( testsetup )
+        base_page.go_to_feedback_page()
 
-        Assert.true(feedback_pg.is_feedback_link_visible)
-        feedback_pg.click_feedback_link()
-        Assert.equal(feedback_pg.title, "Welcome :: Firefox Input")
+        header = base_page.header_region
 
-        Assert.true(feedback_pg.is_themes_link_visible)
-        feedback_pg.click_themes_link()
-        Assert.equal(feedback_pg.title, "Themes :: Firefox Input")
-        feedback_pg.go_back()
+        feedback_pg = header.click_feedback_link()
+        Assert.true( feedback_pg.is_the_current_page )
+        base_page.go_to_feedback_page()
 
-        Assert.true(feedback_pg.is_sites_link_visible)
-        feedback_pg.click_sites_link()
-        Assert.equal(feedback_pg.title, "Sites :: Firefox Input")
-        feedback_pg.go_back()
+        themes = header.click_themes_link()
+        Assert.true( themes.is_the_current_page )
+        base_page.go_to_feedback_page()
 
-        Assert.true(feedback_pg.is_main_heading_link_visible)
-        feedback_pg.click_main_heading_link()
-        Assert.equal(feedback_pg.title, "Welcome :: Firefox Input")
+        sites = header.click_sites_link()
+        Assert.true( sites.is_the_current_page )
+        base_page.go_to_feedback_page()
 
-    def test_the_footer_area_layout(self, testsetup):
+        feedback_pg = header.click_main_heading_link()
+        Assert.true( feedback_pg.is_the_current_page )
+
+
+    def test_the_area_layout( self, testsetup ):
         """
         Litmus 13598 - input:Verify the layout of footer area
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage( testsetup )
         feedback_pg.go_to_feedback_page()
 
-        Assert.true(feedback_pg.is_footer_privacy_policy_visible)
-        Assert.equal(feedback_pg.footer_privacy_policy, "Privacy Policy")
-        Assert.true(feedback_pg.is_footer_legal_notices_visible)
-        Assert.equal(feedback_pg.footer_legal_notices, "Legal Notices")
-        Assert.true(feedback_pg.is_footer_report_trademark_abuse_link_visible)
-        Assert.equal(feedback_pg.footer_report_trademark_abuse, "Report Trademark Abuse")
-        Assert.true(feedback_pg.is_footer_unless_otherwise_noted_visible)
-        Assert.equal(feedback_pg.footer_unless_otherwise_noted, "noted")
-        Assert.true(feedback_pg.is_footer_creative_commons_link_visible)
-        Assert.equal(feedback_pg.footer_creative_commons, "Creative Commons Attribution Share-Alike License v3.0")
-        Assert.true(feedback_pg.is_footer_about_input_visible)
-        Assert.equal(feedback_pg.footer_about_input, "About Firefox Input")
+        footer = feedback_pg.footer_region
 
-        Assert.true(feedback_pg.is_footer_language_dropdown_visible)
+        Assert.equal( footer.privacy_policy, "Privacy Policy" )
 
-    def test_the_left_panel_layout(self, testsetup):
+        Assert.equal( footer.legal_notices, "Legal Notices" )
+
+        Assert.equal( footer.report_trademark_abuse, "Report Trademark Abuse" )
+
+        Assert.equal( footer.unless_otherwise_noted, "noted" )
+
+        Assert.equal( footer.creative_commons, "Creative Commons Attribution Share-Alike License v3.0" )
+
+        Assert.equal( footer.about_input, "About Firefox Input" )
+
+        Assert.true( footer.is_language_dropdown_visible )
+
+
+    def test_the_left_panel_layout( self, testsetup ):
         """
         Litmus 13595 - input:Verify the layout of the left hand side section containing various
         filtering options
         Litmus 13600 - input:Verify the applications drop down in Product
         """
 
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage( testsetup )
         feedback_pg.go_to_feedback_page()
 
-        Assert.true(feedback_pg.product_filter.verify_location)
-        Assert.true (feedback_pg.is_days_visible)
+        Assert.true( feedback_pg.product_filter.default_values( "firefox", "5.0" ) )
+        Assert.false( feedback_pg.is_date_filter_aplyed )
+
+        Assert.false( feedback_pg.is_custom_date_filter_visible() )
 
         feedback_pg.click_custom_dates()
 
-        Assert.true(feedback_pg.is_custom_date_filter_visible())
+        Assert.true( feedback_pg.platform_filter.platform_count > 0 )
+        Assert.equal ( feedback_pg.product_filter.products , ['Firefox', 'Mobile'] )
+        feedback_pg.product_filter.select_version( '--' )
+        types = [type.name for type in feedback_pg.type_filter.types()]
+        Assert.equal( types, ['Praise', 'Issues', 'Ideas'] )
 
-        Assert.not_equal(feedback_pg.platform_filter.platform_count, 0)
-        Assert.equal (feedback_pg.product_filter.products , [u'Firefox', u'Mobile'])
+        platforms = [platform.name for platform in feedback_pg.platform_filter.platforms()]
+        Assert.equal( platforms, ['Windows 7', 'Windows XP', 'Windows Vista', 'Mac OS X', 'Linux'] )
 
-        type_enum = ("Praise",
-                    "Issues",
-                    "Ideas")
-        for type in type_enum:
-            Assert.true(feedback_pg.type_filter.contains_type(type))
+        Assert.true( feedback_pg.locale_filter.locale_count > 0 )
 
-        platform_names = ("Windows 7",
-                         "Windows XP",
-                         "Windows Vista",
-                         "Mac OS X",
-                         "Linux")
+        locales = [locale.name for locale in feedback_pg.locale_filter.locales()]
+        Assert.true( set( ['English (US)', 'German', 'Spanish', 'French'] ).issubset( set( locales ) ) )
 
-        for lock in platform_names:
-            Assert.true(feedback_pg.platform_filter.contains_platform(lock))
-
-        Assert.not_equal(feedback_pg.locale_filter.locale_count, 0)
-
-        locale_names = ("English (US)",
-                        "German",
-                        "Spanish",
-                        "French")
-
-        for lock in locale_names:
-            Assert.true(feedback_pg.locale_filter.contains_locale(lock))
-
-    def test_the_middle_section_page(self, testsetup):
+    def test_the_middle_section_page( self, testsetup ):
         """
         Litmus 13596 - input:Verify the layout of Latest Feedback section
         Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage( testsetup )
         feedback_pg.go_to_feedback_page()
 
-        Assert.equal(feedback_pg.search_box_placeholder(), "Search by keyword")
-        Assert.not_equal(feedback_pg.message_count, 0)
+        Assert.equal( feedback_pg.search_box_placeholder, "Search by keyword" )
+        Assert.true( feedback_pg.message_count > 0 )
 
-        Assert.true(feedback_pg.is_chart_visible)
+        Assert.true( feedback_pg.is_chart_visible )
 
-        Assert.true(feedback_pg.is_next_page_visible)
-        Assert.true(feedback_pg.is_previous_page_visible)
-        #this is is "intended"
+        Assert.true( feedback_pg.is_next_page_enabled )
+        Assert.false( feedback_pg.is_previous_page_enabled )
+
+        #the first click only applies the filters and add messages until the message count reaches 20
+        #the second click goes to the next page
+        #this is discussed in bug https://bugzilla.mozilla.org/show_bug.cgi?id=640007
+
         feedback_pg.click_next_page()
         feedback_pg.click_next_page()
 
-        Assert.true(feedback_pg.is_next_page_visible)
-        Assert.true(feedback_pg.is_previous_page_visible)
+        Assert.true( feedback_pg.is_next_page_enabled )
+        Assert.true( feedback_pg.is_previous_page_enabled )
 
         feedback_pg.click_previous_page()
 
-        Assert.true(feedback_pg.is_next_page_visible)
-        Assert.true(feedback_pg.is_previous_page_visible)
+        Assert.true( feedback_pg.is_next_page_visible )
+        Assert.false( feedback_pg.is_previous_page_enabled )
 
-    def test_the_right_panel_layout(self, testsetup):
+    @xfail( reason = "Bug 659640 - [Input] 'While visiting' section is not shown on the homepage" )
+    def test_the_right_panel_layout( self, testsetup ):
         """
         Litmus 13597 - input:Verify the layout of right hand section containing statistics data
         Litmus 13716 - input:Verify while visiting section
         """
 
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage( testsetup )
         feedback_pg.go_to_feedback_page()
 
-        Assert.equal(feedback_pg.total_message_count_heading, "Messages")
-        Assert.not_equal(feedback_pg.total_message_count, 0)
+        Assert.equal( feedback_pg.total_message_count_heading, "Messages" )
+        Assert.true( feedback_pg.total_message_count > 0 )
 
-        Assert.equal(feedback_pg.mentioned_filter.mentioned_header, "Often Mentioned Toggle")
-        Assert.not_equal(feedback_pg.mentioned_filter.mentioned_count, 0)
+        Assert.equal( feedback_pg.common_words_filter.common_words_header, "Often Mentioned" )
+        Assert.true( feedback_pg.common_words_filter.common_words_count > 0 )
 
-        Assert.equal(feedback_pg.visiting_filter.visiting_header , "While Visiting Toggle")
-        Assert.not_equal(feedback_pg.visiting_filter.visiting_count, 0)
+
+        Assert.equal( feedback_pg.sites_filter.sites_filter_header , "While Visiting" )
+        Assert.true( feedback_pg.sites_filter.sites_filter_count > 0 )

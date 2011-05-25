@@ -39,58 +39,61 @@ Created on May 17, 2011
 '''
 from page import Page
 
+class SitesFilterRegion( Page ):
 
-class MentionedRegion(Page):
-
-    _mentioned_locator = "id('filter_themes')"
-
-    @property
-    def mentioned_header(self):
-        return self.selenium.get_text("xpath=%s/h3" % self._mentioned_locator)
+    _sites_filter_region_locator = "id('filter_sites')"
 
     @property
-    def mentioned_count(self):
-        return int(self.selenium.get_xpath_count("%s//li" % self._mentioned_locator))
+    def sites_filter_header( self ):
+        return self.selenium.get_text( "xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator )
 
-    def mentioned(self, lookup):
-        return self.Mentioned(self.testsetup, lookup)
+    @property
+    def sites_filter_count( self ):
+        return int( self.selenium.get_xpath_count( "%s//li" % self._sites_filter_locator ) )
 
-    def contains_mentioned(self, lookup):
+    def sites_filter( self, lookup ):
+        return self.SitesFilter( self.testsetup, lookup )
+
+    def contains_sites_filter( self, lookup ):
         try :
-            self.selenium.get_text("css=#filter_themes li:contains(%s) a > strong" % lookup)
+            self.selenium.get_text( "css=#filter_sites li:contains(%s) a > strong" % lookup )
+
             return True
         except :
             return False
 
-    class Mentioned(Page):
+    def sites_filters( self ):
+        return [self.SitesFilter( self.testsetup, i )for i in range( self.sites_filter_count )]
+
+    class SitesFilter( Page ):
 
         _name_locator = " a > strong"
-        _message_count_locator = " .count"
+        _site_count_locator = " .count"
 
-        def __init__(self, testsetup, lookup):
-            Page.__init__(self, testsetup)
+        def __init__( self, testsetup, lookup ):
+            Page.__init__( self, testsetup )
             self.lookup = lookup
 
-        def absolute_locator(self, relative_locator):
+        def absolute_locator( self, relative_locator ):
             return self.root_locator + relative_locator
 
         @property
-        def root_locator(self):
-            if type(self.lookup) == int:
+        def root_locator( self ):
+            if type( self.lookup ) == int:
                 # lookup by index
-                return "css=#filter_themes li:nth(%s)" % self.lookup
+                return "css=#filter_sites li:nth(%s)" % self.lookup
             else:
                 # lookup by name
-                return "css=#filter_themes li:contains(%s)" % self.lookup
+                return "css=#filter_sites li:contains(%s)" % self.lookup
 
         @property
-        def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
+        def name( self ):
+            return self.selenium.get_text( self.absolute_locator( self._name_locator ) )
 
         @property
-        def message_count(self):
-            return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+        def site_count( self ):
+            return self.selenium.get_text( self.absolute_locator( self._site_count_locator ) )
 
-        def select(self):
-            self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+        def select( self ):
+            self.selenium.click( self.absolute_locator( self._name_locator ) )
+            self.selenium.wait_for_page_to_load( self.timeout )

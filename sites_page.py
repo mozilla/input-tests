@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 David Burns
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,6 +40,7 @@
 '''
 Created on Nov 24, 2010
 '''
+from page import Page
 import input_base_page
 import product_filter_region
 

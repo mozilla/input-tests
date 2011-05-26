@@ -53,12 +53,12 @@ import header_region
 import footer_region
 
 
-class FeedbackPage( input_base_page.InputBasePage ):
+class FeedbackPage(input_base_page.InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
     _current_when_link_locator = "css=#when a.selected"
-    _when_links = ( "link=1d", "link=7d", "link=30d" )
+    _when_links = ("link=1d", "link=7d", "link=30d")
     _show_custom_dates_locator = "id=show-custom-date"
     _custom_dates_locator = "id=custom-date"
     _custom_start_date_locator = "id=id_date_start"
@@ -84,126 +84,126 @@ class FeedbackPage( input_base_page.InputBasePage ):
 
     _messages_locator = "id('messages')//li[@class='message']"
 
-    def go_to_feedback_page( self ):
-        self.selenium.open( '/' )
+    def go_to_feedback_page(self):
+        self.selenium.open('/')
         self.is_the_current_page
 
-    def get_current_days( self ):
+    def get_current_days(self):
         """
 
         Returns the link text of the currently applied days filter
 
         """
-        if self.selenium.is_element_present( self._current_when_link_locator ):
-            return self.selenium.get_text( self._current_when_link_locator )
+        if self.selenium.is_element_present(self._current_when_link_locator):
+            return self.selenium.get_text(self._current_when_link_locator)
         else:
             return None
 
-    def get_days_tooltip( self, days ):
+    def get_days_tooltip(self, days):
         """
 
         Returns the tooltip for the days link 1d/7d/30d
 
         """
         for time in self._when_links:
-            if re.search( days, time, re.IGNORECASE ) is None:
+            if re.search(days, time, re.IGNORECASE) is None:
                 continue
             else:
-                return self.selenium.get_attribute( time + "@title" )
+                return self.selenium.get_attribute(time + "@title")
 
-    def click_days( self, days ):
+    def click_days(self, days):
         """
         clicks 1d/7d/30d
         """
         for time in self._when_links:
-            if not re.search( days, time, re.IGNORECASE ) is None:
+            if not re.search(days, time, re.IGNORECASE) is None:
                 if not self.get_current_days() == time:
-                    self.selenium.click( time )
-                    self.selenium.wait_for_page_to_load( self.timeout )
+                    self.selenium.click(time)
+                    self.selenium.wait_for_page_to_load(self.timeout)
                     break
 
-    def get_custom_dates_tooltip( self ):
+    def get_custom_dates_tooltip(self):
         """
 
         Returns the tooltip for the custom dates filter link 1d/7d/30d
 
         """
-        return self.selenium.get_attribute( self._show_custom_dates_locator + "@title" )
+        return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
 
-    def click_custom_dates( self ):
+    def click_custom_dates(self):
         """
 
         Clicks the custom date filter button and waits for the form to appear
 
         """
-        self.selenium.click( self._show_custom_dates_locator )
-        self.wait_for_element_visible( self._custom_dates_locator )
+        self.selenium.click(self._show_custom_dates_locator)
+        self.wait_for_element_visible(self._custom_dates_locator)
 
-    def is_custom_date_filter_visible( self ):
+    def is_custom_date_filter_visible(self):
         """
 
         Returns True if the custom date filter form is visible
 
         """
-        return self.selenium.is_visible( self._custom_dates_locator )
+        return self.selenium.is_visible(self._custom_dates_locator)
 
-    def wait_for_datepicker_to_finish_animating( self ):
-        self.selenium.wait_for_condition( 
-            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000 )
+    def wait_for_datepicker_to_finish_animating(self):
+        self.selenium.wait_for_condition(
+            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
 
-    def click_start_date( self ):
+    def click_start_date(self):
         """
 
         Clicks the start date in the custom date filter form and waits for the datepicker to appear
 
         """
-        self.selenium.click( self._custom_start_date_locator )
+        self.selenium.click(self._custom_start_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
-    def click_end_date( self ):
+    def click_end_date(self):
         """
 
         Clicks the end date in the custom date filter form and waits for the datepicker to appear
 
         """
-        self.selenium.click( self._custom_end_date_locator )
+        self.selenium.click(self._custom_end_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
-    def click_previous_month( self ):
+    def click_previous_month(self):
         """
 
         Clicks the previous month button in the datepicker
 
         """
-        self.selenium.click( self._datepicker_previous_month_locator )
+        self.selenium.click(self._datepicker_previous_month_locator)
 
-    def click_next_month( self ):
+    def click_next_month(self):
         """
 
         Clicks the next month button in the datepicker
 
         """
         # TODO: Throw an error if the next month button is disabled
-        self.selenium.click( self._datepicker_next_month_locator )
+        self.selenium.click(self._datepicker_next_month_locator)
 
-    def click_day( self, day ):
+    def click_day(self, day):
         """
 
         Clicks the day in the datepicker and waits for the datepicker to disappear
 
         """
         # TODO: Throw an error if the day button is disabled
-        self.wait_for_element_visible( self._datepicker_day_locator_prefix + str( day ) + self._datepicker_day_locator_suffix )
-        self.selenium.click( self._datepicker_day_locator_prefix + str( day ) + self._datepicker_day_locator_suffix )
-        self.wait_for_element_not_visible( self._datepicker_locator )
+        self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
+        self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
+        self.wait_for_element_not_visible(self._datepicker_locator)
 
-    def select_date( self, target_date ):
+    def select_date(self, target_date):
         """
 
         Navigates to the target month in the datepicker and clicks the target day
 
         """
-        currentYear = int( self.selenium.get_text( self._datepicker_year_locator ) )
+        currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
         targetYear = target_date.year
         yearDelta = targetYear - currentYear
         monthDelta = yearDelta * 12
@@ -220,20 +220,20 @@ class FeedbackPage( input_base_page.InputBasePage ):
                   "October": 10,
                   "November": 11,
                   "December": 12}
-        currentMonth = months[self.selenium.get_text( self._datepicker_month_locator )]
+        currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
         targetMonth = target_date.month
         monthDelta += targetMonth - currentMonth
 
         count = 0
-        while ( count < abs( monthDelta ) ):
+        while (count < abs(monthDelta)):
             if monthDelta < 0:
                 self.click_previous_month()
             elif monthDelta > 0:
                 self.click_next_month()
             count = count + 1
-        self.click_day( target_date.day )
+        self.click_day(target_date.day)
 
-    def filter_by_custom_dates( self, start_date, end_date ):
+    def filter_by_custom_dates(self, start_date, end_date):
         """
 
         Filters by a custom date range
@@ -241,90 +241,91 @@ class FeedbackPage( input_base_page.InputBasePage ):
         """
         self.click_custom_dates()
         self.click_start_date()
-        self.select_date( start_date )
+        self.select_date(start_date)
         self.click_end_date()
-        self.select_date( end_date )
-        self.selenium.click( self._set_custom_date_locator )
-        self.selenium.wait_for_page_to_load( self.timeout )
+        self.select_date(end_date)
+        self.selenium.click(self._set_custom_date_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
-    def locale_filter( self ):
-        return locale_filter_region.LocaleFilter( self.testsetup )
+    def locale_filter(self):
+        return locale_filter_region.LocaleFilter(self.testsetup)
 
     @property
-    def platform_filter( self ):
-        return platform_filter_region.PlatformFilter.CheckboxFilter( self.testsetup )
+    def platform_filter(self):
+        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
 
     @property
-    def type_filter( self ):
-        return type_filter_region.TypeFilter.CheckboxFilter( self.testsetup )
+    def type_filter(self):
+        return type_filter_region.TypeFilter.CheckboxFilter(self.testsetup)
 
     @property
-    def common_words_filter( self ):
-        return common_words_region.CommonWordsRegion( self.testsetup )
+    def common_words_filter(self):
+        return common_words_region.CommonWordsRegion(self.testsetup)
 
     @property
-    def sites_filter_region( self ):
-        return sites_filter_region.SitesFilterRegion( self.testsetup )
+    def sites_filter_region(self):
+        return sites_filter_region.SitesFilterRegion(self.testsetup)
 
     @property
-    def product_filter( self ):
-        return product_filter_region.ProductFilter.ComboFilter( self.testsetup )
+    def product_filter(self):
+        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
 
     @property
-    def header_region( self ):
-        return header_region.Header( self.testsetup )
+    def header_region(self):
+        return header_region.Header(self.testsetup)
 
     @property
-    def footer_region( self ):
-        return footer_region.Footer( self.testsetup )
+    def footer_region(self):
+        return footer_region.Footer(self.testsetup)
 
-    def search_for( self, search_string ):
-        self.selenium.type( self._search_box, search_string )
-        self.selenium.key_press( self._search_box, '\\13' )
-        self.selenium.wait_for_page_to_load( self.timeout )
-
-    @property
-    def total_message_count( self ):
-        return self.selenium.get_text( self._total_message_count_locator )
+    def search_for(self, search_string):
+        self.selenium.type(self._search_box, search_string)
+        self.selenium.key_press(self._search_box, '\\13')
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
-    def total_message_count_heading( self ):
+    def total_message_count(self):
+        return self.selenium.get_text(self._total_message_count_locator)
+
+    @property
+    def total_message_count_heading(self):
         """
         Get the total messages header value
         """
-        return self.selenium.get_text( self._total_message_count_heading_locator )
+        return self.selenium.get_text(self._total_message_count_heading_locator)
 
     @property
-    def message_count( self ):
-        return int( self.selenium.get_xpath_count( self._messages_locator ) )
+    def message_count(self):
+        return int(self.selenium.get_xpath_count(self._messages_locator))
 
     @property
-    def messages( self ):
-        return [message_region.Message( self.testsetup, i + 1 ) for i in range( self.message_count )]
+    def messages(self):
+        return [message_region.Message(self.testsetup, i + 1) for i in range(self.message_count)]
 
-    def message( self, index ):
-        return message_region.Message( self.testsetup, index )
+    def message(self, index):
+        return message_region.Message(self.testsetup, index)
 
     @property
-    def is_days_visible( self ):
+    def is_days_visible(self):
         """
         Verifys if the 1d/7d/30d are visible
         """
         for time in self._when_links:
-            if not self.selenium.is_visible( time ):
+            if not self.selenium.is_visible(time):
                 return False
         return True
-    @property
-    def search_box_placeholder( self ):
-        return self.selenium.get_attribute( self._search_box + "@placeholder" )
 
     @property
-    def is_chart_visible( self ):
-        return self.is_element_visible( self._chart_locator )
+    def search_box_placeholder(self):
+        return self.selenium.get_attribute(self._search_box + "@placeholder")
 
     @property
-    def is_date_filter_aplyed( self ):
+    def is_chart_visible(self):
+        return self.is_element_visible(self._chart_locator)
+
+    @property
+    def is_date_filter_aplyed(self):
         try:
             self.date_start_from_url()
             self.date_end_from_url()

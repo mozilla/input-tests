@@ -39,47 +39,48 @@ Created on May 17, 2011
 '''
 from page import Page
 
-class SitesFilterRegion( Page ):
+
+class SitesFilterRegion(Page):
 
     _sites_filter_region_locator = "id('filter_sites')"
 
     @property
-    def sites_filter_header( self ):
-        return self.selenium.get_text( "xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator )
+    def sites_filter_header(self):
+        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator)
 
     @property
-    def sites_filter_count( self ):
-        return int( self.selenium.get_xpath_count( "%s//li" % self._sites_filter_locator ) )
+    def sites_filter_count(self):
+        return int(self.selenium.get_xpath_count("%s//li" % self._sites_filter_locator))
 
-    def sites_filter( self, lookup ):
-        return self.SitesFilter( self.testsetup, lookup )
+    def sites_filter(self, lookup):
+        return self.SitesFilter(self.testsetup, lookup)
 
-    def contains_sites_filter( self, lookup ):
-        try :
-            self.selenium.get_text( "css=#filter_sites li:contains(%s) a > strong" % lookup )
+    def contains_sites_filter(self, lookup):
+        try:
+            self.selenium.get_text("css=#filter_sites li:contains(%s) a > strong" % lookup)
 
             return True
-        except :
+        except:
             return False
 
-    def sites_filters( self ):
-        return [self.SitesFilter( self.testsetup, i )for i in range( self.sites_filter_count )]
+    def sites_filters(self):
+        return [self.SitesFilter(self.testsetup, i)for i in range(self.sites_filter_count)]
 
-    class SitesFilter( Page ):
+    class SitesFilter(Page):
 
         _name_locator = " a > strong"
         _site_count_locator = " .count"
 
-        def __init__( self, testsetup, lookup ):
-            Page.__init__( self, testsetup )
+        def __init__(self, testsetup, lookup):
+            Page.__init__(self, testsetup)
             self.lookup = lookup
 
-        def absolute_locator( self, relative_locator ):
+        def absolute_locator(self, relative_locator):
             return self.root_locator + relative_locator
 
         @property
-        def root_locator( self ):
-            if type( self.lookup ) == int:
+        def root_locator(self):
+            if type(self.lookup) == int:
                 # lookup by index
                 return "css=#filter_sites li:nth(%s)" % self.lookup
             else:
@@ -87,13 +88,13 @@ class SitesFilterRegion( Page ):
                 return "css=#filter_sites li:contains(%s)" % self.lookup
 
         @property
-        def name( self ):
-            return self.selenium.get_text( self.absolute_locator( self._name_locator ) )
+        def name(self):
+            return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
         @property
-        def site_count( self ):
-            return self.selenium.get_text( self.absolute_locator( self._site_count_locator ) )
+        def site_count(self):
+            return self.selenium.get_text(self.absolute_locator(self._site_count_locator))
 
-        def select( self ):
-            self.selenium.click( self.absolute_locator( self._name_locator ) )
-            self.selenium.wait_for_page_to_load( self.timeout )
+        def select(self):
+            self.selenium.click(self.absolute_locator(self._name_locator))
+            self.selenium.wait_for_page_to_load(self.timeout)

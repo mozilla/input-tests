@@ -37,7 +37,8 @@
 
 from page import Page
 
-class Footer( Page ):
+
+class Footer(Page):
 
     _privacy_policy_link_locator = "css=#footer-links > a:nth(0)"
     _legal_notices_link_locator = "css=#footer-links > a:nth(1)"
@@ -48,35 +49,35 @@ class Footer( Page ):
     _language_dropdown_locator = "id=language"
 
     @property
-    def is_language_dropdown_visible( self ):
-        return self.is_element_visible( self._language_dropdown_locator )
+    def is_language_dropdown_visible(self):
+        return self.is_element_visible(self._language_dropdown_locator)
 
     @property
-    def privacy_policy( self ):
-        self.is_element_visible( self._privacy_policy_link_locator )
-        return self.selenium.get_text( self._privacy_policy_link_locator )
+    def privacy_policy(self):
+        self.is_element_visible(self._privacy_policy_link_locator)
+        return self.selenium.get_text(self._privacy_policy_link_locator)
 
     @property
-    def legal_notices( self ):
-        self.is_element_visible( self._report_trademark_abuse_link_locator )
-        return self.selenium.get_text( self._legal_notices_link_locator )
+    def legal_notices(self):
+        self.is_element_visible(self._report_trademark_abuse_link_locator)
+        return self.selenium.get_text(self._legal_notices_link_locator)
 
     @property
-    def report_trademark_abuse( self ):
-        self.is_element_visible( self._report_trademark_abuse_link_locator )
-        return self.selenium.get_text( self._report_trademark_abuse_link_locator )
+    def report_trademark_abuse(self):
+        self.is_element_visible(self._report_trademark_abuse_link_locator)
+        return self.selenium.get_text(self._report_trademark_abuse_link_locator)
 
     @property
-    def unless_otherwise_noted( self ):
-        self.is_element_visible( self._unless_otherwise_noted_link_locator )
-        return self.selenium.get_text( self._unless_otherwise_noted_link_locator )
+    def unless_otherwise_noted(self):
+        self.is_element_visible(self._unless_otherwise_noted_link_locator)
+        return self.selenium.get_text(self._unless_otherwise_noted_link_locator)
 
     @property
-    def creative_commons( self ):
-        self.is_element_visible( self._creative_commons_link_locator )
-        return self.selenium.get_text( self._creative_commons_link_locator )
+    def creative_commons(self):
+        self.is_element_visible(self._creative_commons_link_locator)
+        return self.selenium.get_text(self._creative_commons_link_locator)
 
     @property
-    def about_input( self ):
-        self.is_element_visible( self._about_input_link_locator )
-        return self.selenium.get_text( self._about_input_link_locator )
+    def about_input(self):
+        self.is_element_visible(self._about_input_link_locator)
+        return self.selenium.get_text(self._about_input_link_locator)

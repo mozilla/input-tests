@@ -46,109 +46,108 @@ from urlparse import urlparse
 
 from page import Page
 
-class InputBasePage( Page ):
+
+class InputBasePage(Page):
 
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
 
-    def click_previous_page( self ):
+    def click_previous_page(self):
         """
         Navigates to the previous page of results
         """
-        self.selenium.click( self._previous_page_locator )
-        self.selenium.wait_for_page_to_load( self.timeout )
+        self.selenium.click(self._previous_page_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
-    def click_next_page( self ):
+    def click_next_page(self):
         """
         Navigates to the next page of results
         """
-        self.selenium.click( self._next_page_locator )
-        self.selenium.wait_for_page_to_load( self.timeout )
+        self.selenium.click(self._next_page_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
-    def is_next_page_enabled( self ):
-        self.is_element_visible( self._next_page_locator )
-        if not self.selenium.get_attribute( self._next_page_locator + "@class" ) == "prev inactive":
+    def is_next_page_enabled(self):
+        self.is_element_visible(self._next_page_locator)
+        if not self.selenium.get_attribute(self._next_page_locator + "@class") == "prev inactive":
             return True
         else:
             return False
 
-
     @property
-    def is_previous_page_enabled( self ):
-        self.is_element_visible( self._previous_page_locator )
-        if not self.selenium.get_attribute( self._previous_page_locator + "@class" ) == "prev inactive":
+    def is_previous_page_enabled(self):
+        self.is_element_visible(self._previous_page_locator)
+        if not self.selenium.get_attribute(self._previous_page_locator + "@class") == "prev inactive":
             return True
         else:
             return False
 
-    def _value_from_url( self, param ):
+    def _value_from_url(self, param):
         """
         Returns the value for the specified parameter in the URL
         """
-        url = urlparse( self.selenium.get_location() )
-        params = dict( [part.split( '=' ) for part in url[4].split( '&' )] )
+        url = urlparse(self.selenium.get_location())
+        params = dict([part.split('=') for part in url[4].split('&')])
         return params[param]
 
     @property
-    def feedback_type_from_url( self ):
+    def feedback_type_from_url(self):
         """
         Returns the feedback type (praise, issues, ideas) from the current location URL
         """
-        return self._value_from_url( "s" )
+        return self._value_from_url("s")
 
     @property
-    def platform_from_url( self ):
+    def platform_from_url(self):
         """
         Returns the platform from the current location URL
         """
-        return self._value_from_url( "platform" )
+        return self._value_from_url("platform")
 
     @property
-    def product_from_url( self ):
+    def product_from_url(self):
         """
         Returns the product from the current location URL
         NOTE: if the site is on the homepage (not on the search
             page) and default/latest version is selected then
             the URL will not contain the product parameter
         """
-        return self._value_from_url( "product" )
+        return self._value_from_url("product")
 
     @property
-    def version_from_url( self ):
+    def version_from_url(self):
         """
         Returns the version from the current location URL
         NOTE: if the site is on the homepage (not on the search
             page) and default/latest version is selected then
             the URL will not contain the version parameter
         """
-        return self._value_from_url( "version" )
+        return self._value_from_url("version")
 
     @property
-    def date_start_from_url( self ):
+    def date_start_from_url(self):
         """
         Returns the date_start value from the current location URL
         """
-        return self._value_from_url( "date_start" )
+        return self._value_from_url("date_start")
 
     @property
-    def date_end_from_url( self ):
+    def date_end_from_url(self):
         """
         Returns the date_end value from the current location URL
         """
-        return self._value_from_url( "date_end" )
+        return self._value_from_url("date_end")
 
     @property
-    def page_from_url( self ):
+    def page_from_url(self):
         """
         Returns the page value from the current location URL
         """
-        return self._value_from_url( "page" )
+        return self._value_from_url("page")
 
     @property
-    def locale_from_url( self ):
+    def locale_from_url(self):
         """
         Returns the locale value from the current location URL
         """
-        return self._value_from_url( "locale" )
-
+        return self._value_from_url("locale")

@@ -41,49 +41,49 @@ Created on Mar 18, 2011
 from page import Page
 
 
-class PlatformFilter( Page ):
+class PlatformFilter(Page):
 
-    #Button filter added  but the combo filter needs Moziila Accept 
-    class CheckboxFilter( Page ):
+    #Button filter added  but the combo filter needs Moziila Accept
+    class CheckboxFilter(Page):
 
         _platforms_locator = "id('filter_platform')//li"
 
-        def __init__( self, testsetup ):
-            Page.__init__( self, testsetup )
+        def __init__(self, testsetup):
+            Page.__init__(self, testsetup)
 
         @property
-        def platform_count( self ):
-            return int( self.selenium.get_xpath_count( self._platforms_locator ) )
+        def platform_count(self):
+            return int(self.selenium.get_xpath_count(self._platforms_locator))
 
-        def platform( self, lookup ):
-            return self.Platform( self.testsetup, lookup )
+        def platform(self, lookup):
+            return self.Platform(self.testsetup, lookup)
 
-        def contains_platform( self, lookup ):
-            try :
-                self.selenium.get_text( "css=#filter_platform li:contains(%s) label > strong" % lookup )
+        def contains_platform(self, lookup):
+            try:
+                self.selenium.get_text("css=#filter_platform li:contains(%s) label > strong" % lookup)
                 return True
-            except :
+            except:
                 return False
 
-        def platforms( self ):
-            return [self.Platform( self.testsetup, i )for i in range( self.platform_count )]
+        def platforms(self):
+            return [self.Platform(self.testsetup, i)for i in range(self.platform_count)]
 
-        class Platform( Page ):
+        class Platform(Page):
 
             _checkbox_locator = " input"
             _name_locator = " label > strong"
             _message_count_locator = " .count"
 
-            def __init__( self, testsetup, lookup ):
-                Page.__init__( self, testsetup )
+            def __init__(self, testsetup, lookup):
+                Page.__init__(self, testsetup)
                 self.lookup = lookup
 
-            def absolute_locator( self, relative_locator ):
+            def absolute_locator(self, relative_locator):
                 return self.root_locator + relative_locator
 
             @property
-            def root_locator( self ):
-                if type( self.lookup ) == int:
+            def root_locator(self):
+                if type(self.lookup) == int:
                     # lookup by index
                     return "css=#filter_platform li:nth(%s)" % self.lookup
                 else:
@@ -91,60 +91,60 @@ class PlatformFilter( Page ):
                     return "css=#filter_platform li:contains(%s)" % self.lookup
 
             @property
-            def is_selected( self ):
-                return self.selenium.is_checked( self.absolute_locator( self._checkbox_locator ) )
+            def is_selected(self):
+                return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
 
             @property
-            def name( self ):
-                return self.selenium.get_text( self.absolute_locator( self._name_locator ) )
+            def name(self):
+                return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
             @property
-            def code( self ):
-                return self.selenium.get_attribute( self.absolute_locator( self._checkbox_locator + "@value" ) )
+            def code(self):
+                return self.selenium.get_attribute(self.absolute_locator(self._checkbox_locator + "@value"))
 
             @property
-            def message_count( self ):
-                return self.selenium.get_text( self.absolute_locator( self._message_count_locator ) )
+            def message_count(self):
+                return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
 
-            def select( self ):
-                self.selenium.click( self.absolute_locator( self._checkbox_locator ) )
-                self.selenium.wait_for_page_to_load( self.timeout )
+            def select(self):
+                self.selenium.click(self.absolute_locator(self._checkbox_locator))
+                self.selenium.wait_for_page_to_load(self.timeout)
 
-    class ButtonFilter( Page ):
+    class ButtonFilter(Page):
 
         _selected_platform_locator = "css=#filter_platform a.selected"
         _platform_locator = "id('filter_platform')//li"
 
         @property
-        def platform_count( self ):
-            return int( self.selenium.get_xpath_count( self._platform_locator ) )
+        def platform_count(self):
+            return int(self.selenium.get_xpath_count(self._platform_locator))
 
         @property
-        def selected_platform( self ):
-            return self.selenium.get_text( self._selected_platform_locator )
+        def selected_platform(self):
+            return self.selenium.get_text(self._selected_platform_locator)
 
-        def select_platform( self, platform ):
-            self.selenium.click( "css=#filter_platform a:contains(%s)" % platform )
-            self.selenium.wait_for_page_to_load( self.timeout )
+        def select_platform(self, platform):
+            self.selenium.click("css=#filter_platform a:contains(%s)" % platform)
+            self.selenium.wait_for_page_to_load(self.timeout)
 
-        def platforms( self ):
-            return [self.Platform( self.testsetup, i )for i in range( self.platform_count )]
+        def platforms(self):
+            return [self.Platform(self.testsetup, i)for i in range(self.platform_count)]
 
-        class Platform( Page ):
+        class Platform(Page):
 
             _selected_locator = " selected"
             _name_locator = " a"
 
-            def __init__( self, testsetup, lookup ):
-                Page.__init__( self, testsetup )
+            def __init__(self, testsetup, lookup):
+                Page.__init__(self, testsetup)
                 self.lookup = lookup
 
-            def absolute_locator( self, relative_locator ):
+            def absolute_locator(self, relative_locator):
                 return self.root_locator + relative_locator
 
             @property
-            def root_locator( self ):
-                if type( self.lookup ) == int:
+            def root_locator(self):
+                if type(self.lookup) == int:
                     # lookup by index
                     return "css=#filter_platform li:nth(%s)" % self.lookup
                 else:
@@ -152,9 +152,9 @@ class PlatformFilter( Page ):
                     return "css=#filter_platform li:contains(%s)" % self.lookup
 
             @property
-            def is_selected( self ):
+            def is_selected(self):
                 try:
-                    if  self.selenium.get_attribute( self.absolute_locator( self._name_locator ) + "@class" ) == "selected ":
+                    if  self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class") == "selected ":
                         return True
                     else:
                         return False
@@ -162,9 +162,9 @@ class PlatformFilter( Page ):
                     return False
 
             @property
-            def name( self ):
-                return self.selenium.get_text( self.root_locator )
+            def name(self):
+                return self.selenium.get_text(self.root_locator)
 
-            def select( self ):
-                self.selenium.click( self.absolute_locator( self._name_locator ) )
-                self.selenium.wait_for_page_to_load( self.timeout )
+            def select(self):
+                self.selenium.click(self.absolute_locator(self._name_locator))
+                self.selenium.wait_for_page_to_load(self.timeout)

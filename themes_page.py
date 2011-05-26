@@ -45,51 +45,51 @@ import input_base_page
 import type_filter_region
 
 
-class ThemesPage( input_base_page.InputBasePage ):
+class ThemesPage(input_base_page.InputBasePage):
 
     _page_title = 'Themes :: Firefox Input'
 
     _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
 
-    def go_to_themes_page( self ):
-        self.selenium.open( '/themes/' )
+    def go_to_themes_page(self):
+        self.selenium.open('/themes/')
         self.is_the_current_page
 
     @property
-    def type_filter( self ):
-        return type_filter_region.TypeFilter.ButtonFilter( self.testsetup )
+    def type_filter(self):
+        return type_filter_region.TypeFilter.ButtonFilter(self.testsetup)
 
     @property
-    def theme_count( self ):
-        return int( self.selenium.get_xpath_count( self._themes_locator ) )
+    def theme_count(self):
+        return int(self.selenium.get_xpath_count(self._themes_locator))
 
     @property
-    def themes( self ):
-        return [self.Theme( self.testsetup, i + 1 ) for i in range( self.theme_count )]
+    def themes(self):
+        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
 
-    def theme( self, index ):
-        return self.Theme( self.testsetup, index )
+    def theme(self, index):
+        return self.Theme(self.testsetup, index)
 
-    class Theme( Page ):
+    class Theme(Page):
 
         _type_locator = " .type"
         _similar_messages_locator = " .more"
 
-        def __init__( self, testsetup, index ):
-            Page.__init__( self, testsetup )
+        def __init__(self, testsetup, index):
+            Page.__init__(self, testsetup)
             self.index = index
 
-        def absolute_locator( self, relative_locator ):
+        def absolute_locator(self, relative_locator):
             return self.root_locator + relative_locator
 
         @property
-        def root_locator( self ):
-            return "css=#themes .theme:nth(%s)" % ( self.index - 1 )
+        def root_locator(self):
+            return "css=#themes .theme:nth(%s)" % (self.index - 1)
 
         @property
-        def type( self ):
-            return self.selenium.get_text( self.absolute_locator( self._type_locator ) )
+        def type(self):
+            return self.selenium.get_text(self.absolute_locator(self._type_locator))
 
-        def click_similar_messages( self ):
-            self.selenium.click( self.absolute_locator( self._similar_messages_locator ) )
-            self.selenium.wait_for_page_to_load( self.timeout )
+        def click_similar_messages(self):
+            self.selenium.click(self.absolute_locator(self._similar_messages_locator))
+            self.selenium.wait_for_page_to_load(self.timeout)

@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,6 +47,7 @@ class Message(Page):
     _body_locator = " .body"
     _time_locator = " time"
     _platform_locator = " .meta li:nth(1)"
+    _platform_link_locator = " .meta li:nth(1) a"
     _locale_locator = " .meta li:nth(2)"
     _site_locator = " .meta li:nth(3)"
     _more_options_locator = " .options"
@@ -57,6 +59,55 @@ class Message(Page):
     def __init__(self, testsetup, index):
         Page.__init__(self, testsetup)
         self.index = index
+
+    def click_platform_link(self):
+        self.selenium.click(self.absolute_locator(self._platform_locator) + " a")
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_locale_link(self):
+        self.selenium.click(self.absolute_locator(self._locale_locator) + " a")
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_timestamp_link(self):
+        self.selenium.click(self._time_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def is_platform_visble(self):
+        """
+        Returns True if the platform in an individual theme page is visible
+        """
+        return self.selenium.is_visible(self.absolute_locator(self._platform_locator))
+
+    def is_language_visible(self):
+        """
+        Returns True if the language in an individual theme page is visible
+        """
+        return self.selenium.is_visible(self.absolute_locator(self._locale_locator))
+
+    def platform_id(self, platform):
+        return {
+            "Windows 7": "win7",
+            "Windows XP": "winxp",
+            "Windows Vista": "vista",
+            "Linux": "linux",
+            "Mac OS X": "mac",
+            "Android": "android",
+            "Maemo": "maemo"
+            }[platform]
+
+    def platform_goes_to_product_filter(self, platform, filter):
+        return self.platform_id(platform) == filter
+
+    def language_id(self, language):
+        return{"English (US)": "en-US",
+               "Spanish": "es",
+               "English (British)": "en-GB",
+               "German": "de",
+               "French": "fr"
+               }[language]
+
+    def language_goes_to_locale_filter(self, language, locale):
+        return self.language_id(language) == locale
 
     def absolute_locator(self, relative_locator):
         return self.root_locator + relative_locator
@@ -80,6 +131,10 @@ class Message(Page):
     @property
     def platform(self):
         return self.selenium.get_text(self.absolute_locator(self._platform_locator))
+
+    @property
+    def platform_link(self):
+        return self.selenium.get_attribute(self.absolute_locator(self._platform_link_locator) + "@href")
 
     @property
     def locale(self):

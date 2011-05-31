@@ -25,6 +25,7 @@
 # Contributor(s): David Burns
 #                 Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -72,3 +73,26 @@ class TestSearch:
 
         feedback_pg.search_for(u"rapidit\xe9")
         Assert.true(0 < feedback_pg.message_count)
+
+    def test_search_box_default_text(self, testsetup):
+        '''
+            Litmus 13845
+        1. Verify that there is a search field appearing in Latest Feedback
+        section it shows by default "Search by keyword"
+        '''
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
+
+        feedback_pg.go_to_feedback_page()
+        Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
+
+    def test_search_box_text_disappears_on_click(self, testsetup):
+        '''
+            Litmus 13846
+        1. Verify that on clicking in the text field default text
+        "Search by keyword" disappears
+        '''
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
+
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.click_search_box()
+        Assert.equal(feedback_pg.search_box, "")

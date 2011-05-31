@@ -46,7 +46,20 @@ class ThemePage(input_base_page.InputBasePage):
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"
     _back_link_locator = "css=a.exit"
-    _messages_locator = "id('messages')//li[@class='message']"
+    _messages_locator = "id('big-count')//li[@class='count block']"
+    _relative_date = "css=.meta a"
+
+    def is_back_link_visible(self):
+        """
+        Returns true if the "Back to all themes" link is visible
+        """
+        return self.selenium.is_text_present("Back to all themes")
+
+    def is_message_count_visble(self):
+        """
+        Returns True if the message count is visible
+        """
+        return self.selenium.is_text_present(self.message_count)
 
     @property
     def messages_heading(self):

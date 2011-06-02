@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Alex Lakatos <alex.lakatos@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -66,6 +67,11 @@ class FeedbackPage(input_base_page.InputBasePage):
     _datepicker_next_month_locator = "css=.ui-datepicker-next"
     _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
     _datepicker_day_locator_suffix = ")"
+
+    _warning_locator = "id=message-warning"
+    _custom_date_only_error_locator = "//div[@id='custom-date']/ul/li"
+    _custom_date_first_error_locator = "//div[@id='custom-date']/ul[1]/li"
+    _custom_date_second_error_locator = "//div[@id='custom-date']/ul[2]/li"
 
     _type_issues_locator = "css=#filters a:contains(Issues)"
 
@@ -191,7 +197,7 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
         self.wait_for_element_not_visible(self._datepicker_locator)
 
-    def select_date(self, target_date):
+    def select_date_from_datepicker(self, target_date):
         """
 
         Navigates to the target month in the datepicker and clicks the target day
@@ -227,17 +233,44 @@ class FeedbackPage(input_base_page.InputBasePage):
             count = count + 1
         self.click_day(target_date.day)
 
-    def filter_by_custom_dates(self, start_date, end_date):
+    def set_custom_start_date_using_keyboard(self, date):
+        self.click_start_date()
+        self.selenium.type_keys(self._custom_start_date_locator, date)
+
+    def set_custom_end_date_using_keyboard(self, date):
+        self.click_end_date()
+        self.selenium.type_keys(self._custom_end_date_locator, date)
+
+    def set_custom_start_date_using_datepicker(self, date):
+        self.click_start_date()
+        self.select_date_from_datepicker(date)
+
+    def set_custom_end_date_using_datepicker(self, date):
+        self.click_end_date()
+        self.select_date_from_datepicker(date)
+
+    def filter_by_custom_dates_using_datepicker(self, start_date, end_date):
         """
 
         Filters by a custom date range
 
         """
         self.click_custom_dates()
-        self.click_start_date()
-        self.select_date(start_date)
-        self.click_end_date()
-        self.select_date(end_date)
+        self.set_custom_start_date_using_datepicker(start_date)
+        self.set_custom_end_date_using_datepicker(end_date)
+        self.selenium.click(self._set_custom_date_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def filter_by_custom_dates_using_keyboard(self, start_date, end_date):
+        """
+        
+        Filters by a custom date range using any input type, not using date() format
+        This uses selenium.type_keys in an attempt to mimic actual typing
+        
+        """
+        self.click_custom_dates()
+        self.set_custom_start_date_using_keyboard(start_date)
+        self.set_custom_end_date_using_keyboard(end_date)
         self.selenium.click(self._set_custom_date_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
 
@@ -268,3 +301,27 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def message(self, index):
         return message_region.Message(self.testsetup, index)
+
+    @property
+    def warning(self):
+        return self.selenium.get_text(self._warning_locator)
+
+    @property
+    def custom_date_only_error(self):
+        return self.selenium.get_text(self._custom_date_only_error_locator)
+
+    @property
+    def custom_date_first_error(self):
+        return self.selenium.get_text(self._custom_date_first_error_locator)
+
+    @property
+    def custom_date_second_error(self):
+        return self.selenium.get_text(self._custom_date_second_error_locator)
+
+    @property
+    def custom_start_date(self):
+        return self.selenium.get_value(self._custom_start_date_locator)
+
+    @property
+    def custom_end_date(self):
+        return self.selenium.get_value(self._custom_end_date_locator)

@@ -21,6 +21,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,6 +46,11 @@ import product_filter_region
 import locale_filter_region
 import platform_filter_region
 import message_region
+import type_filter_region
+import common_words_region
+import sites_filter_region
+import header_region
+import footer_region
 
 
 class FeedbackPage(input_base_page.InputBasePage):
@@ -71,16 +77,16 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     _search_box = "id_q"
 
+    _chart_locator = "id=feedback-chart"
+
     _total_message_count_locator = "css=#big-count p"
+    _total_message_count_heading_locator = "css=#big-count h3"
+
     _messages_locator = "id('messages')//li[@class='message']"
 
     def go_to_feedback_page(self):
         self.selenium.open('/')
         self.is_the_current_page
-
-    @property
-    def product_filter(self):
-        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
 
     def get_current_days(self):
         """
@@ -247,7 +253,31 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter(self.testsetup)
+        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
+
+    @property
+    def type_filter(self):
+        return type_filter_region.TypeFilter.CheckboxFilter(self.testsetup)
+
+    @property
+    def common_words_filter(self):
+        return common_words_region.CommonWordsRegion(self.testsetup)
+
+    @property
+    def sites_filter_region(self):
+        return sites_filter_region.SitesFilterRegion(self.testsetup)
+
+    @property
+    def product_filter(self):
+        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
+
+    @property
+    def header_region(self):
+        return header_region.Header(self.testsetup)
+
+    @property
+    def footer_region(self):
+        return footer_region.Footer(self.testsetup)
 
     def search_for(self, search_string):
         self.selenium.type(self._search_box, search_string)
@@ -259,6 +289,13 @@ class FeedbackPage(input_base_page.InputBasePage):
         return self.selenium.get_text(self._total_message_count_locator)
 
     @property
+    def total_message_count_heading(self):
+        """
+        Get the total messages header value
+        """
+        return self.selenium.get_text(self._total_message_count_heading_locator)
+
+    @property
     def message_count(self):
         return int(self.selenium.get_xpath_count(self._messages_locator))
 
@@ -268,3 +305,30 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     def message(self, index):
         return message_region.Message(self.testsetup, index)
+
+    @property
+    def is_days_visible(self):
+        """
+        Verifys if the 1d/7d/30d are visible
+        """
+        for time in self._when_links:
+            if not self.selenium.is_visible(time):
+                return False
+        return True
+
+    @property
+    def search_box_placeholder(self):
+        return self.selenium.get_attribute(self._search_box + "@placeholder")
+
+    @property
+    def is_chart_visible(self):
+        return self.is_element_visible(self._chart_locator)
+
+    @property
+    def is_date_filter_aplyed(self):
+        try:
+            self.date_start_from_url()
+            self.date_end_from_url()
+            return True
+        except:
+            return False

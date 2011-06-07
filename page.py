@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
 #                 David Burns
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -123,3 +124,14 @@ class Page(object):
         f.write(base64.decodestring(
             self.selenium.capture_entire_page_screenshot_to_string('')))
         f.close()
+
+    @property
+    def title(self):
+        return self.selenium.get_title()
+
+    def is_element_visible(self, locator):
+        return self.selenium.is_visible(locator)
+
+    def go_back(self):
+        self.selenium.go_back()
+        self.selenium.wait_for_page_to_load(self.timeout)

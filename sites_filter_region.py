@@ -19,10 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Vishal
-#                 David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
-#                 Bebe <florin.strugariu@softvision.ro>
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,58 +35,66 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Nov 24, 2010
+Created on May 17, 2011
 '''
 from page import Page
-import input_base_page
-import type_filter_region
 
 
-class ThemesPage(input_base_page.InputBasePage):
+class SitesFilterRegion(Page):
 
-    _page_title = 'Themes :: Firefox Input'
-
-    _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
-
-    def go_to_themes_page(self):
-        self.selenium.open('/themes/')
-        self.is_the_current_page
+    _sites_filter_region_locator = "id('filter_sites')"
 
     @property
-    def type_filter(self):
-        return type_filter_region.TypeFilter.ButtonFilter(self.testsetup)
+    def sites_filter_header(self):
+        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator)
 
     @property
-    def theme_count(self):
-        return int(self.selenium.get_xpath_count(self._themes_locator))
+    def sites_filter_count(self):
+        return int(self.selenium.get_xpath_count("%s//li" % self._sites_filter_locator))
 
-    @property
-    def themes(self):
-        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
+    def sites_filter(self, lookup):
+        return self.SitesFilter(self.testsetup, lookup)
 
-    def theme(self, index):
-        return self.Theme(self.testsetup, index)
+    def contains_sites_filter(self, lookup):
+        try:
+            self.selenium.get_text("css=#filter_sites li:contains(%s) a > strong" % lookup)
 
-    class Theme(Page):
+            return True
+        except:
+            return False
 
-        _type_locator = " .type"
-        _similar_messages_locator = " .more"
+    def sites_filters(self):
+        return [self.SitesFilter(self.testsetup, i)for i in range(self.sites_filter_count)]
 
-        def __init__(self, testsetup, index):
+    class SitesFilter(Page):
+
+        _name_locator = " a > strong"
+        _site_count_locator = " .count"
+
+        def __init__(self, testsetup, lookup):
             Page.__init__(self, testsetup)
-            self.index = index
+            self.lookup = lookup
 
         def absolute_locator(self, relative_locator):
             return self.root_locator + relative_locator
 
         @property
         def root_locator(self):
-            return "css=#themes .theme:nth(%s)" % (self.index - 1)
+            if type(self.lookup) == int:
+                # lookup by index
+                return "css=#filter_sites li:nth(%s)" % self.lookup
+            else:
+                # lookup by name
+                return "css=#filter_sites li:contains(%s)" % self.lookup
 
         @property
-        def type(self):
-            return self.selenium.get_text(self.absolute_locator(self._type_locator))
+        def name(self):
+            return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
-        def click_similar_messages(self):
-            self.selenium.click(self.absolute_locator(self._similar_messages_locator))
+        @property
+        def site_count(self):
+            return self.selenium.get_text(self.absolute_locator(self._site_count_locator))
+
+        def select(self):
+            self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(self.timeout)

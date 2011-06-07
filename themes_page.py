@@ -41,6 +41,7 @@
 Created on Nov 24, 2010
 '''
 from page import Page
+
 import input_base_page
 import type_filter_region
 
@@ -57,7 +58,7 @@ class ThemesPage(input_base_page.InputBasePage):
 
     @property
     def type_filter(self):
-        return type_filter_region.TypeFilter.ButtonFilter(testsetup)
+        return type_filter_region.TypeFilter.ButtonFilter(self.testsetup)
 
     @property
     def theme_count(self):

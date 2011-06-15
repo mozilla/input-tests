@@ -51,7 +51,7 @@ class LocaleFilter(Page):
 
     @property
     def total_message_count(self):
-        return self.get_atribute(self._total_message_count_locator, "data-total")
+        return self.selenium.get_attribute(self._total_message_count_locator + "@data-total")
 
     @property
     def is_extra_locales_visible(self):

@@ -94,6 +94,7 @@ class Test_Feedback_Layout:
 
         Assert.true(footer.is_language_dropdown_visible)
 
+    @xfail(reason="Bug 663862 - [stage] Landing page is missing components")
     def test_the_left_panel_layout(self, testsetup):
         """
         Litmus 13595 - input:Verify the layout of the left hand side section containing various
@@ -125,6 +126,7 @@ class Test_Feedback_Layout:
         locales = [locale.name for locale in feedback_pg.locale_filter.locales()]
         Assert.true(set(['English (US)', 'German', 'Spanish', 'French']).issubset(set(locales)))
 
+    @xfail(reason="Bug 664562 - [stage] [prod] View older marks does not redirect to page=2")
     def test_the_middle_section_page(self, testsetup):
         """
         Litmus 13596 - input:Verify the layout of Latest Feedback section

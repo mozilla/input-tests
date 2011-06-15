@@ -23,6 +23,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or

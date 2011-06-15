@@ -43,6 +43,7 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
+import submit_feedback_page
 import submit_happy_feedback_page
 import thanks_page
 
@@ -117,3 +118,29 @@ class TestFeedback:
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+    def test_submit_feedback(self, testsetup):
+
+        """
+        Litmus 13651 - Input: Submit feedback page
+        """
+
+        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(testsetup)
+        submit_feedback_pg.go_to_submit_feedback_page()
+
+        submit_feedback_pg.click_happy_feedback()
+
+        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#happy")
+        submit_feedback_pg.back()
+
+        submit_feedback_pg.click_sad_feedback()
+        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#sad")
+
+        submit_feedback_pg.back()
+        submit_feedback_pg.click_idea_feedback()
+        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#idea")
+        submit_feedback_pg.back()
+
+        submit_feedback_pg.click_support_page()
+
+        Assert.equal(submit_feedback_pg.current_page_url(), "http://support.mozilla.com/en-US/home")

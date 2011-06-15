@@ -43,6 +43,7 @@ xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 import themes_page
+import feedback_page
 
 
 class TestPagination:
@@ -57,7 +58,7 @@ class TestPagination:
         3. Verifies the results of the filter
 
         """
-        themes_ppg = themes_page.ThemesPage(testsetup)
+        themes_pg = themes_page.ThemesPage(testsetup)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")
@@ -65,3 +66,29 @@ class TestPagination:
         Assert.equal(themes_pg.feedback_type_from_url, "issue")
         Assert.equal(themes_pg.type_filter.selected_type, "Issues")
         [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
+
+    def test_search_pagination(self, testsetup):
+        """
+        Litmus 13636 - Input: Verify Search results have pagination
+        """
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg.go_to_search_page()
+
+        Assert.true(feedback_pg.is_next_page_visible)
+        Assert.true(feedback_pg.is_previous_page_visible)
+
+        Assert.true(feedback_pg.is_text_present(u"\xab Newer Messages"))
+        Assert.true(feedback_pg.is_text_present(u"Older Messages \xbb"))
+
+        for var in  range(10):
+            feedback_pg.click_next_page()
+            Assert.equal(feedback_pg.product_from_url, "firefox")
+            Assert.equal(feedback_pg.search_term_from_url, "facebook")
+
+            Assert.true(feedback_pg.is_next_page_visible)
+            Assert.true(feedback_pg.is_previous_page_visible)
+
+            Assert.true(feedback_pg.is_text_present(u"\xab Newer Messages"))
+            Assert.true(feedback_pg.is_text_present(u"Older Messages \xbb"))
+
+            Assert.equal(int(feedback_pg.page_from_url), var + 2)

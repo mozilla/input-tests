@@ -88,6 +88,11 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.open('/')
         self.is_the_current_page
 
+    def go_to_search_page(self):
+        self._page_title = "Search Results :: Firefox Input"
+        self.selenium.open("/en-US/search/?product=firefox&q=facebook")
+        self.is_the_current_page
+
     def get_current_days(self):
         """
 

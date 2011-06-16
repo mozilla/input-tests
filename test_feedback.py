@@ -41,6 +41,7 @@
 
 
 import pytest
+from conftest import TestSetup
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
@@ -121,7 +122,6 @@ class TestFeedback:
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
     def test_submit_feedback(self, testsetup):
-
         """
         Litmus 13651 - Input: Submit feedback page
         """
@@ -131,15 +131,15 @@ class TestFeedback:
 
         submit_feedback_pg.click_happy_feedback()
 
-        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#happy")
+        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#happy" % testsetup.base_url)
         submit_feedback_pg.back()
 
         submit_feedback_pg.click_sad_feedback()
-        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#sad")
+        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#sad" % testsetup.base_url)
 
         submit_feedback_pg.back()
         submit_feedback_pg.click_idea_feedback()
-        Assert.equal(submit_feedback_pg.current_page_url(), "http://input.allizom.org/en-US/feedback/#idea")
+        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#idea" % testsetup.base_url)
         submit_feedback_pg.back()
 
         submit_feedback_pg.click_support_page()

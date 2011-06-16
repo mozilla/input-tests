@@ -82,7 +82,7 @@ class FeedbackPage(input_base_page.InputBasePage):
     _total_message_count_locator = "css=#big-count p"
     _total_message_count_heading_locator = "css=#big-count h3"
 
-    _messages_locator = "id('messages')//li[@class='message']"
+    _messages_locator = "css=div#messages.block ul li.message"
 
     def go_to_feedback_page(self):
         self.selenium.open('/')
@@ -297,7 +297,7 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def message_count(self):
-        return int(self.selenium.get_xpath_count(self._messages_locator))
+        return int(self.selenium.get_css_count(self._messages_locator))
 
     @property
     def messages(self):

@@ -138,7 +138,3 @@ class Page(object):
 
     def current_page_url(self):
         return(self.selenium.get_location())
-
-    def click(self, locator):
-        self.selenium.click(locator)
-

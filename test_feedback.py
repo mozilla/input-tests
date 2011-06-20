@@ -47,6 +47,8 @@ from unittestzero import Assert
 
 import submit_feedback_page
 import submit_happy_feedback_page
+import submit_sad_feedback_page
+import submit_idea_page
 import thanks_page
 
 
@@ -121,7 +123,7 @@ class TestFeedback:
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-    def test_submit_feedback(self, testsetup):
+    def test_navigating_away_from_initial_submit_feedback_page(self, testsetup):
         """
         Litmus 13651 - Input: Submit feedback page
         """
@@ -130,17 +132,28 @@ class TestFeedback:
         submit_feedback_pg.go_to_submit_feedback_page()
 
         submit_feedback_pg.click_happy_feedback()
+        happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
-        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#happy" % testsetup.base_url)
-        submit_feedback_pg.back()
+        Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % testsetup.base_url)
+        happy_feedback_pg.back()
+        Assert.true(happy_feedback_pg.is_visible())
 
         submit_feedback_pg.click_sad_feedback()
-        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#sad" % testsetup.base_url)
+        sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(testsetup)
 
-        submit_feedback_pg.back()
+        Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % testsetup.base_url)
+        sad_feedback_pg.back()
+        Assert.true(sad_feedback_pg.is_visible())
+
         submit_feedback_pg.click_idea_feedback()
-        Assert.equal(submit_feedback_pg.current_page_url(), "%sen-US/feedback/#idea" % testsetup.base_url)
-        submit_feedback_pg.back()
+        idea_feedback_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+
+        Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % testsetup.base_url)
+        idea_feedback_pg.back()
+        Assert.true(idea_feedback_pg.is_visible())
+
+        Assert.true(happy_feedback_pg.is_visible())
+        Assert.true(sad_feedback_pg.is_visible())
 
         submit_feedback_pg.click_support_page()
 

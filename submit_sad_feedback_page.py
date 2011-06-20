@@ -39,28 +39,28 @@
 # ***** END LICENSE BLOCK *****
 '''
 
-Created on Dec 22, 2010
+Created on June 20, 2011
 
 '''
 import submit_feedback_page
 
 
-class SubmitIdeaPage(submit_feedback_page.SubmitFeedbackPage):
+class SubmitSadPage(submit_feedback_page.SubmitFeedbackPage):
 
-    _feedback_locator = 'id=idea-description'
-    _remaining_character_count_locator = 'css=#idea-description-counter'
-    _submit_feedback_locator = 'css=#idea .submit span'
-    _error_locator = 'css=#idea .errorlist li'
-    _back_locator = 'css=#idea > header > nav > a'
+    _feedback_locator = 'id=sad-description'
+    _remaining_character_count_locator = 'css=#sad-description-counter'
+    _submit_feedback_locator = 'css=#sad .submit span'
+    _error_locator = 'css=#sad .errorlist li'
+    _back_locator = 'css=#sad > header > nav > a'
 
-    def go_to_submit_idea_page(self):
-        self.selenium.open('/feedback#idea')
+    def go_to_submit_sad_page(self):
+        self.selenium.open('/feedback#sad')
         self.is_the_current_page
-        self.wait_for_element_visible(self._idea_page_locator)
+        self.wait_for_element_visible(self._sad_page_locator)
 
     @property
     def is_submit_feedback_enabled(self):
-        return not self.selenium.is_element_present('css=#idea .submit a.disabled')
+        return not self.selenium.is_element_present('css=#sad .submit a.disabled')
 
     def is_visible(self):
-        return self.selenium.is_visible(self._idea_page_locator)
+        return self.selenium.is_visible(self._sad_page_locator)

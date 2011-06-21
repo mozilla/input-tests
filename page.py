@@ -138,8 +138,3 @@ class Page(object):
 
     def current_page_url(self):
         return(self.selenium.get_location())
-
-    def click(self, locator, wait_flag=False, timeout=80000):
-        self.selenium.click(locator)
-        if(wait_flag):
-            self.selenium.wait_for_page_to_load(timeout)

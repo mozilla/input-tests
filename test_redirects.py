@@ -86,23 +86,23 @@ class TestRedirects:
 
     @pytest.mark.skip_selenium
     def test_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
-        self._check_redirect(testsetup, '/search?sentiment=happy', '/en-US/search?sentiment=happy')
+        self._check_redirect(testsetup, '/?sentiment=happy', '/en-US/?sentiment=happy')
 
     @pytest.mark.skip_selenium
     def test_beta_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
-        self._check_redirect(testsetup, '/beta/search?sentiment=sad', '/en-US/search?sentiment=sad')
+        self._check_redirect(testsetup, '/beta/?sentiment=sad', '/en-US/?sentiment=sad')
 
     @pytest.mark.skip_selenium
     def test_beta_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self, testsetup):
-        self._check_redirect(testsetup, '/en-US/beta/search?sentiment=idea', '/en-US/search?sentiment=idea')
+        self._check_redirect(testsetup, '/en-US/beta/?sentiment=idea', '/en-US/?sentiment=idea')
 
     @pytest.mark.skip_selenium
     def test_release_feedback_search_without_locale_redirects_to_feedback_search_with_locale(self, testsetup):
-        self._check_redirect(testsetup, '/release/search?sentiment=happy', '/en-US/search?sentiment=happy')
+        self._check_redirect(testsetup, '/release/?sentiment=happy', '/en-US/?sentiment=happy')
 
     @pytest.mark.skip_selenium
     def test_release_feedback_search_with_locale_redirects_to_feedback_search_with_locale(self, testsetup):
-        self._check_redirect(testsetup, '/en-US/release/search?sentiment=sad', '/en-US/search?sentiment=sad')
+        self._check_redirect(testsetup, '/en-US/release/?sentiment=sad', '/en-US/?sentiment=sad')
 
     @pytest.mark.skip_selenium
     def test_themes_without_locale_redirects_to_themes_with_locale(self, testsetup):

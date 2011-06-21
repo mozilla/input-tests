@@ -41,7 +41,6 @@
 
 
 import pytest
-from conftest import TestSetup
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
@@ -50,7 +49,6 @@ import submit_happy_feedback_page
 import submit_sad_feedback_page
 import submit_idea_page
 import thanks_page
-
 
 class TestFeedback:
 
@@ -135,26 +133,23 @@ class TestFeedback:
         happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
         Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % testsetup.base_url)
-        happy_feedback_pg.back()
         Assert.true(happy_feedback_pg.is_visible())
+        happy_feedback_pg.back()
+
 
         submit_feedback_pg.click_sad_feedback()
         sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(testsetup)
 
         Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % testsetup.base_url)
-        sad_feedback_pg.back()
         Assert.true(sad_feedback_pg.is_visible())
+        sad_feedback_pg.back()
+
 
         submit_feedback_pg.click_idea_feedback()
         idea_feedback_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % testsetup.base_url)
-        idea_feedback_pg.back()
         Assert.true(idea_feedback_pg.is_visible())
+        idea_feedback_pg.back()
 
-        Assert.true(happy_feedback_pg.is_visible())
-        Assert.true(sad_feedback_pg.is_visible())
-
-        submit_feedback_pg.click_support_page()
-
-        Assert.equal(submit_feedback_pg.current_page_url(), "http://support.mozilla.com/en-US/home")
+        Assert.equal(submit_feedback_pg.suport_page_link_address(), "http://support.mozilla.com")

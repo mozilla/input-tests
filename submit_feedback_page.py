@@ -93,7 +93,12 @@ class SubmitFeedbackPage(input_base_page.InputBasePage):
 
     def wait_for_click_to_finish_animating(self, locator):
         self.selenium.wait_for_condition(
-            "selenium.browserbot.getCurrentWindow().document.getElementById('" + locator + "').scrollWidth == 700", 10000)
+           "selenium.browserbot.getCurrentWindow().document.getElementById('" + locator + "').className == 'entering'", 10000)
+        self.selenium.wait_for_condition(
+           "selenium.browserbot.getCurrentWindow().document.getElementById('" + locator + "').className == ''", 10000)
+
+    def suport_page_link_address(self):
+        return self.selenium.get_attribute('%s@href' % self._support_page_locator)
 
     @property
     def error_message(self):

@@ -40,6 +40,8 @@
 Created on Nov 24, 2010
 '''
 
+import pytest
+xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 import feedback_page
@@ -158,6 +160,7 @@ class TestProductFilter:
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
 
+    @xfail(reason="Bug 662113 - Page does not update when selecting mobile in the product combobox")
     def test_sites_can_be_filtered_by_mobile_versions(self, testsetup):
         """
         This testcase covers # 15043 & 15044 in Litmus

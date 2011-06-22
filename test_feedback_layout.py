@@ -94,7 +94,6 @@ class Test_Feedback_Layout:
 
         Assert.true(footer.is_language_dropdown_visible)
 
-    @xfail(reason="Bug 663862 - [stage] Landing page is missing components")
     def test_the_left_panel_layout(self, testsetup):
         """
         Litmus 13595 - input:Verify the layout of the left hand side section containing various

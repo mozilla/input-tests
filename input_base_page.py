@@ -67,6 +67,14 @@ class InputBasePage(Page):
         self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
+    def get_text_of_next_link(self):
+        return self.selenium.get_text(self._next_page_locator)
+
+    @property
+    def get_text_of_previous_link(self):
+        return self.selenium.get_text(self._previous_page_locator)
+
+    @property
     def is_next_page_visible(self):
         return self.is_element_visible(self._next_page_locator)
 

@@ -132,9 +132,6 @@ class Page(object):
     def is_element_visible(self, locator):
         return self.selenium.is_visible(locator)
 
-    def is_text_present(self, text):
-        return self.selenium.is_text_present(text)
-
     def go_back(self):
         self.selenium.go_back()
         self.selenium.wait_for_page_to_load(self.timeout)

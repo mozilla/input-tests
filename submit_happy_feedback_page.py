@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,6 +47,7 @@ class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
     _remaining_character_count_locator = 'css=#happy-description-counter'
     _submit_feedback_locator = 'css=#happy .submit span'
     _error_locator = 'css=#happy .errorlist li'
+    _back_locator = 'css=#happy > header > nav > a'
 
     def go_to_submit_happy_feedback_page(self):
         self.selenium.open('/feedback#happy')
@@ -55,3 +57,6 @@ class SubmitHappyFeedbackPage(submit_feedback_page.SubmitFeedbackPage):
     @property
     def is_submit_feedback_enabled(self):
         return not self.selenium.is_element_present('css=#happy .submit a.disabled')
+
+    def is_visible(self):
+        return self.selenium.is_visible(self._happy_page_locator)

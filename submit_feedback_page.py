@@ -22,6 +22,7 @@
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
 #                 Bob Silverberg <bob.silverberg@gmail.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,14 +46,59 @@ import thanks_page
 
 class SubmitFeedbackPage(input_base_page.InputBasePage):
 
-    _page_title = u'Submit Feedback :: Firefox Input'
+    _page_title = 'Submit Feedback :: Firefox Input'
 
     _idea_page_locator = 'id=idea'
     _happy_page_locator = 'id=happy'
+    _sad_page_locator = 'id=sad'
+    _intro_page_locator = 'id=intro'
+
+    _idea_button_locator = 'id=intro-idea'
+    _happy_button_locator = 'id=intro-happy'
+    _sad_button_locator = 'id=intro-sad'
+
+    _support_page_locator = 'link=Firefox Support'
+
+    def go_to_submit_feedback_page(self):
+        self.selenium.open('/feedback/')
+        self.is_the_current_page
 
     def set_feedback(self, feedback):
         self.selenium.type_keys(self._feedback_locator, feedback)
         self.selenium.key_up(self._feedback_locator, feedback[-1:])
+
+    def click_support_page(self):
+        self.selenium.click(self._support_page_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_happy_feedback(self):
+        self.selenium.click(self._happy_button_locator)
+        self.wait_for_click_to_finish_animating('happy')
+        self.is_the_current_page
+
+    def click_sad_feedback(self):
+        self.selenium.click(self._sad_button_locator)
+        self.wait_for_click_to_finish_animating('sad')
+        self.is_the_current_page
+
+    def click_idea_feedback(self):
+        self.selenium.click(self._idea_button_locator)
+        self.wait_for_click_to_finish_animating('idea')
+        self.is_the_current_page
+
+    def back(self):
+        self.selenium.click(self._back_locator)
+        self.wait_for_click_to_finish_animating('intro')
+        self.is_the_current_page
+
+    def wait_for_click_to_finish_animating(self, locator):
+        self.selenium.wait_for_condition(
+           "selenium.browserbot.getCurrentWindow().document.getElementById('" + locator + "').className == 'entering'", 10000)
+        self.selenium.wait_for_condition(
+           "selenium.browserbot.getCurrentWindow().document.getElementById('" + locator + "').className == ''", 10000)
+
+    def suport_page_link_address(self):
+        return self.selenium.get_attribute('%s@href' % self._support_page_locator)
 
     @property
     def error_message(self):

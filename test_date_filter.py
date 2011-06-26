@@ -60,7 +60,7 @@ class TestSearchDates:
         feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
-        Assert.equal(feedback_pg.get_current_days(), None)
+        Assert.equal(feedback_pg.get_current_days(), u"\u221e")
 
         day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
         for days in day_filters:

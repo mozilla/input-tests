@@ -21,6 +21,7 @@
 #
 # Contributor(s): Tobias Markus <tobbi.bugs@googlemail.com>
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,7 +40,9 @@
 
 from unittestzero import Assert
 
+import pytest
 import feedback_page
+xfail = pytest.mark.xfail
 
 
 class TestLocaleFilter:
@@ -96,3 +99,16 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.total_message_count.replace(',', ''), locale_message_count)
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
+
+    @xfail(reason="Bug 651493 - the Percentage # for Platform and Locale is not shown on the staging component")
+    def test_percentage(self, testsetup):
+        """
+        Litmus 13719 - input:Verify the Percentage # for Platform and Locale
+        """
+        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg.go_to_feedback_page()
+
+        feedback_pg.locale_filter.show_extra_locales()
+        for locale in feedback_pg.locale_filter.locales():
+            expected_percentage = round((float(locale.message_count) / float(feedback_pg.locale_filter.total_message_count)) * 100)
+            Assert.equal(expected_percentage, int(locale.message_percentage.split("%")[0]))

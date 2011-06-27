@@ -67,6 +67,22 @@ class InputBasePage(Page):
         self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
+    def next_link(self):
+        return self.selenium.get_text(self._next_page_locator)
+
+    @property
+    def previous_link(self):
+        return self.selenium.get_text(self._previous_page_locator)
+
+    @property
+    def is_next_page_visible(self):
+        return self.is_element_visible(self._next_page_locator)
+
+    @property
+    def is_previous_page_visible(self):
+        return self.is_element_visible(self._previous_page_locator)
+
+    @property
     def is_next_page_enabled(self):
         self.is_element_visible(self._next_page_locator)
         if not self.selenium.get_attribute(self._next_page_locator + "@class") == "prev inactive":
@@ -113,6 +129,13 @@ class InputBasePage(Page):
             the URL will not contain the product parameter
         """
         return self._value_from_url("product")
+
+    @property
+    def search_term_from_url(self):
+        """
+        Returns the search value from the current location URL
+        """
+        return self._value_from_url("q")
 
     @property
     def version_from_url(self):

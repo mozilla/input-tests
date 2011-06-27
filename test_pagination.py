@@ -77,13 +77,12 @@ class TestPagination:
 
         Assert.true(feedback_pg.is_next_page_visible)
         Assert.true(feedback_pg.is_previous_page_visible)
-
         Assert.false(feedback_pg.is_previous_page_enabled)
 
-        Assert.equal(feedback_pg.get_text_of_previous_link, u"\xab Newer Messages")
-        Assert.equal(feedback_pg.get_text_of_next_link, u"Older Messages \xbb")
+        Assert.equal(feedback_pg.previous_link, u"\xab Newer Messages")
+        Assert.equal(feedback_pg.next_link, u"Older Messages \xbb")
 
-        for var in  range(2, 12):
+        for var in range(2, 12):
             feedback_pg.click_next_page()
             Assert.equal(feedback_pg.product_from_url, "firefox")
             Assert.equal(feedback_pg.search_term_from_url, "facebook")
@@ -94,8 +93,8 @@ class TestPagination:
             Assert.true(feedback_pg.is_previous_page_enabled)
             Assert.true(feedback_pg.is_next_page_enabled)
 
-            Assert.equal(feedback_pg.get_text_of_previous_link, u"\xab Newer Messages")
-            Assert.equal(feedback_pg.get_text_of_next_link, u"Older Messages \xbb")
+            Assert.equal(feedback_pg.previous_link, u"\xab Newer Messages")
+            Assert.equal(feedback_pg.next_link, u"Older Messages \xbb")
 
             Assert.equal(int(feedback_pg.page_from_url), var)
 

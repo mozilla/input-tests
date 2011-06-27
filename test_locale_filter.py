@@ -110,5 +110,5 @@ class TestLocaleFilter:
 
         feedback_pg.locale_filter.show_extra_locales()
         for locale in feedback_pg.locale_filter.locales():
-                Assert.equal(round((float(locale.message_count) / float(feedback_pg.locale_filter.total_message_count)) * 100),
-                                  int(locale.message_percentage.split("%")[0]))
+            expected_percentage = round((float(locale.message_count) / float(feedback_pg.locale_filter.total_message_count)) * 100)
+            Assert.equal(expected_percentage, int(locale.message_percentage.split("%")[0]))

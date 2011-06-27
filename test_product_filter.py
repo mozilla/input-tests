@@ -184,23 +184,3 @@ class TestProductFilter:
             Assert.equal(sites_pg.product_filter.selected_version(), version)
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
-
-    def test_the_latest_version(self, testsetup):
-        """
-        Litmus 13654 - Input: latest beta auto-selected/defaulted to, when switching Products
-        """
-        _latest_beta_firefox_version = "5.0"
-        _latest_beta_mobile_version = "5.0"
-
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
-        feedback_pg.go_to_feedback_page()
-
-        product_fil = feedback_pg.product_filter
-
-        product_fil.select_product("mobile")
-        Assert.equal(product_fil.versions[0], "-- all --")
-        Assert.equal(product_fil.selected_version(), _latest_beta_mobile_version)
-
-        product_fil.select_product("firefox")
-        Assert.equal(product_fil.versions[0], "-- all --")
-        Assert.equal(product_fil.selected_version(), _latest_beta_firefox_version)

@@ -133,23 +133,18 @@ class TestFeedback:
         happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
 
         Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % testsetup.base_url)
-        Assert.true(happy_feedback_pg.is_visible())
-        happy_feedback_pg.back()
-
+        happy_feedback_pg.click_back()
 
         submit_feedback_pg.click_sad_feedback()
         sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(testsetup)
 
         Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % testsetup.base_url)
-        Assert.true(sad_feedback_pg.is_visible())
-        sad_feedback_pg.back()
-
+        sad_feedback_pg.click_back()
 
         submit_feedback_pg.click_idea_feedback()
         idea_feedback_pg = submit_idea_page.SubmitIdeaPage(testsetup)
 
         Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % testsetup.base_url)
-        Assert.true(idea_feedback_pg.is_visible())
-        idea_feedback_pg.back()
+        idea_feedback_pg.click_back()
 
         Assert.equal(submit_feedback_pg.suport_page_link_address(), "http://support.mozilla.com")

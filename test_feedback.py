@@ -23,6 +23,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Matt Brandt <mbrandt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -43,9 +44,11 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
+import submit_feedback_page
 import submit_happy_feedback_page
+import submit_sad_feedback_page
+import submit_idea_page
 import thanks_page
-
 
 class TestFeedback:
 
@@ -117,3 +120,31 @@ class TestFeedback:
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
+
+    def test_navigating_away_from_initial_submit_feedback_page(self, testsetup):
+        """
+        Litmus 13651 - Input: Submit feedback page
+        """
+
+        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(testsetup)
+        submit_feedback_pg.go_to_submit_feedback_page()
+
+        submit_feedback_pg.click_happy_feedback()
+        happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
+
+        Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % testsetup.base_url)
+        happy_feedback_pg.click_back()
+
+        submit_feedback_pg.click_sad_feedback()
+        sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(testsetup)
+
+        Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % testsetup.base_url)
+        sad_feedback_pg.click_back()
+
+        submit_feedback_pg.click_idea_feedback()
+        idea_feedback_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+
+        Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % testsetup.base_url)
+        idea_feedback_pg.click_back()
+
+        Assert.equal(submit_feedback_pg.suport_page_link_address(), "http://support.mozilla.com")

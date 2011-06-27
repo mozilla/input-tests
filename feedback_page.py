@@ -22,6 +22,7 @@
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
 #                 Bebe <florin.strugariu@softvision.ro>
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -70,6 +71,7 @@ class FeedbackPage(input_base_page.InputBasePage):
     _datepicker_year_locator = "css=.ui-datepicker-year"
     _datepicker_previous_month_locator = "css=.ui-datepicker-prev"
     _datepicker_next_month_locator = "css=.ui-datepicker-next"
+    _datepicker_next_month_disabled_locator = "css=.ui-datepicker-next.ui-state-disabled"
     _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
     _datepicker_day_locator_suffix = ")"
 
@@ -147,9 +149,43 @@ class FeedbackPage(input_base_page.InputBasePage):
         """
         return self.selenium.is_visible(self._custom_dates_locator)
 
-    def wait_for_datepicker_to_finish_animating(self):
+    def is_datepicker_visible(self):
+        """
+
+        Returns True if the datepicker pop up is visible
+
+        """
+        date_picker = self.selenium.get_attribute(self._datepicker_locator + "@" + "style")
+        if (date_picker.find("block") == -1):
+            return False
+        else:
+            return True
+
+    def is_custom_start_date_visible(self):
+        """
+
+        Returns True if the custom start date input form is visible
+
+        """
+        return self.selenium.is_visible(self._custom_start_date_locator)
+
+    def is_custom_end_date_visible(self):
+        """
+
+        Returns True if the custom end date input form is visible
+
+        """
+        return self.selenium.is_visible(self._custom_end_date_locator)
+
+    def is_datepicker_next_month_button_disabled(self):
+        return self.selenium.is_visible(self._datepicker_next_month_disabled_locator)
+
+    def wait_for_datepicker_to_finish_animating(self, _width="251"):
         self.selenium.wait_for_condition(
-            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
+            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == " + _width, 10000)
+
+    def close_datepicker(self):
+        self.selenium.click_at("id=body", "1,1")
 
     def click_start_date(self):
         """
@@ -196,6 +232,9 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
         self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
         self.wait_for_element_not_visible(self._datepicker_locator)
+
+    def click_search_box(self):
+        self.selenium.click(self._search_box)
 
     def select_date(self, target_date):
         """
@@ -283,6 +322,22 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.type(self._search_box, search_string)
         self.selenium.key_press(self._search_box, '\\13')
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def search_box(self):
+        return self.selenium.get_value(self._search_box)
+
+    @property
+    def search_box_placeholder(self):
+        return self.selenium.get_attribute(self._search_box + "@placeholder")
+
+    @property
+    def custom_start_date(self):
+        return self.selenium.get_value(self._custom_start_date_locator)
+
+    @property
+    def custom_end_date(self):
+        return self.selenium.get_value(self._custom_end_date_locator)
 
     @property
     def total_message_count(self):

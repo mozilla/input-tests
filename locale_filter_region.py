@@ -107,7 +107,11 @@ class LocaleFilter(Page):
                 return "css=#filter_locale div li:nth(" + str(self.lookup) + ")"
             else:
                 # lookup by name
-                return "css=#filter_locale div li:contains(" + self.lookup + ")"
+                return "css=#filter_locale li:contains(" + self.lookup + ")"
+
+        @property
+        def is_selected(self):
+            return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
 
         @property
         def name(self):

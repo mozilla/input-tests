@@ -39,6 +39,8 @@
 Created on March 28, 2010
 '''
 import input_base_page
+import platform_filter_region
+import locale_filter_region
 import message_region
 
 
@@ -69,6 +71,14 @@ class ThemePage(input_base_page.InputBasePage):
         Returns the heading text of the Theme page
         """
         return self.selenium.get_text(self._messages_heading_locator)
+
+    @property
+    def locale_filter(self):
+        return locale_filter_region.LocaleFilter(self.testsetup)
+
+    @property
+    def platform_filter(self):
+        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
 
     @property
     def theme_callout(self):

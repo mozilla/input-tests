@@ -75,33 +75,8 @@ class Message(Page):
     def is_platform_visible(self):
         return self.selenium.is_visible(self.absolute_locator(self._platform_locator))
 
-    def is_language_visible(self):
+    def is_locale_visible(self):
         return self.selenium.is_visible(self.absolute_locator(self._locale_locator))
-
-    def platform_id(self, platform):
-        return {
-            "Windows 7": "win7",
-            "Windows XP": "winxp",
-            "Windows Vista": "vista",
-            "Linux": "linux",
-            "Mac OS X": "mac",
-            "Android": "android",
-            "Maemo": "maemo"
-            }[platform]
-
-    def platform_goes_to_product_filter(self, platform, filter):
-        return self.platform_id(platform) == filter
-
-    def language_id(self, language):
-        return{"English (US)": "en-US",
-               "Spanish": "es",
-               "English (British)": "en-GB",
-               "German": "de",
-               "French": "fr"
-               }[language]
-
-    def language_goes_to_locale_filter(self, language, locale):
-        return self.language_id(language) == locale
 
     def absolute_locator(self, relative_locator):
         return self.root_locator + relative_locator

@@ -75,8 +75,10 @@ class TestThemePage:
 
         platform = theme_pg.message(1).platform
         theme_pg.message(1).click_platform()
-        filter = theme_pg.platform_from_url
-        Assert.true(theme_pg.message(1).platform_goes_to_product_filter(platform, filter))
+
+        Assert.true(theme_pg.platform_filter.platform(platform).is_selected)
+        for message in theme_pg.messages:
+            Assert.equal(message.platform, platform)
 
     def test_locale_link_applies_locale_filter(self, testsetup):
         themes_pg = themes_page.ThemesPage(testsetup)
@@ -84,12 +86,14 @@ class TestThemePage:
         themes_pg.themes[0].click_similar_messages()
         theme_pg = theme_page.ThemePage(testsetup)
 
-        [Assert.true(message.is_language_visible()) for message in theme_pg.messages]
+        [Assert.true(message.is_locale_visible()) for message in theme_pg.messages]
 
-        language = theme_pg.message(1).locale
+        locale = theme_pg.message(1).locale
         theme_pg.message(1).click_locale()
-        locale = theme_pg.locale_from_url
-        Assert.true(theme_pg.message(1).language_goes_to_locale_filter(language, locale))
+
+        Assert.true(theme_pg.locale_filter.locale(locale).is_selected)
+        for message in theme_pg.messages:
+            Assert.equal(message.locale, locale)
 
     def test_value_of_timestamp_link(self, testsetup):
         themes_pg = themes_page.ThemesPage(testsetup)

@@ -101,6 +101,5 @@ class TestThemePage:
         themes_pg.themes[0].click_similar_messages()
         theme_pg = theme_page.ThemePage(testsetup)
 
-        relative_date = theme_pg.message(1).time
-        matches = re.search('\d+ \w+ \w+', relative_date)
-        Assert.true(int(matches.start()) > -1)
+        for message in theme_pg.messages:
+            Assert.not_none(re.match('\d+ \w+ \w+', message.time))

@@ -21,7 +21,7 @@
 #
 # Contributor(s): teodosia.pop@softvision.ro
 #                 mbrandt@mozilla.com
-#                 dave.hunt@mozilla.com
+#                 dhunt@mozilla.com
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or

@@ -21,6 +21,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,9 +47,8 @@ class Message(Page):
     _type_locator = " .type"
     _body_locator = " .body"
     _time_locator = " time"
-    _platform_locator = " .meta li:nth(1)"
-    _platform_link_locator = " .meta li:nth(1) a"
-    _locale_locator = " .meta li:nth(2)"
+    _platform_locator = " .meta li:nth(1) a"
+    _locale_locator = " .meta li:nth(2) a"
     _site_locator = " .meta li:nth(3)"
     _more_options_locator = " .options"
     _copy_user_agent_locator = " .options .copy_ua"
@@ -60,28 +60,22 @@ class Message(Page):
         Page.__init__(self, testsetup)
         self.index = index
 
-    def click_platform_link(self):
-        self.selenium.click(self.absolute_locator(self._platform_locator) + " a")
+    def click_platform(self):
+        self.selenium.click(self.absolute_locator(self._platform_locator))
         self.selenium.wait_for_page_to_load(self.timeout)
 
-    def click_locale_link(self):
-        self.selenium.click(self.absolute_locator(self._locale_locator) + " a")
+    def click_locale(self):
+        self.selenium.click(self.absolute_locator(self._locale_locator))
         self.selenium.wait_for_page_to_load(self.timeout)
 
-    def click_timestamp_link(self):
+    def click_timestamp(self):
         self.selenium.click(self._time_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
 
-    def is_platform_visble(self):
-        """
-        Returns True if the platform in an individual theme page is visible
-        """
+    def is_platform_visible(self):
         return self.selenium.is_visible(self.absolute_locator(self._platform_locator))
 
     def is_language_visible(self):
-        """
-        Returns True if the language in an individual theme page is visible
-        """
         return self.selenium.is_visible(self.absolute_locator(self._locale_locator))
 
     def platform_id(self, platform):
@@ -131,10 +125,6 @@ class Message(Page):
     @property
     def platform(self):
         return self.selenium.get_text(self.absolute_locator(self._platform_locator))
-
-    @property
-    def platform_link(self):
-        return self.selenium.get_attribute(self.absolute_locator(self._platform_link_locator) + "@href")
 
     @property
     def locale(self):

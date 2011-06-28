@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,20 +47,21 @@ class ThemePage(input_base_page.InputBasePage):
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"
     _back_link_locator = "css=a.exit"
-    _messages_locator = "id('big-count')//li[@class='count block']"
+    _messages_locator = "id('messages')//li[@class='message']"
     _relative_date = "css=.meta a"
+    _total_message_count_locator = "css=#big-count p" 
 
     def is_back_link_visible(self):
         """
         Returns true if the "Back to all themes" link is visible
         """
-        return self.selenium.is_text_present("Back to all themes")
+        return self.selenium.is_visible(self._back_link_locator)
 
-    def is_message_count_visble(self):
+    def is_message_count_visible(self):
         """
         Returns True if the message count is visible
         """
-        return self.selenium.is_text_present(self.message_count)
+        return self.selenium.is_visible(self._total_message_count_locator)
 
     @property
     def messages_heading(self):

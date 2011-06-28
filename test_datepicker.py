@@ -20,6 +20,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
+#                 Dave Hunt <dave.hunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -69,17 +71,15 @@ class TestDatePicker:
         Assert.true(feedback_pg.is_datepicker_visible())
         #dismiss the datepicker and assert that it is not visible before clicking in the end date field
         feedback_pg.close_datepicker()
-        feedback_pg.wait_for_datepicker_to_finish_animating("0")
         Assert.false(feedback_pg.is_datepicker_visible())
         feedback_pg.click_end_date()
         Assert.true(feedback_pg.is_datepicker_visible())
 
         #Check if clicking outside of calendar pop up makes it disappear
         feedback_pg.close_datepicker()
-        feedback_pg.wait_for_datepicker_to_finish_animating("0")
         Assert.false(feedback_pg.is_datepicker_visible())
 
-    def test_datepicker_selected_date_present(self, testsetup):
+    def test_selecting_date_from_datepicker_populates_text_field(self, testsetup):
         """
 
         This testcase covers # 13844 in Litmus

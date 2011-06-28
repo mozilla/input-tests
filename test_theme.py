@@ -20,6 +20,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): teodosia.pop@softvision.ro
+#                 mbrandt@mozilla.com
+#                 dave.hunt@mozilla.com
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -46,8 +48,6 @@ import themes_page
 
 class TestThemePage:
 
-    _timestamp_regex = '\d+ \w+ \w+'
-
     def test_navigate_to_theme_page(self, testsetup):
         '''
         This testcase covers #15170 in Litmus
@@ -63,22 +63,22 @@ class TestThemePage:
 
         Assert.equal(theme_pg.messages_heading, "Theme")
         Assert.true(theme_pg.is_back_link_visible())
-        Assert.true(theme_pg.is_message_count_visble())
+        Assert.true(theme_pg.is_message_count_visible())
 
-    def test_platform_link_goes_to_product_filter(self, testsetup):
+    def test_platform_link_applies_platform_filter(self, testsetup):
         themes_pg = themes_page.ThemesPage(testsetup)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
         theme_pg = theme_page.ThemePage(testsetup)
 
-        [Assert.true(message.is_platform_visble()) for message in theme_pg.messages]
+        [Assert.true(message.is_platform_visible()) for message in theme_pg.messages]
 
         platform = theme_pg.message(1).platform
-        theme_pg.message(1).click_platform_link()
+        theme_pg.message(1).click_platform()
         filter = theme_pg.platform_from_url
         Assert.true(theme_pg.message(1).platform_goes_to_product_filter(platform, filter))
 
-    def test_language_link_goes_to_locale_filter(self, testsetup):
+    def test_locale_link_applies_locale_filter(self, testsetup):
         themes_pg = themes_page.ThemesPage(testsetup)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
@@ -87,16 +87,16 @@ class TestThemePage:
         [Assert.true(message.is_language_visible()) for message in theme_pg.messages]
 
         language = theme_pg.message(1).locale
-        theme_pg.message(1).click_locale_link()
+        theme_pg.message(1).click_locale()
         locale = theme_pg.locale_from_url
         Assert.true(theme_pg.message(1).language_goes_to_locale_filter(language, locale))
 
-    def test_timestamp_link(self, testsetup):
+    def test_value_of_timestamp_link(self, testsetup):
         themes_pg = themes_page.ThemesPage(testsetup)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
         theme_pg = theme_page.ThemePage(testsetup)
 
         relative_date = theme_pg.message(1).time
-        matches = re.search(self._timestamp_regex, relative_date)
+        matches = re.search('\d+ \w+ \w+', relative_date)
         Assert.true(int(matches.start()) > -1)

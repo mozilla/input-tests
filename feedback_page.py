@@ -180,12 +180,13 @@ class FeedbackPage(input_base_page.InputBasePage):
     def is_datepicker_next_month_button_disabled(self):
         return self.selenium.is_visible(self._datepicker_next_month_disabled_locator)
 
-    def wait_for_datepicker_to_finish_animating(self, _width="251"):
+    def wait_for_datepicker_to_finish_animating(self):
         self.selenium.wait_for_condition(
-            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == " + _width, 10000)
+            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
 
     def close_datepicker(self):
         self.selenium.click_at("id=body", "1,1")
+        self.wait_for_element_not_visible(self._datepicker_locator)
 
     def click_start_date(self):
         """

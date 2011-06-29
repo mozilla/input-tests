@@ -20,6 +20,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,6 +39,8 @@
 Created on March 28, 2010
 '''
 import input_base_page
+import platform_filter_region
+import locale_filter_region
 import message_region
 
 
@@ -47,6 +50,20 @@ class ThemePage(input_base_page.InputBasePage):
     _theme_callout_locator = "id=theme-callout"
     _back_link_locator = "css=a.exit"
     _messages_locator = "id('messages')//li[@class='message']"
+    _relative_date = "css=.meta a"
+    _total_message_count_locator = "css=#big-count p" 
+
+    def is_back_link_visible(self):
+        """
+        Returns true if the "Back to all themes" link is visible
+        """
+        return self.selenium.is_visible(self._back_link_locator)
+
+    def is_message_count_visible(self):
+        """
+        Returns True if the message count is visible
+        """
+        return self.selenium.is_visible(self._total_message_count_locator)
 
     @property
     def messages_heading(self):
@@ -54,6 +71,14 @@ class ThemePage(input_base_page.InputBasePage):
         Returns the heading text of the Theme page
         """
         return self.selenium.get_text(self._messages_heading_locator)
+
+    @property
+    def locale_filter(self):
+        return locale_filter_region.LocaleFilter(self.testsetup)
+
+    @property
+    def platform_filter(self):
+        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
 
     @property
     def theme_callout(self):

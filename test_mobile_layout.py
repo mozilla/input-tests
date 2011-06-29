@@ -35,15 +35,13 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 import mobile_feedback_page
 
 
 class Test_Feedback_Layout:
-    @pytest.mark.mobile_site
+
     def test_the_header_layout(self, testsetup):
 
         feedback_pg = mobile_feedback_page.FeedbackPage(testsetup)

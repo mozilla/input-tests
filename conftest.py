@@ -7,12 +7,8 @@ def pytest_runtest_setup(item):
     item.host = item.config.option.hub
     item.browser = item.config.option.browser
     item.port = item.config.option.port
+    TestSetup.base_url = item.config.option.site
     TestSetup.timeout = item.config.option.timeout
-
-    if 'mobile_site' in item.keywords:
-        TestSetup.base_url = item.config.option.mobile
-    else:
-        TestSetup.base_url = item.config.option.desktop
 
     if not 'skip_selenium' in item.keywords:
         TestSetup.skip_selenium = False
@@ -41,9 +37,7 @@ def pytest_addoption(parser):
         help="specify where to run")
     parser.addoption("--browser", action="store", default="*firefox",
         help="specify the browser")
-    parser.addoption("--mobile", action="store", default="http://m.input.stage.mozilla.com",
-        help="specify the AUT")
-    parser.addoption("--desktop", action="store", default="http://input.stage.mozilla.com",
+    parser.addoption("--site", action="store", default="http://input.allizom.org",
         help="specify the AUT")
     parser.addoption("--timeout", action="store", default=120000,
         help="specify the timeout")

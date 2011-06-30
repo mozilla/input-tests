@@ -38,7 +38,7 @@
 import input_base_page
 
 
-class FeedbackPage(input_base_page.InputBasePage,):
+class FeedbackPage(input_base_page.InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 

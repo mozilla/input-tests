@@ -38,20 +38,33 @@
 from unittestzero import Assert
 
 import mobile_feedback_page
-
+import pytest
+xfail = pytest.mark.xfail
 
 class Test_Feedback_Layout:
 
+    @pytest.mark.mobile
     def test_the_header_layout(self, testsetup):
 
         feedback_pg = mobile_feedback_page.FeedbackPage(testsetup)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.click_settings()
-        Assert.equal(feedback_pg.visible_page, "settings")
+        Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
 
-        feedback_pg.click_statistics()
-        Assert.equal(feedback_pg.visible_page, "statistics")
+        feedback_pg.click_settings_tab()
 
-        feedback_pg.click_feed()
-        Assert.equal(feedback_pg.visible_page, "feed")
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.true(feedback_pg.is_settings_visible)
+
+        feedback_pg.click_statistics_tab()
+
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.true(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
+
+        feedback_pg.click_feed_tab()
+
+        Assert.true(feedback_pg.is_feed_visible)

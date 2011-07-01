@@ -45,15 +45,15 @@ class FeedbackPage(input_base_page.InputBasePage):
     #header
     _search_locator = 'id=id_q'
 
-    _feed_header_locator = 'id=tab-feed'
-    _statistics_header_locator = 'id=tab-stats'
-    _settings_header_locator = 'id=tab-settings'
+    _feed_tab_locator = 'id=tab-feed'
+    _statistics_tab_locator = 'id=tab-stats'
+    _settings_tab_locator = 'id=tab-settings'
 
     #body
-    _feed_body_locator = 'id=feed'
-    _statistics_body_locator = 'id=stats'
-    _trends_body_locator = 'id=trends'
-    _settings_body_locator = 'id=settings'
+    _feed_page_locator = 'id=feed'
+    _statistics_page_locator = 'id=stats'
+    _trends_page_locator = 'id=trends'
+    _settings_page_locator = 'id=settings'
 
     def go_to_feedback_page(self):
         self.selenium.open('/')
@@ -64,28 +64,26 @@ class FeedbackPage(input_base_page.InputBasePage):
         self.selenium.key_press(self._search_locator, '\\13')
         self.selenium.wait_for_page_to_load(self.timeout)
 
-    def click_feed(self):
-        self.selenium.click(self._feed_header_locator)
-        self.wait_for_element_visible(self._feed_body_locator)
+    def click_feed_tab(self):
+        self.selenium.click(self._feed_tab_locator)
+        self.wait_for_element_visible(self._feed_page_locator)
 
-    def click_statistics(self):
-        self.selenium.click(self._statistics_header_locator)
-        self.wait_for_element_visible(self._statistics_body_locator)
+    def click_statistics_tab(self):
+        self.selenium.click(self._statistics_tab_locator)
+        self.wait_for_element_visible(self._statistics_page_locator)
 
-    def click_settings(self):
-        self.selenium.click(self._settings_header_locator)
-        self.wait_for_element_visible(self._settings_body_locator)
+    def click_settings_tab(self):
+        self.selenium.click(self._settings_tab_locator)
+        self.wait_for_element_visible(self._settings_page_locator)
 
     @property
-    def visible_page(self):
-        if self.selenium.is_visible(self._feed_body_locator):
-            return "feed"
+    def is_feed_visible(self):
+        return self.selenium.is_visible(self._feed_page_locator)
 
-        if self.selenium.is_visible(self._statistics_body_locator):
-            return "statistics"
+    @property
+    def is_statistics_visible(self):
+        return self.selenium.is_visible(self._statistics_page_locator)
 
-        if self.selenium.is_visible(self._trends_body_locator):
-            return "trends"
-
-        if self.selenium.is_visible(self._settings_body_locator):
-            return "settings"
+    @property
+    def is_settings_visible(self):
+        return self.selenium.is_visible(self._settings_page_locator)

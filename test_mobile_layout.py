@@ -68,3 +68,5 @@ class Test_Feedback_Layout:
         feedback_pg.click_feed_tab()
 
         Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)

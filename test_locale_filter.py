@@ -42,7 +42,6 @@ from unittestzero import Assert
 
 import pytest
 import feedback_page
-xfail = pytest.mark.xfail
 
 
 class TestLocaleFilter:
@@ -100,7 +99,6 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
-    @xfail(reason="Bug 651493 - the Percentage # for Platform and Locale is not shown on the staging component")
     def test_percentage(self, testsetup):
         """
         Litmus 13719 - input:Verify the Percentage # for Platform and Locale

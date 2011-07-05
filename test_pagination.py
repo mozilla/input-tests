@@ -67,6 +67,7 @@ class TestPagination:
         Assert.equal(themes_pg.type_filter.selected_type, "Issues")
         [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
 
+    @xfail(reason="Bug 668560 - The css class names 'prev' and 'next' are ambiguous:")
     def test_search_pagination(self, testsetup):
         """
         Litmus 13636 - Input: Verify Search results have pagination

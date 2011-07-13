@@ -76,7 +76,7 @@ class FeedbackPage(input_base_page.InputBasePage):
     _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
     _datepicker_day_locator_suffix = ")"
 
-    _warning_locator = "id=message-warning"
+    _warning_heading_locator = "css=#message-warning h3"
     _custom_date_only_error_locator = "//div[@id='custom-date']/ul/li"
     _custom_date_first_error_locator = "//div[@id='custom-date']/ul[1]/li"
     _custom_date_second_error_locator = "//div[@id='custom-date']/ul[2]/li"
@@ -422,8 +422,9 @@ class FeedbackPage(input_base_page.InputBasePage):
         except:
             return False
 
-    def warning(self):
-        return self.selenium.get_text(self._warning_locator)
+    @property
+    def warning_heading(self):
+        return self.selenium.get_text(self._warning_heading_locator)
 
     @property
     def custom_date_only_error(self):

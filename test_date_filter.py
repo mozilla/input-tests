@@ -151,7 +151,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, str(start_date))
         Assert.equal(feedback_pg.date_end_from_url, str(end_date))
 
-        Assert.equal(feedback_pg.warning, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
         feedback_pg.click_custom_dates()
         Assert.equal(feedback_pg.custom_start_date, str(start_date))
@@ -177,7 +177,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
         Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
 
-        Assert.equal(feedback_pg.warning, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
         feedback_pg.click_custom_dates()
         Assert.equal(feedback_pg.custom_start_date, start_date)
@@ -204,7 +204,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
         Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
 
-        Assert.equal(feedback_pg.warning, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
         feedback_pg.click_custom_dates()
         Assert.equal(feedback_pg.custom_start_date, start_date)
@@ -230,7 +230,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
         Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
 
-        Assert.equal(feedback_pg.warning, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
         feedback_pg.click_custom_dates()
         Assert.equal(feedback_pg.custom_start_date, start_date)
@@ -304,7 +304,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '-', ''))
         Assert.equal(feedback_pg.date_end_from_url, '')
 
-        Assert.equal(feedback_pg.warning, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
         feedback_pg.click_custom_dates()
         Assert.equal(feedback_pg.custom_start_date, string.replace(start_date, '-', ''))

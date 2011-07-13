@@ -23,6 +23,7 @@
 #                 Dave Hunt <dhunt@mozilla.com>
 #                 Bebe <florin.strugariu@softvision.ro>
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Alex Lakatos <alex.lakatos@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,10 +41,9 @@
 '''
 Created on Nov 19, 2010
 '''
-import re
-
 import input_base_page
 import product_filter_region
+import date_filter_region
 import locale_filter_region
 import platform_filter_region
 import message_region
@@ -58,234 +58,20 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
-    _current_when_link_locator = "css=#when a.selected"
-    _when_links = ("link=1d", "link=7d", "link=30d")
-    _show_custom_dates_locator = "id=show-custom-date"
-    _custom_dates_locator = "id=custom-date"
-    _custom_start_date_locator = "id=id_date_start"
-    _custom_end_date_locator = "id=id_date_end"
-    _set_custom_date_locator = "css=#custom-date button:contains(Set)"
-
-    _datepicker_locator = "id=ui-datepicker-div"
-    _datepicker_month_locator = "css=.ui-datepicker-month"
-    _datepicker_year_locator = "css=.ui-datepicker-year"
-    _datepicker_previous_month_locator = "css=.ui-datepicker-prev"
-    _datepicker_next_month_locator = "css=.ui-datepicker-next"
-    _datepicker_next_month_disabled_locator = "css=.ui-datepicker-next.ui-state-disabled"
-    _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
-    _datepicker_day_locator_suffix = ")"
-
+    _warning_heading_locator = "css=#message-warning h3"
     _type_issues_locator = "css=#filters a:contains(Issues)"
-
     _search_box = "id_q"
-
     _chart_locator = "id=feedback-chart"
-
     _total_message_count_locator = "css=#big-count p"
     _total_message_count_heading_locator = "css=#big-count h3"
-
     _messages_locator = "css=div#messages.block ul li.message"
 
     def go_to_feedback_page(self):
         self.selenium.open('/')
         self.is_the_current_page
 
-    def get_current_days(self):
-        """
-
-        Returns the link text of the currently applied days filter
-
-        """
-        if self.selenium.is_element_present(self._current_when_link_locator):
-            return self.selenium.get_text(self._current_when_link_locator)
-        else:
-            return None
-
-    def get_days_tooltip(self, days):
-        """
-
-        Returns the tooltip for the days link 1d/7d/30d
-
-        """
-        for time in self._when_links:
-            if re.search(days, time, re.IGNORECASE) is None:
-                continue
-            else:
-                return self.selenium.get_attribute(time + "@title")
-
-    def click_days(self, days):
-        """
-        clicks 1d/7d/30d
-        """
-        for time in self._when_links:
-            if not re.search(days, time, re.IGNORECASE) is None:
-                if not self.get_current_days() == time:
-                    self.selenium.click(time)
-                    self.selenium.wait_for_page_to_load(self.timeout)
-                    break
-
-    def get_custom_dates_tooltip(self):
-        """
-
-        Returns the tooltip for the custom dates filter link 1d/7d/30d
-
-        """
-        return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
-
-    def click_custom_dates(self):
-        """
-
-        Clicks the custom date filter button and waits for the form to appear
-
-        """
-        self.selenium.click(self._show_custom_dates_locator)
-        self.wait_for_element_visible(self._custom_dates_locator)
-
-    def is_custom_date_filter_visible(self):
-        """
-
-        Returns True if the custom date filter form is visible
-
-        """
-        return self.selenium.is_visible(self._custom_dates_locator)
-
-    def is_datepicker_visible(self):
-        """
-
-        Returns True if the datepicker pop up is visible
-
-        """
-        date_picker = self.selenium.get_attribute(self._datepicker_locator + "@" + "style")
-        if (date_picker.find("block") == -1):
-            return False
-        else:
-            return True
-
-    def is_custom_start_date_visible(self):
-        """
-
-        Returns True if the custom start date input form is visible
-
-        """
-        return self.selenium.is_visible(self._custom_start_date_locator)
-
-    def is_custom_end_date_visible(self):
-        """
-
-        Returns True if the custom end date input form is visible
-
-        """
-        return self.selenium.is_visible(self._custom_end_date_locator)
-
-    def is_datepicker_next_month_button_disabled(self):
-        return self.selenium.is_visible(self._datepicker_next_month_disabled_locator)
-
-    def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition(
-            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
-
-    def close_datepicker(self):
-        self.selenium.click_at("id=body", "1,1")
-        self.wait_for_element_not_visible(self._datepicker_locator)
-
-    def click_start_date(self):
-        """
-
-        Clicks the start date in the custom date filter form and waits for the datepicker to appear
-
-        """
-        self.selenium.click(self._custom_start_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
-
-    def click_end_date(self):
-        """
-
-        Clicks the end date in the custom date filter form and waits for the datepicker to appear
-
-        """
-        self.selenium.click(self._custom_end_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
-
-    def click_previous_month(self):
-        """
-
-        Clicks the previous month button in the datepicker
-
-        """
-        self.selenium.click(self._datepicker_previous_month_locator)
-
-    def click_next_month(self):
-        """
-
-        Clicks the next month button in the datepicker
-
-        """
-        # TODO: Throw an error if the next month button is disabled
-        self.selenium.click(self._datepicker_next_month_locator)
-
-    def click_day(self, day):
-        """
-
-        Clicks the day in the datepicker and waits for the datepicker to disappear
-
-        """
-        # TODO: Throw an error if the day button is disabled
-        self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
-        self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
-        self.wait_for_element_not_visible(self._datepicker_locator)
-
     def click_search_box(self):
         self.selenium.click(self._search_box)
-
-    def select_date(self, target_date):
-        """
-
-        Navigates to the target month in the datepicker and clicks the target day
-
-        """
-        currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
-        targetYear = target_date.year
-        yearDelta = targetYear - currentYear
-        monthDelta = yearDelta * 12
-
-        months = {"January": 1,
-                  "February": 2,
-                  "March": 3,
-                  "April": 4,
-                  "May": 5,
-                  "June": 6,
-                  "July": 7,
-                  "August": 8,
-                  "September": 9,
-                  "October": 10,
-                  "November": 11,
-                  "December": 12}
-        currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
-        targetMonth = target_date.month
-        monthDelta += targetMonth - currentMonth
-
-        count = 0
-        while (count < abs(monthDelta)):
-            if monthDelta < 0:
-                self.click_previous_month()
-            elif monthDelta > 0:
-                self.click_next_month()
-            count = count + 1
-        self.click_day(target_date.day)
-
-    def filter_by_custom_dates(self, start_date, end_date):
-        """
-
-        Filters by a custom date range
-
-        """
-        self.click_custom_dates()
-        self.click_start_date()
-        self.select_date(start_date)
-        self.click_end_date()
-        self.select_date(end_date)
-        self.selenium.click(self._set_custom_date_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
 
     @property
     def locale_filter(self):
@@ -312,6 +98,10 @@ class FeedbackPage(input_base_page.InputBasePage):
         return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
 
     @property
+    def date_filter(self):
+        return date_filter_region.DateFilter(self.testsetup)
+
+    @property
     def header_region(self):
         return header_region.Header(self.testsetup)
 
@@ -331,14 +121,6 @@ class FeedbackPage(input_base_page.InputBasePage):
     @property
     def search_box_placeholder(self):
         return self.selenium.get_attribute(self._search_box + "@placeholder")
-
-    @property
-    def custom_start_date(self):
-        return self.selenium.get_value(self._custom_start_date_locator)
-
-    @property
-    def custom_end_date(self):
-        return self.selenium.get_value(self._custom_end_date_locator)
 
     @property
     def total_message_count(self):
@@ -363,16 +145,6 @@ class FeedbackPage(input_base_page.InputBasePage):
         return message_region.Message(self.testsetup, index)
 
     @property
-    def is_days_visible(self):
-        """
-        Verifys if the 1d/7d/30d are visible
-        """
-        for time in self._when_links:
-            if not self.selenium.is_visible(time):
-                return False
-        return True
-
-    @property
     def search_box_placeholder(self):
         return self.selenium.get_attribute(self._search_box + "@placeholder")
 
@@ -381,10 +153,5 @@ class FeedbackPage(input_base_page.InputBasePage):
         return self.is_element_visible(self._chart_locator)
 
     @property
-    def is_date_filter_aplyed(self):
-        try:
-            self.date_start_from_url()
-            self.date_end_from_url()
-            return True
-        except:
-            return False
+    def warning_heading(self):
+        return self.selenium.get_text(self._warning_heading_locator)

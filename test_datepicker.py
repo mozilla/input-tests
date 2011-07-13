@@ -59,25 +59,25 @@ class TestDatePicker:
         feedback_pg = feedback_page.FeedbackPage(testsetup)
 
         feedback_pg.go_to_feedback_page()
-        Assert.false(feedback_pg.is_datepicker_visible())
-        feedback_pg.click_custom_dates()
+        Assert.false(feedback_pg.date_filter.is_datepicker_visible)
+        feedback_pg.date_filter.click_custom_dates()
 
         #Check that two text fields appear to set the start and end dates
-        Assert.true(feedback_pg.is_custom_start_date_visible())
-        Assert.true(feedback_pg.is_custom_end_date_visible())
+        Assert.true(feedback_pg.date_filter.is_custom_start_date_visible)
+        Assert.true(feedback_pg.date_filter.is_custom_end_date_visible)
 
         #Check if clicking inside the start/end date text field a calendar pops up
-        feedback_pg.click_start_date()
-        Assert.true(feedback_pg.is_datepicker_visible())
+        feedback_pg.date_filter.click_start_date()
+        Assert.true(feedback_pg.date_filter.is_datepicker_visible)
         #dismiss the datepicker and assert that it is not visible before clicking in the end date field
-        feedback_pg.close_datepicker()
-        Assert.false(feedback_pg.is_datepicker_visible())
-        feedback_pg.click_end_date()
-        Assert.true(feedback_pg.is_datepicker_visible())
+        feedback_pg.date_filter.close_datepicker()
+        Assert.false(feedback_pg.date_filter.is_datepicker_visible)
+        feedback_pg.date_filter.click_end_date()
+        Assert.true(feedback_pg.date_filter.is_datepicker_visible)
 
         #Check if clicking outside of calendar pop up makes it disappear
-        feedback_pg.close_datepicker()
-        Assert.false(feedback_pg.is_datepicker_visible())
+        feedback_pg.date_filter.close_datepicker()
+        Assert.false(feedback_pg.date_filter.is_datepicker_visible)
 
     def test_selecting_date_from_datepicker_populates_text_field(self, testsetup):
         """
@@ -92,13 +92,13 @@ class TestDatePicker:
         today_date = date.today()
 
         feedback_pg.go_to_feedback_page()
-        feedback_pg.click_custom_dates()
-        feedback_pg.click_start_date()
-        feedback_pg.click_day(today_date.day)
-        Assert.equal(feedback_pg.custom_start_date, today_date.strftime('%m/%d/%Y'))
-        feedback_pg.click_end_date()
-        feedback_pg.click_day(today_date.day)
-        Assert.equal(feedback_pg.custom_end_date, today_date.strftime('%m/%d/%Y'))
+        feedback_pg.date_filter.click_custom_dates()
+        feedback_pg.date_filter.click_start_date()
+        feedback_pg.date_filter.click_day(today_date.day)
+        Assert.equal(feedback_pg.date_filter.custom_start_date, today_date.strftime('%m/%d/%Y'))
+        feedback_pg.date_filter.click_end_date()
+        feedback_pg.date_filter.click_day(today_date.day)
+        Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%m/%d/%Y'))
 
     def test_datepicker_next_month_button_disabled(self, testsetup):
         """
@@ -110,9 +110,9 @@ class TestDatePicker:
         """
         feedback_pg = feedback_page.FeedbackPage(testsetup)
         feedback_pg.go_to_feedback_page()
-        feedback_pg.click_custom_dates()
-        feedback_pg.click_start_date()
-        Assert.true(feedback_pg.is_datepicker_next_month_button_disabled())
+        feedback_pg.date_filter.click_custom_dates()
+        feedback_pg.date_filter.click_start_date()
+        Assert.true(feedback_pg.date_filter.is_datepicker_next_month_button_disabled)
 
-        feedback_pg.click_end_date()
-        Assert.true(feedback_pg.is_datepicker_next_month_button_disabled())
+        feedback_pg.date_filter.click_end_date()
+        Assert.true(feedback_pg.date_filter.is_datepicker_next_month_button_disabled)

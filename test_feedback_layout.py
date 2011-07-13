@@ -105,11 +105,11 @@ class Test_Feedback_Layout:
         feedback_pg.go_to_feedback_page()
 
         Assert.true(feedback_pg.product_filter.default_values("firefox", "5.0"))
-        Assert.false(feedback_pg.is_date_filter_aplyed)
+        Assert.false(feedback_pg.date_filter.is_date_filter_applied)
 
-        Assert.false(feedback_pg.is_custom_date_filter_visible())
+        Assert.false(feedback_pg.date_filter.is_custom_date_filter_visible)
 
-        feedback_pg.click_custom_dates()
+        feedback_pg.date_filter.click_custom_dates()
 
         Assert.true(feedback_pg.platform_filter.platform_count > 0)
         Assert.equal(feedback_pg.product_filter.products, ['Firefox', 'Mobile'])

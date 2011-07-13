@@ -37,7 +37,6 @@
 
 import urllib2
 import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 
@@ -189,27 +188,22 @@ class TestRedirects:
     def test_release_sad_with_locale_redirects_to_sad_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/sad/', '/en-US/feedback#sad')
 
-    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_beta_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/beta/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_beta_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/beta/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_release_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/release/feedback/', '/en-US/feedback/')
 
-    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_release_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/feedback/', '/en-US/feedback/')

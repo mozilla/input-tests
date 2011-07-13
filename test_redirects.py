@@ -43,7 +43,7 @@ from unittestzero import Assert
 
 class TestRedirects:
 
-    _user_agent_firefox = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1'
+    _user_agent_firefox = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.5; rv:5.0) Gecko/20100101 Firefox/5.0'
     _user_agent_safari = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'
 
     def _check_redirect(self, testsetup, start_url, end_url, user_agent=_user_agent_firefox, locale='en-US'):
@@ -189,22 +189,27 @@ class TestRedirects:
     def test_release_sad_with_locale_redirects_to_sad_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/sad/', '/en-US/feedback#sad')
 
+    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/feedback/', '/en-US/feedback/')
 
+    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_beta_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/beta/feedback/', '/en-US/feedback/')
 
+    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_beta_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/beta/feedback/', '/en-US/feedback/')
 
+    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_release_feedback_without_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/release/feedback/', '/en-US/feedback/')
 
+    @xfail(reason="Bug 671006 - input isn't recognizing 5.0 as a current release for non-Mac platforms")
     @pytest.mark.skip_selenium
     def test_release_feedback_with_locale_redirects_to_feedback_with_locale(self, testsetup):
         self._check_redirect(testsetup, '/en-US/release/feedback/', '/en-US/feedback/')

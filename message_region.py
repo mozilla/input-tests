@@ -20,6 +20,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
+#                 Teodosia Pop <teodosia.pop@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -45,8 +47,8 @@ class Message(Page):
     _type_locator = " .type"
     _body_locator = " .body"
     _time_locator = " time"
-    _platform_locator = " .meta li:nth(1)"
-    _locale_locator = " .meta li:nth(2)"
+    _platform_locator = " .meta li:nth(1) a"
+    _locale_locator = " .meta li:nth(2) a"
     _site_locator = " .meta li:nth(3)"
     _more_options_locator = " .options"
     _copy_user_agent_locator = " .options .copy_ua"
@@ -57,6 +59,24 @@ class Message(Page):
     def __init__(self, testsetup, index):
         Page.__init__(self, testsetup)
         self.index = index
+
+    def click_platform(self):
+        self.selenium.click(self.absolute_locator(self._platform_locator))
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_locale(self):
+        self.selenium.click(self.absolute_locator(self._locale_locator))
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def click_timestamp(self):
+        self.selenium.click(self._time_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+
+    def is_platform_visible(self):
+        return self.selenium.is_visible(self.absolute_locator(self._platform_locator))
+
+    def is_locale_visible(self):
+        return self.selenium.is_visible(self.absolute_locator(self._locale_locator))
 
     def absolute_locator(self, relative_locator):
         return self.root_locator + relative_locator

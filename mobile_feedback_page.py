@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-
-# -*- coding: utf-8 -*-
-
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -22,10 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
-#                 Matt Brandt <mbrandt@mozilla.com>
-#                 Teodosia Pop <teodosia.pop@softvision.ro>
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,47 +35,55 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
-from unittestzero import Assert
-
-import feedback_page
+import input_base_page
 
 
-class TestSearch:
+class FeedbackPage(input_base_page.InputBasePage):
 
-    def test_that_empty_search_of_feedback_returns_some_data(self, testsetup):
-        '''
-            Litmus 13847
-        '''
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+    _page_title = 'Welcome :: Firefox Input'
 
-        feedback_pg.go_to_feedback_page()
-        feedback_pg.search_for('')
-        Assert.true(0 < feedback_pg.message_count)
+    #header
+    _search_locator = 'id=id_q'
 
-    def test_that_we_can_search_feedback_with_unicode(self, testsetup):
-        '''
-            Litmus 13697
-        '''
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+    _feed_tab_locator = 'id=tab-feed'
+    _statistics_tab_locator = 'id=tab-stats'
+    _settings_tab_locator = 'id=tab-settings'
 
-        feedback_pg.go_to_feedback_page()
-        # Select the Firefox version that is 1 less than the newest to ensure the unicode
-        # search returns at least 1 result.
-        feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
+    #body
+    _feed_page_locator = 'id=feed'
+    _statistics_page_locator = 'id=stats'
+    _trends_page_locator = 'id=trends'
+    _settings_page_locator = 'id=settings'
 
-        feedback_pg.search_for(u"rapidit\xe9")
-        Assert.true(0 < feedback_pg.message_count)
+    def go_to_feedback_page(self):
+        self.selenium.open('/')
+        self.is_the_current_page
 
-    def test_search_box_placeholder(self, testsetup):
-        '''
-            Litmus 13845
-        1. Verify that there is a search field appearing in Latest Feedback
-        section it shows by default "Search by keyword"
-        '''
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+    def search_for(self, search_string):
+        self.selenium.type(self._search_locator, search_string)
+        self.selenium.key_press(self._search_locator, '\\13')
+        self.selenium.wait_for_page_to_load(self.timeout)
 
-        feedback_pg.go_to_feedback_page()
-        Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
+    def click_feed_tab(self):
+        self.selenium.click(self._feed_tab_locator)
+        self.wait_for_element_visible(self._feed_page_locator)
 
+    def click_statistics_tab(self):
+        self.selenium.click(self._statistics_tab_locator)
+        self.wait_for_element_visible(self._statistics_page_locator)
+
+    def click_settings_tab(self):
+        self.selenium.click(self._settings_tab_locator)
+        self.wait_for_element_visible(self._settings_page_locator)
+
+    @property
+    def is_feed_visible(self):
+        return self.selenium.is_visible(self._feed_page_locator)
+
+    @property
+    def is_statistics_visible(self):
+        return self.selenium.is_visible(self._statistics_page_locator)
+
+    @property
+    def is_settings_visible(self):
+        return self.selenium.is_visible(self._settings_page_locator)

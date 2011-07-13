@@ -40,6 +40,8 @@
 Created on Nov 24, 2010
 '''
 
+import pytest
+xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 import feedback_page

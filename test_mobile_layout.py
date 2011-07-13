@@ -12,15 +12,14 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Firefox Input.
+# The Original Code is Mozilla WebQA Selenium Tests.
 #
 # The Initial Developer of the Original Code is
-# Mozilla Corp.
+# Mozilla.
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Tobias Markus <tobbi.bugs@googlemail.com>
-#                 Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,45 +34,39 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Jan 26, 2011
-'''
-import pytest
-xfail = pytest.mark.xfail
+
 from unittestzero import Assert
 
-import sites_page
-import themes_page
-import theme_page
+import mobile_feedback_page
+import pytest
+xfail = pytest.mark.xfail
 
+class Test_Feedback_Layout:
 
-class TestSimilarMessages:
+    @pytest.mark.mobile
+    def test_the_header_layout(self, testsetup):
 
-    @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
-    def test_similar_messages(self, testsetup):
-        """
-        This testcase covers # 13807 in Litmus
-        """
-        sites_pg = sites_page.SitesPage(testsetup)
-        themes_pg = themes_page.ThemesPage(testsetup)
-        theme_pg = theme_page.ThemePage(testsetup)
+        feedback_pg = mobile_feedback_page.FeedbackPage(testsetup)
+        feedback_pg.go_to_feedback_page()
 
-        sites_pg.go_to_sites_page()
-        sites_pg.product_filter.select_product('firefox')
-        sites_pg.product_filter.select_version(2, by='index')
+        Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
 
-        #store the first site's name and click in
-        site = sites_pg.site(1)
-        site_name = site.name
-        site.click_name()
+        feedback_pg.click_settings_tab()
 
-        #click similar messages and navigate to the second page
-        themes_pg.theme(1).click_similar_messages()
-        theme_pg.click_next_page()
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.true(feedback_pg.is_settings_visible)
 
-        Assert.equal(theme_pg.messages_heading, 'Theme')
-        Assert.equal(theme_pg.page_from_url, '2')
-        Assert.equal(theme_pg.theme_callout, 'Theme for ' + site_name)
-        Assert.true(theme_pg.message_count > 0)
-        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
-        [Assert.true(site_name in message.site) for message in theme_pg.messages]
+        feedback_pg.click_statistics_tab()
+
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.true(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
+
+        feedback_pg.click_feed_tab()
+
+        Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)

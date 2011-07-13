@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-
 # -*- coding: utf-8 -*-
-
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -24,6 +22,7 @@
 #
 # Contributor(s): Vishal
 #                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <Florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,6 +37,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
+
 
 '''
 Created on Nov 19, 2010
@@ -65,6 +65,38 @@ class InputBasePage(Page):
         """
         self.selenium.click(self._next_page_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
+
+    @property
+    def next_link(self):
+        return self.selenium.get_text(self._next_page_locator)
+
+    @property
+    def previous_link(self):
+        return self.selenium.get_text(self._previous_page_locator)
+
+    @property
+    def is_next_page_visible(self):
+        return self.is_element_visible(self._next_page_locator)
+
+    @property
+    def is_previous_page_visible(self):
+        return self.is_element_visible(self._previous_page_locator)
+
+    @property
+    def is_next_page_enabled(self):
+        self.is_element_visible(self._next_page_locator)
+        if not self.selenium.get_attribute(self._next_page_locator + "@class") == "prev inactive":
+            return True
+        else:
+            return False
+
+    @property
+    def is_previous_page_enabled(self):
+        self.is_element_visible(self._previous_page_locator)
+        if not self.selenium.get_attribute(self._previous_page_locator + "@class") == "prev inactive":
+            return True
+        else:
+            return False
 
     def _value_from_url(self, param):
         """
@@ -97,6 +129,13 @@ class InputBasePage(Page):
             the URL will not contain the product parameter
         """
         return self._value_from_url("product")
+
+    @property
+    def search_term_from_url(self):
+        """
+        Returns the search value from the current location URL
+        """
+        return self._value_from_url("q")
 
     @property
     def version_from_url(self):

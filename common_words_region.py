@@ -19,10 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Vishal
-#                 David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
-#                 Bebe <florin.strugariu@softvision.ro>
+# Contributor(s): Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,59 +35,65 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Nov 24, 2010
+Created on May 17, 2011
 '''
 from page import Page
 
-import input_base_page
-import type_filter_region
 
+class CommonWordsRegion(Page):
 
-class ThemesPage(input_base_page.InputBasePage):
-
-    _page_title = 'Themes :: Firefox Input'
-
-    _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
-
-    def go_to_themes_page(self):
-        self.selenium.open('/themes/')
-        self.is_the_current_page
+    _common_words_locator = "id('filter_themes')"
 
     @property
-    def type_filter(self):
-        return type_filter_region.TypeFilter.ButtonFilter(self.testsetup)
+    def common_words_header(self):
+        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._common_words_locator)
 
     @property
-    def theme_count(self):
-        return int(self.selenium.get_xpath_count(self._themes_locator))
+    def common_words_count(self):
+        return int(self.selenium.get_xpath_count("%s//li" % self._common_words_locator))
 
-    @property
-    def themes(self):
-        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
+    def common_word(self, lookup):
+        return self.CommonWord(self.testsetup, lookup)
 
-    def theme(self, index):
-        return self.Theme(self.testsetup, index)
+    def common_words(self):
+        return [self.CommonWord(self.testsetup, i)for i in range(self.common_words_count)]
 
-    class Theme(Page):
+    def contains_common_words(self, lookup):
+        try:
+            self.selenium.get_text("css=#filter_themes li:contains(%s) a > strong" % lookup)
+            return True
+        except:
+            return False
 
-        _type_locator = " .type"
-        _similar_messages_locator = " .more"
+    class CommonWord(Page):
 
-        def __init__(self, testsetup, index):
+        _name_locator = " a > strong"
+        _message_count_locator = " .count"
+
+        def __init__(self, testsetup, lookup):
             Page.__init__(self, testsetup)
-            self.index = index
+            self.lookup = lookup
 
         def absolute_locator(self, relative_locator):
             return self.root_locator + relative_locator
 
         @property
         def root_locator(self):
-            return "css=#themes .theme:nth(%s)" % (self.index - 1)
+            if type(self.lookup) == int:
+                # lookup by index
+                return "css=#filter_themes li:nth(%s)" % self.lookup
+            else:
+                # lookup by name
+                return "css=#filter_themes li:contains(%s)" % self.lookup
 
         @property
-        def type(self):
-            return self.selenium.get_text(self.absolute_locator(self._type_locator))
+        def name(self):
+            return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
-        def click_similar_messages(self):
-            self.selenium.click(self.absolute_locator(self._similar_messages_locator))
+        @property
+        def message_count(self):
+            return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+
+        def select(self):
+            self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(self.timeout)

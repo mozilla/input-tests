@@ -161,7 +161,7 @@ class TestSearchDates:
         """
 
         This testcase covers # 13609 , 13725 in Litmus
-        1.Verifies invalid dates generate an error
+        1.Verifies invalid dates show all recent feedback
 
         """
         feedback_pg = feedback_page.FeedbackPage(testsetup)
@@ -286,7 +286,7 @@ class TestSearchDates:
         """
 
         This testcase covers # 13614 in Litmus
-        1.Verifies custom date fields do not accept yyyy-dd-mm format
+        1.Verifies custom date fields show all recent feedback
 
         """
         feedback_pg = feedback_page.FeedbackPage(testsetup)

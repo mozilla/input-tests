@@ -137,7 +137,7 @@ class TestSearchDates:
         """
 
         This testcase covers # 13608 in Litmus
-        1.Verifies random numbers generate an error
+        1.Verifies random numbers show all recent feedback
 
         """
         feedback_pg = feedback_page.FeedbackPage(testsetup)
@@ -151,13 +151,11 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, str(start_date))
         Assert.equal(feedback_pg.date_end_from_url, str(end_date))
 
-        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
+        Assert.equal(feedback_pg.message_count, 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, str(start_date))
         Assert.equal(feedback_pg.date_filter.custom_end_date, str(end_date))
-        Assert.equal(feedback_pg.date_filter.custom_date_first_error, 'Enter a valid date.')
-        Assert.equal(feedback_pg.date_filter.custom_date_second_error, 'Enter a valid date.')
 
     def test_feedback_custom_date_filter_with_invalid_dates(self, testsetup):
         """
@@ -177,13 +175,11 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
         Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
 
-        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
+        Assert.equal(feedback_pg.message_count, 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
-        Assert.equal(feedback_pg.date_filter.custom_date_first_error, 'Enter a valid date.')
-        Assert.equal(feedback_pg.date_filter.custom_date_second_error, 'Enter a valid date.')
 
     def test_feedback_custom_date_filter_with_future_dates(self, testsetup):
         """
@@ -304,9 +300,8 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '-', ''))
         Assert.equal(feedback_pg.date_end_from_url, '')
 
-        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
+        Assert.equal(feedback_pg.message_count, 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, string.replace(start_date, '-', ''))
         Assert.equal(feedback_pg.date_filter.custom_end_date, '')
-        Assert.equal(feedback_pg.date_filter.custom_date_only_error, 'Enter a valid date.')

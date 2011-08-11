@@ -55,6 +55,7 @@ import feedback_page
 
 class TestSearchDates:
 
+    xfail(reason="Bug 678219 - [stage] Date format in the GET request changed from '2011-08-10' to '08%2F10%2F2011'")
     def test_feedback_preset_date_filters(self, testsetup):
         """
 

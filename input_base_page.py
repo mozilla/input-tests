@@ -42,6 +42,7 @@
 '''
 Created on Nov 19, 2010
 '''
+import urllib
 from urlparse import urlparse
 
 from page import Page
@@ -104,7 +105,7 @@ class InputBasePage(Page):
         """
         url = urlparse(self.selenium.get_location())
         params = dict([part.split('=') for part in url[4].split('&')])
-        return params[param]
+        return urllib.unquote(params[param])
 
     @property
     def feedback_type_from_url(self):

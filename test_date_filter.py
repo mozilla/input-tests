@@ -74,7 +74,6 @@ class TestSearchDates:
             feedback_pg.date_filter.click_days(days[1])
             Assert.equal(feedback_pg.date_filter.current_days, days[1])
             start_date = date.today() - timedelta(days=days[0])
-            # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
             Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
             # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
@@ -95,9 +94,8 @@ class TestSearchDates:
         end_date = date.today() - timedelta(days=1)
 
         feedback_pg.date_filter.filter_by_custom_dates_using_datepicker(start_date, end_date)
-        # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
-        Assert.equal(feedback_pg.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
+        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+        Assert.equal(feedback_pg.date_end_from_url, end_date.strftime('%Y-%m-%d'))
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
 
         # Check that the relevant days preset link is highlighted when the applied custom date filter matches it
@@ -106,9 +104,8 @@ class TestSearchDates:
             start_date = date.today() - timedelta(days=days[0])
             feedback_pg.date_filter.filter_by_custom_dates_using_datepicker(start_date, date.today())
             Assert.false(feedback_pg.date_filter.is_custom_date_filter_visible)
-            # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-            Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
-            Assert.equal(feedback_pg.date_end_from_url, date.today().strftime('%m%%2F%d%%2F%Y'))
+            Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+            Assert.equal(feedback_pg.date_end_from_url, date.today().strftime('%Y-%m-%d'))
             Assert.equal(feedback_pg.date_filter.current_days, days[1])
 
     def test_feedback_custom_date_filter_with_random_alphabet(self, testsetup):
@@ -169,12 +166,12 @@ class TestSearchDates:
 
         feedback_pg.go_to_feedback_page()
 
-        start_date = "00/00/0000"
-        end_date = "00/00/0000"
+        start_date = "0000-00-00"
+        end_date = "0000-00-00"
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
-        Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
+        Assert.equal(feedback_pg.date_end_from_url, end_date)
 
         Assert.equal(feedback_pg.message_count, 20)
 
@@ -194,12 +191,12 @@ class TestSearchDates:
 
         feedback_pg.go_to_feedback_page()
 
-        start_date = "01/01/2021"
-        end_date = "01/01/2031"
+        start_date = "2021-01-01"
+        end_date = "2031-01-01"
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
-        Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
+        Assert.equal(feedback_pg.date_end_from_url, end_date)
 
         Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
@@ -219,12 +216,12 @@ class TestSearchDates:
 
         feedback_pg.go_to_feedback_page()
 
-        start_date = "01/01/2900"
+        start_date = "2900-01-01"
         end_date = ""
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
-        Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
+        Assert.equal(feedback_pg.date_end_from_url, end_date)
 
         Assert.equal(feedback_pg.warning_heading, 'No search results found.')
 
@@ -246,11 +243,11 @@ class TestSearchDates:
         feedback_pg.go_to_feedback_page()
 
         start_date = ""
-        end_date = "01/01/2900"
+        end_date = "2900-01-01"
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '/', '%2F'))
-        Assert.equal(feedback_pg.date_end_from_url, string.replace(end_date, '/', '%2F'))
+        Assert.equal(feedback_pg.date_start_from_url, sstart_date)
+        Assert.equal(feedback_pg.date_end_from_url, end_date)
 
         Assert.true(feedback_pg.is_text_present('Search Results'))
 
@@ -273,16 +270,15 @@ class TestSearchDates:
         end_date = date.today() - timedelta(days=3)
 
         feedback_pg.date_filter.filter_by_custom_dates_using_datepicker(start_date, end_date)
-        # The format for a date when using preset filters is different to using the custom search. See bug 616306 for details.
-        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%m%%2F%d%%2F%Y'))
-        Assert.equal(feedback_pg.date_end_from_url, end_date.strftime('%m%%2F%d%%2F%Y'))
+        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+        Assert.equal(feedback_pg.date_end_from_url, end_date.strftime('%Y-%m-%d'))
         # TODO: Check results are within the expected date range, possibly by navigating to the first/last pages and checking the final result is within range. Currently blocked by bug 615844.
 
         feedback_pg.date_filter.click_custom_dates()
-        Assert.equal(feedback_pg.date_filter.custom_start_date, start_date.strftime('%m/%d/%Y'))
-        Assert.equal(feedback_pg.date_filter.custom_end_date, end_date.strftime('%m/%d/%Y'))
+        Assert.equal(feedback_pg.date_filter.custom_start_date, start_date.strftime('%Y-%m-%d'))
+        Assert.equal(feedback_pg.date_filter.custom_end_date, end_date.strftime('%Y-%m-%d'))
 
-    def test_feedback_custom_date_filter_with_ydm_format(self, testsetup):
+    def test_feedback_custom_date_filter_with_mdy_format(self, testsetup):
         """
 
         This testcase covers # 13614 in Litmus
@@ -293,15 +289,15 @@ class TestSearchDates:
 
         feedback_pg.go_to_feedback_page()
 
-        start_date = '2011-22-04'
+        start_date = '04-22-2011'
         end_date = ''
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, string.replace(start_date, '-', ''))
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, '')
 
         Assert.equal(feedback_pg.message_count, 20)
 
         feedback_pg.date_filter.click_custom_dates()
-        Assert.equal(feedback_pg.date_filter.custom_start_date, string.replace(start_date, '-', ''))
+        Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, '')

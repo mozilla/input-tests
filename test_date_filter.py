@@ -208,7 +208,7 @@ class TestSearchDates:
         """
 
         This testcase covers # 13610 in Litmus
-        1.Verifies future start date generate an error
+        1.Verifies future start date are ignored as erroneous input and results for a 30 day period are returned
 
         """
 
@@ -223,7 +223,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
+        Assert.equal(feedback_pg.message_count, 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)

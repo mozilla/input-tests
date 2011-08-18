@@ -95,10 +95,10 @@ class TestDatePicker:
         feedback_pg.date_filter.click_custom_dates()
         feedback_pg.date_filter.click_start_date()
         feedback_pg.date_filter.click_day(today_date.day)
-        Assert.equal(feedback_pg.date_filter.custom_start_date, today_date.strftime('%m/%d/%Y'))
+        Assert.equal(feedback_pg.date_filter.custom_start_date, today_date.strftime('%Y-%m-%d'))
         feedback_pg.date_filter.click_end_date()
         feedback_pg.date_filter.click_day(today_date.day)
-        Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%m/%d/%Y'))
+        Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%Y-%m-%d'))
 
     def test_datepicker_next_month_button_disabled(self, testsetup):
         """

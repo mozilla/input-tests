@@ -104,7 +104,7 @@ class Test_Feedback_Layout:
         feedback_pg = feedback_page.FeedbackPage(testsetup)
         feedback_pg.go_to_feedback_page()
 
-        Assert.true(feedback_pg.product_filter.default_values("firefox", "5.0"))
+        Assert.true(feedback_pg.product_filter.default_values("firefox", "6.0"))
         Assert.false(feedback_pg.date_filter.is_date_filter_applied)
 
         Assert.false(feedback_pg.date_filter.is_custom_date_filter_visible)

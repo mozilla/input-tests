@@ -67,7 +67,6 @@ class Page(object):
     def is_the_current_page(self):
         page_title = self.selenium.get_title()
         if not page_title == self._page_title:
-            self.record_error()
             try:
                 raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
             except Exception:
@@ -85,7 +84,6 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout / 1000:
-                self.record_error()
                 raise Exception(element + ' has not loaded')
 
     def wait_for_element_visible(self, element):
@@ -95,7 +93,6 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout / 1000:
-                self.record_error()
                 raise Exception(element + " is not visible")
 
     def wait_for_element_not_visible(self, element):
@@ -104,26 +101,7 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout / 1000:
-                self.record_error()
                 raise Exception(element + " is still visible")
-
-    def record_error(self):
-        ''' Records an error. '''
-
-        http_matches = http_regex.match(self.base_url)
-        file_name = http_matches.group(1)
-
-        print '-------------------'
-        print 'Error at ' + self.selenium.get_location()
-        print 'Page title ' + self.selenium.get_title().encode('utf-8')
-        print '-------------------'
-        filename = file_name + '_' + str(time.time()).split('.')[0] + '.png'
-
-        print 'Screenshot of error in file ' + filename
-        f = open(filename, 'wb')
-        f.write(base64.decodestring(
-            self.selenium.capture_entire_page_screenshot_to_string('')))
-        f.close()
 
     @property
     def title(self):

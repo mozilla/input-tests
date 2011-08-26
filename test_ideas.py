@@ -54,14 +54,14 @@ import feedback_page
 
 class TestSubmitIdea:
 
-    def test_submitting_idea(self, testsetup):
+    def test_submitting_idea(self, mozwebqa):
         """
 
         This testcase covers # 15104 in Litmus
         1. Verifies the thank you page is loaded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
@@ -69,14 +69,14 @@ class TestSubmitIdea:
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
-    def test_submitting_idea_with_unicode_characters(self, testsetup):
+    def test_submitting_idea_with_unicode_characters(self, mozwebqa):
         """
 
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
         
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
@@ -84,7 +84,7 @@ class TestSubmitIdea:
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
-    def test_remaining_character_count(self, testsetup):
+    def test_remaining_character_count(self, mozwebqa):
         """
 
         This testcase covers # 15029 in Litmus
@@ -93,7 +93,7 @@ class TestSubmitIdea:
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         Assert.equal(submit_idea_pg.remaining_character_count, "250")
@@ -126,7 +126,7 @@ class TestSubmitIdea:
         Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
 
-    def test_submitting_same_idea_twice_generates_error_message(self, testsetup):
+    def test_submitting_same_idea_twice_generates_error_message(self, mozwebqa):
         """
 
         This testcase covers # 15119 in Litmus
@@ -134,7 +134,7 @@ class TestSubmitIdea:
 
         """
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

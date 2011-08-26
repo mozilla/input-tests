@@ -46,12 +46,12 @@ class Test_Feedback_Layout:
     """
     Litmus 13593 - input:Verify the layout of homepage
     """
-    def test_the_header_layout(self, testsetup):
+    def test_the_header_layout(self, mozwebqa):
         """
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area
         """
-        base_page = feedback_page.FeedbackPage(testsetup)
+        base_page = feedback_page.FeedbackPage(mozwebqa)
         base_page.go_to_feedback_page()
 
         header = base_page.header_region
@@ -71,11 +71,11 @@ class Test_Feedback_Layout:
         feedback_pg = header.click_main_heading_link()
         Assert.true(feedback_pg.is_the_current_page)
 
-    def test_the_area_layout(self, testsetup):
+    def test_the_area_layout(self, mozwebqa):
         """
         Litmus 13598 - input:Verify the layout of footer area
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         footer = feedback_pg.footer_region
@@ -94,14 +94,14 @@ class Test_Feedback_Layout:
 
         Assert.true(footer.is_language_dropdown_visible)
 
-    def test_the_left_panel_layout(self, testsetup):
+    def test_the_left_panel_layout(self, mozwebqa):
         """
         Litmus 13595 - input:Verify the layout of the left hand side section containing various
         filtering options
         Litmus 13600 - input:Verify the applications drop down in Product
         """
 
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.true(feedback_pg.product_filter.default_values("firefox", "6.0"))
@@ -126,12 +126,12 @@ class Test_Feedback_Layout:
         Assert.true(set(['English (US)', 'German', 'Spanish', 'French']).issubset(set(locales)))
 
     @xfail(reason="Bug 664562 - [stage] [prod] View older marks does not redirect to page=2")
-    def test_the_middle_section_page(self, testsetup):
+    def test_the_middle_section_page(self, mozwebqa):
         """
         Litmus 13596 - input:Verify the layout of Latest Feedback section
         Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
@@ -158,13 +158,13 @@ class Test_Feedback_Layout:
         Assert.false(feedback_pg.is_previous_page_enabled)
 
     @xfail(reason="Bug 659640 - [Input] 'While visiting' section is not shown on the homepage")
-    def test_the_right_panel_layout(self, testsetup):
+    def test_the_right_panel_layout(self, mozwebqa):
         """
         Litmus 13597 - input:Verify the layout of right hand section containing statistics data
         Litmus 13716 - input:Verify while visiting section
         """
 
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.equal(feedback_pg.total_message_count_heading, "Messages")

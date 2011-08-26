@@ -50,7 +50,7 @@ import sites_page
 
 class TestProductFilter:
 
-    def test_feedback_can_be_filtered_by_firefox_versions(self, testsetup):
+    def test_feedback_can_be_filtered_by_firefox_versions(self, mozwebqa):
         """
         This testcase covers # 13602 & 13603 in Litmus
         1. Verify that at least three firefox versions exist
@@ -58,7 +58,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         product = "firefox"
         feedback_pg.go_to_feedback_page()
@@ -74,14 +74,14 @@ class TestProductFilter:
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_displayed_for_all_firefox_versions(self, testsetup):
+    def test_feedback_can_be_displayed_for_all_firefox_versions(self, mozwebqa):
         """
         This testcase covers # 15149 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         product = "firefox"
         version = "--"
@@ -93,7 +93,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_filtered_by_mobile_versions(self, testsetup):
+    def test_feedback_can_be_filtered_by_mobile_versions(self, mozwebqa):
         """
         This testcase covers # 13602 & 13604 in Litmus
         1. Verify that at least three mobile versions exist
@@ -101,7 +101,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         product = "mobile"
         feedback_pg.go_to_feedback_page()
@@ -117,14 +117,14 @@ class TestProductFilter:
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_feedback_can_be_displayed_for_all_mobile_versions(self, testsetup):
+    def test_feedback_can_be_displayed_for_all_mobile_versions(self, mozwebqa):
         """
         This testcase covers # 15377 in Litmus
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         product = "mobile"
         version = "--"
@@ -136,7 +136,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
-    def test_sites_can_be_filtered_by_firefox_versions(self, testsetup):
+    def test_sites_can_be_filtered_by_firefox_versions(self, mozwebqa):
         """
         This testcase covers # 15043 & 15045 in Litmus
         1. Verify that at least three firefox versions exist
@@ -144,7 +144,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        sites_pg = sites_page.SitesPage(testsetup)
+        sites_pg = sites_page.SitesPage(mozwebqa)
 
         product = "firefox"
         sites_pg.go_to_sites_page()
@@ -160,7 +160,7 @@ class TestProductFilter:
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
 
-    def test_sites_can_be_filtered_by_mobile_versions(self, testsetup):
+    def test_sites_can_be_filtered_by_mobile_versions(self, mozwebqa):
         """
         This testcase covers # 15043 & 15044 in Litmus
         1. Verify that at least three mobile versions exist
@@ -168,7 +168,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        sites_pg = sites_page.SitesPage(testsetup)
+        sites_pg = sites_page.SitesPage(mozwebqa)
 
         product = "mobile"
         sites_pg.go_to_sites_page()

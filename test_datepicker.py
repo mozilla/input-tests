@@ -46,7 +46,7 @@ import feedback_page
 
 class TestDatePicker:
 
-    def test_datepicker_is_only_shown_when_a_date_field_has_focus(self, testsetup):
+    def test_datepicker_is_only_shown_when_a_date_field_has_focus(self, mozwebqa):
         """
 
         This testcase covers # 13726 in Litmus
@@ -56,7 +56,7 @@ class TestDatePicker:
         4.Selected date is set in the date field and calendar pop up gets closed
 
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         Assert.false(feedback_pg.date_filter.is_datepicker_visible)
@@ -79,7 +79,7 @@ class TestDatePicker:
         feedback_pg.date_filter.close_datepicker()
         Assert.false(feedback_pg.date_filter.is_datepicker_visible)
 
-    def test_selecting_date_from_datepicker_populates_text_field(self, testsetup):
+    def test_selecting_date_from_datepicker_populates_text_field(self, mozwebqa):
         """
 
         This testcase covers # 13844 in Litmus
@@ -87,7 +87,7 @@ class TestDatePicker:
         select the date. Verify that selected date appears in the date field.
 
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         today_date = date.today()
 
@@ -100,7 +100,7 @@ class TestDatePicker:
         feedback_pg.date_filter.click_day(today_date.day)
         Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%Y-%m-%d'))
 
-    def test_datepicker_next_month_button_disabled(self, testsetup):
+    def test_datepicker_next_month_button_disabled(self, mozwebqa):
         """
 
         This testcase covers # 13844 in Litmus
@@ -108,7 +108,7 @@ class TestDatePicker:
         is in current month thus unable to select some future date.
 
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.date_filter.click_custom_dates()
         feedback_pg.date_filter.click_start_date()

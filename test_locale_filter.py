@@ -46,14 +46,14 @@ import feedback_page
 
 class TestLocaleFilter:
 
-    def test_feedback_can_be_filtered_by_locale(self, testsetup):
+    def test_feedback_can_be_filtered_by_locale(self, mozwebqa):
         """
         This testcase covers # 15120 in Litmus
         1. Verify that the number of messages in the locale list matches the number of messages returned
         2. Verify that the locale short code appears in the URL
         3. Verify that the locale for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
@@ -69,7 +69,7 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
-    def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, testsetup):
+    def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, mozwebqa):
         """
         This testcase covers # 15087 & 15120 in Litmus
         1. Verify the initial locale count is 10
@@ -79,7 +79,7 @@ class TestLocaleFilter:
         5. Verify that the locale short code appears in the URL
         6. Verify that the locale for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
@@ -99,11 +99,11 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
-    def test_percentage(self, testsetup):
+    def test_percentage(self, mozwebqa):
         """
         Litmus 13719 - input:Verify the Percentage # for Platform and Locale
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         feedback_pg.locale_filter.show_extra_locales()

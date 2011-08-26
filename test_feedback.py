@@ -52,13 +52,13 @@ import thanks_page
 
 class TestFeedback:
 
-    def test_submitting_same_feedback_twice(self, testsetup):
+    def test_submitting_same_feedback_twice(self, mozwebqa):
         """
         This testcase covers # 15119 in Litmus
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
@@ -70,26 +70,26 @@ class TestFeedback:
         submit_happy_feedback_pg.submit_feedback()
         Assert.equal(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
 
-    def test_submitting_feedback_with_unicode_characters(self, testsetup):
+    def test_submitting_feedback_with_unicode_characters(self, mozwebqa):
         """
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
         """
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
-    def test_remaining_character_count(self, testsetup):
+    def test_remaining_character_count(self, mozwebqa):
         """
         This testcase covers # 13806 in Litmus
         1. Verifies the remaining character count decreases
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
         """
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
+        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "140")
@@ -121,30 +121,30 @@ class TestFeedback:
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-    def test_navigating_away_from_initial_submit_feedback_page(self, testsetup):
+    def test_navigating_away_from_initial_submit_feedback_page(self, mozwebqa):
         """
         Litmus 13651 - Input: Submit feedback page
         """
 
-        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(testsetup)
+        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(mozwebqa)
         submit_feedback_pg.go_to_submit_feedback_page()
 
         submit_feedback_pg.click_happy_feedback()
-        happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(testsetup)
+        happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
 
-        Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % testsetup.base_url)
+        Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % mozwebqa.base_url)
         happy_feedback_pg.click_back()
 
         submit_feedback_pg.click_sad_feedback()
-        sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(testsetup)
+        sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(mozwebqa)
 
-        Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % testsetup.base_url)
+        Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % mozwebqa.base_url)
         sad_feedback_pg.click_back()
 
         submit_feedback_pg.click_idea_feedback()
-        idea_feedback_pg = submit_idea_page.SubmitIdeaPage(testsetup)
+        idea_feedback_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
 
-        Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % testsetup.base_url)
+        Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % mozwebqa.base_url)
         idea_feedback_pg.click_back()
 
         Assert.equal(submit_feedback_pg.suport_page_link_address(), "http://support.mozilla.com")

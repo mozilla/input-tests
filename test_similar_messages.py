@@ -50,13 +50,13 @@ import theme_page
 class TestSimilarMessages:
 
     @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
-    def test_similar_messages(self, testsetup):
+    def test_similar_messages(self, mozwebqa):
         """
         This testcase covers # 13807 in Litmus
         """
-        sites_pg = sites_page.SitesPage(testsetup)
-        themes_pg = themes_page.ThemesPage(testsetup)
-        theme_pg = theme_page.ThemePage(testsetup)
+        sites_pg = sites_page.SitesPage(mozwebqa)
+        themes_pg = themes_page.ThemesPage(mozwebqa)
+        theme_pg = theme_page.ThemePage(mozwebqa)
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')

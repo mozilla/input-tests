@@ -49,7 +49,6 @@ import theme_page
 
 class TestSimilarMessages:
 
-    @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
     def test_similar_messages(self, testsetup):
         """
         This testcase covers # 13807 in Litmus

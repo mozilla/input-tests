@@ -125,7 +125,6 @@ class Test_Feedback_Layout:
         locales = [locale.name for locale in feedback_pg.locale_filter.locales()]
         Assert.true(set(['English (US)', 'German', 'Spanish', 'French']).issubset(set(locales)))
 
-    @xfail(reason="Bug 664562 - [stage] [prod] View older marks does not redirect to page=2")
     def test_the_middle_section_page(self, testsetup):
         """
         Litmus 13596 - input:Verify the layout of Latest Feedback section

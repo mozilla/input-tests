@@ -49,7 +49,7 @@ import feedback_page
 class TestPagination:
 
     @xfail(reason="Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
-    def test_themes_filters_persist_when_paging_through_results(self, testsetup):
+    def test_themes_filters_persist_when_paging_through_results(self, mozwebqa):
         """
 
         This testcase covers # 15018 in Litmus
@@ -58,7 +58,7 @@ class TestPagination:
         3. Verifies the results of the filter
 
         """
-        themes_pg = themes_page.ThemesPage(testsetup)
+        themes_pg = themes_page.ThemesPage(mozwebqa)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")
@@ -68,11 +68,11 @@ class TestPagination:
         [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
 
     @xfail(reason="Bug 668560 - The css class names 'prev' and 'next' are ambiguous:")
-    def test_search_pagination(self, testsetup):
+    def test_search_pagination(self, mozwebqa):
         """
         Litmus 13636 - Input: Verify Search results have pagination
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for("facebook")
 

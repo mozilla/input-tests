@@ -44,9 +44,9 @@ xfail = pytest.mark.xfail
 class Test_Feedback_Layout:
 
     @pytest.mark.mobile
-    def test_the_header_layout(self, testsetup):
+    def test_the_header_layout(self, mozwebqa):
 
-        feedback_pg = mobile_feedback_page.FeedbackPage(testsetup)
+        feedback_pg = mobile_feedback_page.FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.true(feedback_pg.is_feed_visible)

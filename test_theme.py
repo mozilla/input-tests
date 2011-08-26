@@ -48,7 +48,7 @@ import themes_page
 
 class TestThemePage:
 
-    def test_navigate_to_theme_page(self, testsetup):
+    def test_navigate_to_theme_page(self, mozwebqa):
         '''
         This testcase covers #15170 in Litmus
         Verify you are able to navigate to individual theme page, includes # of messages,
@@ -56,20 +56,20 @@ class TestThemePage:
         the user platform, language 3. Verify timestamp link goes to the suggestion, the
         Platform link goes to that product filter, verify language goes to locale filter.
         '''
-        themes_pg = themes_page.ThemesPage(testsetup)
+        themes_pg = themes_page.ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(testsetup)
+        theme_pg = theme_page.ThemePage(mozwebqa)
 
         Assert.equal(theme_pg.messages_heading, "Theme")
         Assert.true(theme_pg.is_back_link_visible())
         Assert.true(theme_pg.is_message_count_visible())
 
-    def test_platform_link_applies_platform_filter(self, testsetup):
-        themes_pg = themes_page.ThemesPage(testsetup)
+    def test_platform_link_applies_platform_filter(self, mozwebqa):
+        themes_pg = themes_page.ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(testsetup)
+        theme_pg = theme_page.ThemePage(mozwebqa)
 
         [Assert.true(message.is_platform_visible()) for message in theme_pg.messages]
 
@@ -80,11 +80,11 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.platform, platform)
 
-    def test_locale_link_applies_locale_filter(self, testsetup):
-        themes_pg = themes_page.ThemesPage(testsetup)
+    def test_locale_link_applies_locale_filter(self, mozwebqa):
+        themes_pg = themes_page.ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(testsetup)
+        theme_pg = theme_page.ThemePage(mozwebqa)
 
         [Assert.true(message.is_locale_visible()) for message in theme_pg.messages]
 
@@ -95,11 +95,11 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.locale, locale)
 
-    def test_value_of_timestamp_link(self, testsetup):
-        themes_pg = themes_page.ThemesPage(testsetup)
+    def test_value_of_timestamp_link(self, mozwebqa):
+        themes_pg = themes_page.ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(testsetup)
+        theme_pg = theme_page.ThemePage(mozwebqa)
 
         for message in theme_pg.messages:
             Assert.not_none(re.match('\d+ \w+ \w+', message.time))

@@ -43,7 +43,7 @@ import feedback_page
 
 class TestPlatformFilter:
 
-    def test_feedback_can_be_filtered_by_platform(self, testsetup):
+    def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """
         This testcase covers # 15215 in Litmus
         1. Verify that the selected platform is the only one to appear in the list and is selected
@@ -51,7 +51,7 @@ class TestPlatformFilter:
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(testsetup)
+        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')

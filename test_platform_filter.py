@@ -47,7 +47,7 @@ class TestPlatformFilter:
         """
         This testcase covers # 15215 in Litmus
         1. Verify that the selected platform is the only one to appear in the list and is selected
-        2. Verify that the number of messages in the platform list matches the number of messages returned
+        2. Verify that the number of messages in the platform list is plus or minus 15 for the number of messages returned
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """

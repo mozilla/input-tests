@@ -63,8 +63,11 @@ class TestPlatformFilter:
         platform_code = platform.code
         platform.select()
 
+        total_message_count = feedback_pg.total_message_count.replace(',', '')
+        message_count_difference = int(total_message_count) - int(platform_message_count)
+
         Assert.equal(feedback_pg.platform_filter.platform_count, 1)
         Assert.true(platform.is_selected)
-        Assert.equal(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
+        Assert.true(message_count_difference <= 15 and message_count_difference >= -15)
         Assert.equal(feedback_pg.platform_from_url, platform_code)
         [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]

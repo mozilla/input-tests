@@ -68,6 +68,7 @@ class TestPlatformFilter:
 
         Assert.equal(feedback_pg.platform_filter.platform_count, 1)
         Assert.true(platform.is_selected)
+        # TODO refactor if unittest-zero receives an Assert.within_range method
         Assert.true(message_count_difference <= 15 and message_count_difference >= -15)
         Assert.equal(feedback_pg.platform_from_url, platform_code)
         [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]

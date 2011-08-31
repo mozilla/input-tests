@@ -47,7 +47,7 @@ class TestPlatformFilter:
         """
         This testcase covers # 15215 in Litmus
         1. Verify that the selected platform is the only one to appear in the list and is selected
-        2. Verify that the number of messages in the platform list matches the number of messages returned
+        2. Verify that the number of messages in the platform list is plus or minus 15 for the number of messages returned
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
@@ -63,8 +63,12 @@ class TestPlatformFilter:
         platform_code = platform.code
         platform.select()
 
+        total_message_count = feedback_pg.total_message_count.replace(',', '')
+        message_count_difference = int(total_message_count) - int(platform_message_count)
+
         Assert.equal(feedback_pg.platform_filter.platform_count, 1)
         Assert.true(platform.is_selected)
-        Assert.equal(feedback_pg.total_message_count.replace(',', ''), platform_message_count)
+        # TODO refactor if unittest-zero receives an Assert.within_range method
+        Assert.true(message_count_difference <= 15 and message_count_difference >= -15)
         Assert.equal(feedback_pg.platform_from_url, platform_code)
         [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]

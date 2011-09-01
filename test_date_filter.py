@@ -249,7 +249,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.contains(feedback_pg.message_column_heading, 'Search Results')
+        Assert.contains('Search Results', feedback_pg.message_column_heading)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)

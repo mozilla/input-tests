@@ -7,7 +7,7 @@
 # the License. You may obtain a copy of the License at
 # http://www.mozilla.org/MPL/
 #
-# Software distributed under the License is distributed on an "AS IS" basis,
+
 # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
 # for the specific language governing rights and limitations under the
 # License.
@@ -229,7 +229,6 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
-    @xfail(reason="Bug 645850 - [input-stage] Internal Server Error - OverflowError: mktime argument out of range")
     def test_feedback_custom_date_filter_with_future_end_date(self, mozwebqa):
         """
 
@@ -246,10 +245,10 @@ class TestSearchDates:
         end_date = "2900-01-01"
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, sstart_date)
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.true(feedback_pg.is_text_present('Search Results'))
+        Assert.contains(feedback_pg.message_column_heading, 'Search Results')
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)

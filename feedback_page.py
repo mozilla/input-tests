@@ -24,6 +24,7 @@
 #                 Bebe <florin.strugariu@softvision.ro>
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alex Lakatos <alex.lakatos@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -64,6 +65,7 @@ class FeedbackPage(input_base_page.InputBasePage):
     _chart_locator = "id=feedback-chart"
     _total_message_count_locator = "css=#big-count p"
     _total_message_count_heading_locator = "css=#big-count h3"
+    _messages_column_heading_locator = "css=#messages h2"
     _messages_locator = "css=div#messages.block ul li.message"
 
     def go_to_feedback_page(self):
@@ -121,6 +123,10 @@ class FeedbackPage(input_base_page.InputBasePage):
     @property
     def search_box_placeholder(self):
         return self.selenium.get_attribute(self._search_box + "@placeholder")
+
+    @property
+    def message_column_heading(self):
+        return self.selenium.get_text(self._messages_column_heading_locator)
 
     @property
     def total_message_count(self):

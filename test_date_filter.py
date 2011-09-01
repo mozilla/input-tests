@@ -21,6 +21,7 @@
 #
 # Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Alex Lakatos <alex.lakatos@softvision.ro>
+#                 Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -229,7 +230,6 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
-    @xfail(reason="Bug 645850 - [input-stage] Internal Server Error - OverflowError: mktime argument out of range")
     def test_feedback_custom_date_filter_with_future_end_date(self, mozwebqa):
         """
 
@@ -246,10 +246,10 @@ class TestSearchDates:
         end_date = "2900-01-01"
 
         feedback_pg.date_filter.filter_by_custom_dates_using_keyboard(start_date, end_date)
-        Assert.equal(feedback_pg.date_start_from_url, sstart_date)
+        Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.true(feedback_pg.is_text_present('Search Results'))
+        Assert.contains('Search Results', feedback_pg.message_column_heading)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)

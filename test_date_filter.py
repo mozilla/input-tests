@@ -56,7 +56,7 @@ import feedback_page
 
 class TestSearchDates:
 
-    xfail(reason="Bug 678219 - [stage] Date format in the GET request changed from '2011-08-10' to '08%2F10%2F2011'")
+    @xfail(reason="Bug 678219 - [stage] Date format in the GET request changed from '2011-08-10' to '08%2F10%2F2011'")
     def test_feedback_preset_date_filters(self, mozwebqa):
         """
 
@@ -230,7 +230,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
-    xfail(reason="Bug 686850 - Returned message counts vary too much to reliably test")
+    @xfail(reason="Bug 686850 - Returned message counts vary too much to reliably test")
     def test_feedback_custom_date_filter_with_future_end_date(self, mozwebqa):
         """
 

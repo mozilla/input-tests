@@ -205,6 +205,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
+    @xfail(reason="Bug 686850 - Returned message counts vary too much to reliably test")
     def test_feedback_custom_date_filter_with_future_start_date(self, mozwebqa):
         """
 

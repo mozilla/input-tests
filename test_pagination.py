@@ -42,8 +42,8 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
-import themes_page
-import feedback_page
+from pages.desktop.themes import ThemesPage
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestPagination:
@@ -58,7 +58,7 @@ class TestPagination:
         3. Verifies the results of the filter
 
         """
-        themes_pg = themes_page.ThemesPage(mozwebqa)
+        themes_pg = ThemesPage(mozwebqa)
 
         themes_pg.go_to_themes_page()
         themes_pg.type_filter.select_type("Issues")
@@ -72,7 +72,7 @@ class TestPagination:
         """
         Litmus 13636 - Input: Verify Search results have pagination
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for("facebook")
 

@@ -19,7 +19,10 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s): Vishal
+#                 David Burns
+#                 Dave Hunt <dhunt@mozilla.com>
+#                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,66 +38,57 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on May 17, 2011
+Created on Nov 24, 2010
 '''
 from page import Page
+from pages.base import InputBasePage
 
 
-class SitesFilterRegion(Page):
+class SitesPage(InputBasePage):
 
-    _sites_filter_region_locator = "id('filter_sites')"
+    _page_title = 'Sites :: Firefox Input'
+
+    _sites_locator = "id('themes')//li[@class='site']"
+
+    def go_to_sites_page(self):
+        self.selenium.open('/sites/')
+        self.is_the_current_page
 
     @property
-    def sites_filter_header(self):
-        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator)
+    def product_filter(self):
+        from pages.desktop.regions.product_filter import ProductFilter
+        return ProductFilter.ComboFilter(self.testsetup)
 
     @property
-    def sites_filter_count(self):
-        return int(self.selenium.get_xpath_count("%s//li" % self._sites_filter_locator))
+    def site_count(self):
+        return int(self.selenium.get_xpath_count(self._sites_locator))
 
-    def sites_filter(self, lookup):
-        return self.SitesFilter(self.testsetup, lookup)
+    @property
+    def sites(self):
+        return [self.Site(self.selenium, i + 1) for i in range(self.site_count)]
 
-    def contains_sites_filter(self, lookup):
-        try:
-            self.selenium.get_text("css=#filter_sites li:contains(%s) a > strong" % lookup)
+    def site(self, index):
+        return self.Site(self.testsetup, index)
 
-            return True
-        except:
-            return False
+    class Site(Page):
 
-    def sites_filters(self):
-        return [self.SitesFilter(self.testsetup, i)for i in range(self.sites_filter_count)]
+        _name_locator = " .name a"
 
-    class SitesFilter(Page):
-
-        _name_locator = " a > strong"
-        _site_count_locator = " .count"
-
-        def __init__(self, testsetup, lookup):
+        def __init__(self, testsetup, index):
             Page.__init__(self, testsetup)
-            self.lookup = lookup
+            self.index = index
 
         def absolute_locator(self, relative_locator):
             return self.root_locator + relative_locator
 
         @property
         def root_locator(self):
-            if type(self.lookup) == int:
-                # lookup by index
-                return "css=#filter_sites li:nth(%s)" % self.lookup
-            else:
-                # lookup by name
-                return "css=#filter_sites li:contains(%s)" % self.lookup
+            return "css=#themes .site:nth(%s)" % (self.index - 1)
 
         @property
         def name(self):
             return self.selenium.get_text(self.absolute_locator(self._name_locator))
 
-        @property
-        def site_count(self):
-            return self.selenium.get_text(self.absolute_locator(self._site_count_locator))
-
-        def select(self):
+        def click_name(self):
             self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(self.timeout)

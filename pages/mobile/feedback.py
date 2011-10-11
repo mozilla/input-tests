@@ -19,7 +19,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,10 +37,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import input_base_page
+from pages.base import InputBasePage
 
 
-class FeedbackPage(input_base_page.InputBasePage):
+class FeedbackPage(InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 

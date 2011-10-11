@@ -42,20 +42,11 @@
 '''
 Created on Nov 19, 2010
 '''
-import input_base_page
-import product_filter_region
-import date_filter_region
-import locale_filter_region
-import platform_filter_region
-import message_region
-import type_filter_region
-import common_words_region
-import sites_filter_region
-import header_region
-import footer_region
+from pages.base import InputBasePage
+from pages.desktop.regions.message import Message
 
 
-class FeedbackPage(input_base_page.InputBasePage):
+class FeedbackPage(InputBasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
@@ -77,39 +68,48 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def locale_filter(self):
-        return locale_filter_region.LocaleFilter(self.testsetup)
+        from pages.desktop.regions.locale_filter import LocaleFilter
+        return LocaleFilter(self.testsetup)
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
+        from pages.desktop.regions.platform_filter import PlatformFilter
+        return PlatformFilter.CheckboxFilter(self.testsetup)
 
     @property
     def type_filter(self):
-        return type_filter_region.TypeFilter.CheckboxFilter(self.testsetup)
+        from pages.desktop.regions.type_filter import TypeFilter
+        return TypeFilter.CheckboxFilter(self.testsetup)
 
     @property
     def common_words_filter(self):
-        return common_words_region.CommonWordsRegion(self.testsetup)
+        from pages.desktop.regions.common_words import CommonWordsRegion
+        return CommonWordsRegion(self.testsetup)
 
     @property
     def sites_filter_region(self):
-        return sites_filter_region.SitesFilterRegion(self.testsetup)
+        from pages.desktop.regions.sites_filter import SitesFilterRegion
+        return SitesFilterRegion(self.testsetup)
 
     @property
     def product_filter(self):
-        return product_filter_region.ProductFilter.ComboFilter(self.testsetup)
+        from pages.desktop.regions.product_filter import ProductFilter
+        return ProductFilter.ComboFilter(self.testsetup)
 
     @property
     def date_filter(self):
-        return date_filter_region.DateFilter(self.testsetup)
+        from pages.desktop.regions.date_filter import DateFilter
+        return DateFilter(self.testsetup)
 
     @property
     def header_region(self):
-        return header_region.Header(self.testsetup)
+        from pages.desktop.regions.header import Header
+        return Header(self.testsetup)
 
     @property
     def footer_region(self):
-        return footer_region.Footer(self.testsetup)
+        from pages.desktop.regions.footer import Footer
+        return Footer(self.testsetup)
 
     def search_for(self, search_string):
         self.selenium.type(self._search_box, search_string)
@@ -145,10 +145,10 @@ class FeedbackPage(input_base_page.InputBasePage):
 
     @property
     def messages(self):
-        return [message_region.Message(self.testsetup, i + 1) for i in range(self.message_count)]
+        return [Message(self.testsetup, i + 1) for i in range(self.message_count)]
 
     def message(self, index):
-        return message_region.Message(self.testsetup, index)
+        return Message(self.testsetup, index)
 
     @property
     def search_box_placeholder(self):

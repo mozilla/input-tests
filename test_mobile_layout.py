@@ -19,7 +19,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -37,16 +39,15 @@
 
 from unittestzero import Assert
 
-import mobile_feedback_page
+from pages.mobile.feedback import FeedbackPage
 import pytest
-xfail = pytest.mark.xfail
 
 class Test_Feedback_Layout:
 
     @pytest.mark.mobile
     def test_the_header_layout(self, mozwebqa):
 
-        feedback_pg = mobile_feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.true(feedback_pg.is_feed_visible)

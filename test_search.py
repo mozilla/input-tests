@@ -44,7 +44,7 @@
 
 from unittestzero import Assert
 
-import feedback_page
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestSearch:
@@ -53,7 +53,7 @@ class TestSearch:
         '''
             Litmus 13847
         '''
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for('')
@@ -63,7 +63,7 @@ class TestSearch:
         '''
             Litmus 13697
         '''
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         # Select the Firefox version that is 1 less than the newest to ensure the unicode
@@ -80,7 +80,7 @@ class TestSearch:
         1. Verify that there is a search field appearing in Latest Feedback
         section it shows by default "Search by keyword"
         '''
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")

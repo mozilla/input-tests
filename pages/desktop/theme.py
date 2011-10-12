@@ -38,13 +38,11 @@
 '''
 Created on March 28, 2010
 '''
-import input_base_page
-import platform_filter_region
-import locale_filter_region
-import message_region
+from pages.base import InputBasePage
+from pages.desktop.regions.message import Message
 
 
-class ThemePage(input_base_page.InputBasePage):
+class ThemePage(InputBasePage):
 
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"
@@ -74,11 +72,13 @@ class ThemePage(input_base_page.InputBasePage):
 
     @property
     def locale_filter(self):
-        return locale_filter_region.LocaleFilter(self.testsetup)
+        from pages.desktop.regions.locale_filter import LocaleFilter
+        return LocaleFilter(self.testsetup)
 
     @property
     def platform_filter(self):
-        return platform_filter_region.PlatformFilter.CheckboxFilter(self.testsetup)
+        from pages.desktop.regions.platform_filter import PlatformFilter
+        return PlatformFilter.CheckboxFilter(self.testsetup)
 
     @property
     def theme_callout(self):
@@ -100,7 +100,7 @@ class ThemePage(input_base_page.InputBasePage):
 
     @property
     def messages(self):
-        return [message_region.Message(self.testsetup, i + 1) for i in range(self.message_count)]
+        return [Message(self.testsetup, i + 1) for i in range(self.message_count)]
 
     def message(self, index):
-        return message_region.Message(self.testsetup, index)
+        return Message(self.testsetup, index)

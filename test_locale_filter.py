@@ -41,7 +41,7 @@
 from unittestzero import Assert
 
 import pytest
-import feedback_page
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestLocaleFilter:
@@ -53,7 +53,7 @@ class TestLocaleFilter:
         2. Verify that the locale short code appears in the URL
         3. Verify that the locale for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
@@ -79,7 +79,7 @@ class TestLocaleFilter:
         5. Verify that the locale short code appears in the URL
         6. Verify that the locale for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
@@ -103,7 +103,7 @@ class TestLocaleFilter:
         """
         Litmus 13719 - input:Verify the Percentage # for Platform and Locale
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         feedback_pg.locale_filter.show_extra_locales()

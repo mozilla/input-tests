@@ -18,7 +18,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -38,7 +40,7 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
-import feedback_page
+from pages.desktop.feedback import FeedbackPage
 
 
 class Test_Feedback_Layout:
@@ -51,7 +53,7 @@ class Test_Feedback_Layout:
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area
         """
-        base_page = feedback_page.FeedbackPage(mozwebqa)
+        base_page = FeedbackPage(mozwebqa)
         base_page.go_to_feedback_page()
 
         header = base_page.header_region
@@ -75,7 +77,7 @@ class Test_Feedback_Layout:
         """
         Litmus 13598 - input:Verify the layout of footer area
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         footer = feedback_pg.footer_region
@@ -101,7 +103,7 @@ class Test_Feedback_Layout:
         Litmus 13600 - input:Verify the applications drop down in Product
         """
 
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.true(feedback_pg.product_filter.default_values("firefox", "7.0"))
@@ -131,7 +133,7 @@ class Test_Feedback_Layout:
         Litmus 13596 - input:Verify the layout of Latest Feedback section
         Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
@@ -164,7 +166,7 @@ class Test_Feedback_Layout:
         Litmus 13716 - input:Verify while visiting section
         """
 
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
         Assert.equal(feedback_pg.total_message_count_heading, "Messages")

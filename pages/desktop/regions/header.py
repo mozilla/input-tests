@@ -18,7 +18,9 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -37,10 +39,6 @@
 
 from page import Page
 
-import feedback_page
-import sites_page
-import themes_page
-
 
 class Header(Page):
 
@@ -53,25 +51,33 @@ class Header(Page):
         self.is_feedback_link_visible
         self.selenium.click(self._feedback_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
-        return feedback_page.FeedbackPage(self.testsetup)
+
+        from pages.desktop.feedback import FeedbackPage
+        return FeedbackPage(self.testsetup)
 
     def click_themes_link(self):
         self.is_themes_link_visible
         self.selenium.click(self._themes_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
-        return themes_page.ThemesPage(self.testsetup)
+
+        from pages.desktop.themes import ThemesPage
+        return ThemesPage(self.testsetup)
 
     def click_main_heading_link(self):
         self.is_main_heading_link_visible
         self.selenium.click(self._main_heading_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
-        return feedback_page.FeedbackPage(self.testsetup)
+
+        from pages.desktop.feedback import FeedbackPage
+        return FeedbackPage(self.testsetup)
 
     def click_sites_link(self):
         self.is_sites_link_visible
         self.selenium.click(self._sites_link_locator)
         self.selenium.wait_for_page_to_load(self.timeout)
-        return sites_page.SitesPage(self.testsetup)
+
+        from pages.desktop.sites import SitesPage
+        return SitesPage(self.testsetup)
 
     @property
     def is_feedback_link_visible(self):

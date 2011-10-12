@@ -19,8 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Tobias Markus <tobbi.bugs@googlemail.com>
-#                 Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -36,44 +35,11 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Jan 26, 2011
+Created on Jan 28, 2011
 '''
-import pytest
-xfail = pytest.mark.xfail
-from unittestzero import Assert
-
-from pages.desktop.sites import SitesPage
-from pages.desktop.themes import ThemesPage
-from pages.desktop.theme import ThemePage
+from pages.base import InputBasePage
 
 
-class TestSimilarMessages:
+class ThanksPage(InputBasePage):
 
-    @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
-    def test_similar_messages(self, mozwebqa):
-        """
-        This testcase covers # 13807 in Litmus
-        """
-        sites_pg = SitesPage(mozwebqa)
-        themes_pg = ThemesPage(mozwebqa)
-        theme_pg = ThemePage(mozwebqa)
-
-        sites_pg.go_to_sites_page()
-        sites_pg.product_filter.select_product('firefox')
-        sites_pg.product_filter.select_version(2, by='index')
-
-        #store the first site's name and click in
-        site = sites_pg.site(1)
-        site_name = site.name
-        site.click_name()
-
-        #click similar messages and navigate to the second page
-        themes_pg.theme(1).click_similar_messages()
-        theme_pg.click_next_page()
-
-        Assert.equal(theme_pg.messages_heading, 'Theme')
-        Assert.equal(theme_pg.page_from_url, '2')
-        Assert.equal(theme_pg.theme_callout, 'Theme for ' + site_name)
-        Assert.true(theme_pg.message_count > 0)
-        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
-        [Assert.true(site_name in message.site) for message in theme_pg.messages]
+    _page_title = u'Thanks :: Firefox Input'

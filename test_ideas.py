@@ -47,9 +47,8 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
-import submit_idea_page
-import thanks_page
-import feedback_page
+from pages.desktop.submit_idea import SubmitIdeaPage
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestSubmitIdea:
@@ -61,7 +60,7 @@ class TestSubmitIdea:
         1. Verifies the thank you page is loaded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
+        submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
@@ -76,7 +75,7 @@ class TestSubmitIdea:
         1. Verifies the thank you page is loaded
         
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
+        submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
@@ -93,7 +92,7 @@ class TestSubmitIdea:
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
 
         """
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
+        submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         Assert.equal(submit_idea_pg.remaining_character_count, "250")
@@ -134,7 +133,7 @@ class TestSubmitIdea:
 
         """
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
-        submit_idea_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
+        submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
         submit_idea_pg.set_feedback(idea)

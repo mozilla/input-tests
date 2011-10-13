@@ -45,7 +45,7 @@ Created on June 20, 2011
 from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 
-class SubmitSadPage(SubmitFeedbackPage):
+class SubmitSadFeedbackPage(SubmitFeedbackPage):
 
     _feedback_locator = 'id=sad-description'
     _remaining_character_count_locator = 'css=#sad-description-counter'

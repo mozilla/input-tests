@@ -94,3 +94,5 @@ class SitesPage(InputBasePage):
         def click_name(self):
             self.selenium.click(self.absolute_locator(self._name_locator))
             self.selenium.wait_for_page_to_load(self.timeout)
+            from pages.desktop.themes import ThemesPage
+            return ThemesPage(self.testsetup)

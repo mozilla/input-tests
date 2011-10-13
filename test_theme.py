@@ -45,7 +45,6 @@ import re
 from unittestzero import Assert
 
 from pages.desktop.themes import ThemesPage
-from pages.desktop.theme import ThemePage
 
 
 class TestThemePage:
@@ -60,8 +59,7 @@ class TestThemePage:
         '''
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
-        themes_pg.themes[0].click_similar_messages()
-        theme_pg = ThemePage(mozwebqa)
+        theme_pg = themes_pg.themes[0].click_similar_messages()
 
         Assert.equal(theme_pg.messages_heading, "Theme")
         Assert.true(theme_pg.is_back_link_visible())
@@ -70,8 +68,7 @@ class TestThemePage:
     def test_platform_link_applies_platform_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
-        themes_pg.themes[0].click_similar_messages()
-        theme_pg = ThemePage(mozwebqa)
+        theme_pg = themes_pg.themes[0].click_similar_messages()
 
         [Assert.true(message.is_platform_visible()) for message in theme_pg.messages]
 
@@ -85,8 +82,7 @@ class TestThemePage:
     def test_locale_link_applies_locale_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
-        themes_pg.themes[0].click_similar_messages()
-        theme_pg = ThemePage(mozwebqa)
+        theme_pg = themes_pg.themes[0].click_similar_messages()
 
         [Assert.true(message.is_locale_visible()) for message in theme_pg.messages]
 
@@ -100,8 +96,7 @@ class TestThemePage:
     def test_value_of_timestamp_link(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
-        themes_pg.themes[0].click_similar_messages()
-        theme_pg = ThemePage(mozwebqa)
+        theme_pg = themes_pg.themes[0].click_similar_messages()
 
         for message in theme_pg.messages:
-            Assert.not_none(re.match('\d+ \w+ \w+', message.time))
+            Assert.not_none(re.match('(\d+ \w+ ago)|(\w{3} \d{1,2}, \d{4})', message.time))

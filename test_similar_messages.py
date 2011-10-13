@@ -45,8 +45,6 @@ xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 from pages.desktop.sites import SitesPage
-from pages.desktop.themes import ThemesPage
-from pages.desktop.theme import ThemePage
 
 
 class TestSimilarMessages:
@@ -57,8 +55,6 @@ class TestSimilarMessages:
         This testcase covers # 13807 in Litmus
         """
         sites_pg = SitesPage(mozwebqa)
-        themes_pg = ThemesPage(mozwebqa)
-        theme_pg = ThemePage(mozwebqa)
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')
@@ -67,15 +63,15 @@ class TestSimilarMessages:
         #store the first site's name and click in
         site = sites_pg.site(1)
         site_name = site.name
-        site.click_name()
+        themes_pg = site.click_name()
 
         #click similar messages and navigate to the second page
-        themes_pg.theme(1).click_similar_messages()
+        theme_pg = themes_pg.theme(1).click_similar_messages()
         theme_pg.click_next_page()
 
         Assert.equal(theme_pg.messages_heading, 'Theme')
         Assert.equal(theme_pg.page_from_url, '2')
         Assert.equal(theme_pg.theme_callout, 'Theme for ' + site_name)
-        Assert.true(theme_pg.message_count > 0)
+        Assert.greater(theme_pg.message_count, 0)
         Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
         [Assert.true(site_name in message.site) for message in theme_pg.messages]

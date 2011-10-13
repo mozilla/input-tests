@@ -37,9 +37,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Jan 28, 2011
-'''
+
 from pages.base import InputBasePage
 
 

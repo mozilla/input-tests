@@ -38,10 +38,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-'''
-Created on Jun 21, 2010
-
-'''
 import re
 import time
 import base64

@@ -35,9 +35,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Jan 26, 2011
-'''
+
 import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert

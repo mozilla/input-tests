@@ -38,10 +38,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
-'''
-Created on Nov 19, 2010
-'''
 import urllib
 from urlparse import urlparse
 

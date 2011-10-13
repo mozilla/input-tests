@@ -37,11 +37,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
 
-Created on Dec 22, 2010
-
-'''
 from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 

@@ -36,9 +36,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Mar 28, 2011
-'''
+
 from page import Page
 
 

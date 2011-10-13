@@ -40,11 +40,7 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import re
 import time
-import base64
-
-http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
 
 
 class Page(object):

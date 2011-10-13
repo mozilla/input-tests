@@ -40,7 +40,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 from unittestzero import Assert
 
 from pages.desktop.feedback import FeedbackPage

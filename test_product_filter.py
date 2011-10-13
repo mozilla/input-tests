@@ -39,8 +39,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 from pages.desktop.feedback import FeedbackPage

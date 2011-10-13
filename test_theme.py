@@ -39,7 +39,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 import re
 
 from unittestzero import Assert

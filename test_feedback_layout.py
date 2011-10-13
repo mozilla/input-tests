@@ -38,11 +38,12 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.feedback import FeedbackPage
+
+xfail = pytest.mark.xfail
 
 
 class Test_Feedback_Layout:

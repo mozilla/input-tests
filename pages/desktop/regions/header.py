@@ -38,7 +38,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 from page import Page
 
 

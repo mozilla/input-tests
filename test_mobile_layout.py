@@ -39,9 +39,9 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
 
 from pages.mobile.feedback import FeedbackPage
-import pytest
 
 
 class Test_Feedback_Layout:

@@ -39,10 +39,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from datetime import date
 
 from unittestzero import Assert
 
-from datetime import date
 from pages.desktop.feedback import FeedbackPage
 
 

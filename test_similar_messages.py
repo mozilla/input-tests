@@ -38,11 +38,12 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.sites import SitesPage
+
+xfail = pytest.mark.xfail
 
 
 class TestSimilarMessages:

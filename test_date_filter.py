@@ -39,16 +39,15 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from datetime import date
-from datetime import timedelta
+from datetime import date, timedelta
 import random
-import string
 
 from unittestzero import Assert
 import pytest
-xfail = pytest.mark.xfail
 
 from pages.desktop.feedback import FeedbackPage
+
+xfail = pytest.mark.xfail
 
 
 class TestSearchDates:

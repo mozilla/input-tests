@@ -84,15 +84,14 @@ class InputBasePage(Page):
 
     @property
     def is_next_page_visible(self):
-        return self.is_element_visible(self._next_page_locator)
+        return self.selenium.is_visible(self._next_page_locator)
 
     @property
     def is_previous_page_visible(self):
-        return self.is_element_visible(self._previous_page_locator)
+        return self.selenium.is_visible(self._previous_page_locator)
 
     @property
     def is_next_page_enabled(self):
-        self.is_element_visible(self._next_page_locator)
         if not self.selenium.get_attribute(self._next_page_locator + "@class") == "prev inactive":
             return True
         else:
@@ -100,7 +99,6 @@ class InputBasePage(Page):
 
     @property
     def is_previous_page_enabled(self):
-        self.is_element_visible(self._previous_page_locator)
         if not self.selenium.get_attribute(self._previous_page_locator + "@class") == "prev inactive":
             return True
         else:

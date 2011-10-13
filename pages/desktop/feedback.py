@@ -146,7 +146,7 @@ class FeedbackPage(InputBasePage):
 
     @property
     def is_chart_visible(self):
-        return self.is_element_visible(self._chart_locator)
+        return self.selenium.is_visible(self._chart_locator)
 
     @property
     def warning_heading(self):

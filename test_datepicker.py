@@ -43,6 +43,7 @@ from unittestzero import Assert
 from datetime import date
 from pages.desktop.feedback import FeedbackPage
 
+
 class TestDatePicker:
 
     def test_datepicker_is_only_shown_when_a_date_field_has_focus(self, mozwebqa):

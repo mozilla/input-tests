@@ -278,10 +278,10 @@ class DateFilter(Page):
 
     def filter_by_custom_dates_using_keyboard(self, start_date, end_date):
         """
-        
+
         Filters by a custom date range using any input type, not using date() format
         This uses selenium.type_keys in an attempt to mimic actual typing
-        
+
         """
         self.click_custom_dates()
         self.set_custom_start_date_using_keyboard(start_date)

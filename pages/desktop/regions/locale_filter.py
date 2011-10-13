@@ -70,10 +70,10 @@ class LocaleFilter(Page):
         self.wait_for_element_visible(self._extra_locales_locator)
 
     def contains_locale(self, lookup):
-        try :
+        try:
             self.selenium.get_text("css=#filter_locale div li:contains(%s)" % lookup)
             return True
-        except :
+        except:
             return False
 
     def locales(self):

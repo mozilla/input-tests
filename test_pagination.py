@@ -98,4 +98,3 @@ class TestPagination:
             Assert.equal(feedback_pg.next_link, u"Older Messages \xbb")
 
             Assert.equal(int(feedback_pg.page_from_url), var)
-

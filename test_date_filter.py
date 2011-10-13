@@ -256,6 +256,7 @@ class TestSearchDates:
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
+
     @xfail(reason="Bug 688113 - test_feedback_custom_date_filter_with_end_date_lower_than_start_date suffers from Search Unavailable Errors")
     def test_feedback_custom_date_filter_with_end_date_lower_than_start_date(self, mozwebqa):
         """

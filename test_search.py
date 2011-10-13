@@ -84,4 +84,3 @@ class TestSearch:
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
-

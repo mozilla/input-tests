@@ -89,13 +89,13 @@ class ProductFilter(Page):
             """
             return self.selenium.get_select_options(self._version_dropdown_locator)
 
-        def selected_version(self, type = 'value'):
+        def selected_version(self, type='value'):
             """
             returns the currently selected product version
             """
             return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
-        def select_version(self, lookup, by = 'value'):
+        def select_version(self, lookup, by='value'):
             """
             selects product version
             """

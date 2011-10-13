@@ -49,7 +49,7 @@ class ThemePage(InputBasePage):
     _back_link_locator = "css=a.exit"
     _messages_locator = "css=#messages .message"
     _relative_date = "css=.meta a"
-    _total_message_count_locator = "css=#big-count p" 
+    _total_message_count_locator = "css=#big-count p"
 
     def is_back_link_visible(self):
         """

@@ -46,10 +46,11 @@ Change the path/name to the downloaded Selenium server file.
 
 ### Running tests locally
 
-To run tests locally its a simple case of calling the command below from this directory
+To run tests locally it's a simple case of calling py.test from the root directory.
 
-    py.test . 
+    py.test
 
+For more command line options access https://github.com/davehunt/pytest-mozwebqa
 
 Writing Tests
 -------------

@@ -53,24 +53,21 @@ class Test_Feedback_Layout:
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area
         """
-        base_page = FeedbackPage(mozwebqa)
-        base_page.go_to_feedback_page()
+        feedback_pg = FeedbackPage(mozwebqa)
 
-        header = base_page.header_region
-
-        feedback_pg = header.click_feedback_link()
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.header.click_feedback_link()
         Assert.true(feedback_pg.is_the_current_page)
-        base_page.go_to_feedback_page()
 
-        themes = header.click_themes_link()
-        Assert.true(themes.is_the_current_page)
-        base_page.go_to_feedback_page()
+        themes_pg = feedback_pg.header.click_themes_link()
+        Assert.true(themes_pg.is_the_current_page)
+        feedback_pg.go_to_feedback_page()
 
-        sites = header.click_sites_link()
-        Assert.true(sites.is_the_current_page)
-        base_page.go_to_feedback_page()
+        sites_pg = feedback_pg.header.click_sites_link()
+        Assert.true(sites_pg.is_the_current_page)
+        feedback_pg.go_to_feedback_page()
 
-        feedback_pg = header.click_main_heading_link()
+        feedback_pg.header.click_main_heading_link()
         Assert.true(feedback_pg.is_the_current_page)
 
     def test_the_area_layout(self, mozwebqa):
@@ -80,21 +77,13 @@ class Test_Feedback_Layout:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        footer = feedback_pg.footer_region
-
-        Assert.equal(footer.privacy_policy, "Privacy Policy")
-
-        Assert.equal(footer.legal_notices, "Legal Notices")
-
-        Assert.equal(footer.report_trademark_abuse, "Report Trademark Abuse")
-
-        Assert.equal(footer.unless_otherwise_noted, "noted")
-
-        Assert.equal(footer.creative_commons, "Creative Commons Attribution Share-Alike License v3.0")
-
-        Assert.equal(footer.about_input, "About Firefox Input")
-
-        Assert.true(footer.is_language_dropdown_visible)
+        Assert.equal(feedback_pg.footer.privacy_policy, "Privacy Policy")
+        Assert.equal(feedback_pg.footer.legal_notices, "Legal Notices")
+        Assert.equal(feedback_pg.footer.report_trademark_abuse, "Report Trademark Abuse")
+        Assert.equal(feedback_pg.footer.unless_otherwise_noted, "noted")
+        Assert.equal(feedback_pg.footer.creative_commons, "Creative Commons Attribution Share-Alike License v3.0")
+        Assert.equal(feedback_pg.footer.about_input, "About Firefox Input")
+        Assert.true(feedback_pg.footer.is_language_dropdown_visible)
 
     def test_the_left_panel_layout(self, mozwebqa):
         """

@@ -43,12 +43,9 @@ Created on Dec 22, 2010
 
 import time
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 from pages.desktop.submit_idea import SubmitIdeaPage
-from pages.desktop.feedback import FeedbackPage
 
 
 class TestSubmitIdea:
@@ -73,7 +70,7 @@ class TestSubmitIdea:
 
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
-        
+
         """
         submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
@@ -123,7 +120,6 @@ class TestSubmitIdea:
         Assert.false(submit_idea_pg.is_remaining_character_count_limited)
         Assert.true(submit_idea_pg.is_remaining_character_count_negative)
         Assert.false(submit_idea_pg.is_submit_feedback_enabled)
-
 
     def test_submitting_same_idea_twice_generates_error_message(self, mozwebqa):
         """

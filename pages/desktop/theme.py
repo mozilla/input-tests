@@ -47,7 +47,7 @@ class ThemePage(InputBasePage):
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"
     _back_link_locator = "css=a.exit"
-    _messages_locator = "id('messages')//li[@class='message']"
+    _messages_locator = "css=#messages .message"
     _relative_date = "css=.meta a"
     _total_message_count_locator = "css=#big-count p" 
 
@@ -96,7 +96,7 @@ class ThemePage(InputBasePage):
 
     @property
     def message_count(self):
-        return int(self.selenium.get_xpath_count(self._messages_locator))
+        return self.selenium.get_css_count(self._messages_locator)
 
     @property
     def messages(self):

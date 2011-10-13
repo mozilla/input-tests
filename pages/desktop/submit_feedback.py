@@ -73,22 +73,24 @@ class SubmitFeedbackPage(InputBasePage):
     def click_happy_feedback(self):
         self.selenium.click(self._happy_button_locator)
         self.wait_for_click_to_finish_animating('happy')
-        self.selenium.is_visible(self._happy_page_locator)
+        from pages.desktop.submit_happy_feedback import SubmitHappyFeedbackPage
+        return SubmitHappyFeedbackPage(self.testsetup)
 
     def click_sad_feedback(self):
         self.selenium.click(self._sad_button_locator)
         self.wait_for_click_to_finish_animating('sad')
-        self.selenium.is_visible(self._sad_page_locator)
+        from pages.desktop.submit_sad_feedback import SubmitSadFeedbackPage
+        return SubmitSadFeedbackPage(self.testsetup)
 
     def click_idea_feedback(self):
         self.selenium.click(self._idea_button_locator)
         self.wait_for_click_to_finish_animating('idea')
-        self.selenium.is_visible(self._idea_page_locator)
+        from pages.desktop.submit_idea import SubmitIdeaPage
+        return SubmitIdeaPage(self.testsetup)
 
     def click_back(self):
         self.selenium.click(self._back_locator)
         self.wait_for_click_to_finish_animating('intro')
-        self.selenium.is_visible(self._intro_page_locator)
 
     def wait_for_click_to_finish_animating(self, locator):
         self.selenium.wait_for_condition(

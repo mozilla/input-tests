@@ -94,3 +94,5 @@ class ThemesPage(InputBasePage):
         def click_similar_messages(self):
             self.selenium.click(self.absolute_locator(self._similar_messages_locator))
             self.selenium.wait_for_page_to_load(self.timeout)
+            from pages.desktop.theme import ThemePage
+            return ThemePage(self.testsetup)

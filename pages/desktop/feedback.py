@@ -101,16 +101,6 @@ class FeedbackPage(InputBasePage):
         from pages.desktop.regions.date_filter import DateFilter
         return DateFilter(self.testsetup)
 
-    @property
-    def header_region(self):
-        from pages.desktop.regions.header import Header
-        return Header(self.testsetup)
-
-    @property
-    def footer_region(self):
-        from pages.desktop.regions.footer import Footer
-        return Footer(self.testsetup)
-
     def search_for(self, search_string):
         self.selenium.type(self._search_box, search_string)
         self.selenium.key_press(self._search_box, '\\13')

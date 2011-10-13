@@ -51,7 +51,7 @@ from unittestzero import Assert
 import pytest
 xfail = pytest.mark.xfail
 
-import feedback_page
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestSearchDates:
@@ -64,7 +64,7 @@ class TestSearchDates:
         1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.date_filter.current_days, u"\u221e")
@@ -86,7 +86,7 @@ class TestSearchDates:
         2. Verifies date-start=<date> and end-date=<date> in the url
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.date_filter.custom_dates_tooltip, "Custom")
@@ -116,7 +116,7 @@ class TestSearchDates:
         1.Verifies custom date fields do not accept alphabet
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -139,7 +139,7 @@ class TestSearchDates:
         1.Verifies random numbers show all recent feedback
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -163,7 +163,7 @@ class TestSearchDates:
         1.Verifies invalid dates show all recent feedback
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -188,7 +188,7 @@ class TestSearchDates:
 
         """
 
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -214,7 +214,7 @@ class TestSearchDates:
 
         """
 
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -240,7 +240,7 @@ class TestSearchDates:
 
         """
 
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -264,7 +264,7 @@ class TestSearchDates:
         1. Verifies start_date > end_date get switched automatically and the results are shown from end date to start date
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 
@@ -287,7 +287,7 @@ class TestSearchDates:
         1.Verifies custom date fields show all recent feedback
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
 

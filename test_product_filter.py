@@ -44,8 +44,8 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
-import feedback_page
-import sites_page
+from pages.desktop.feedback import FeedbackPage
+from pages.desktop.sites import SitesPage
 
 
 class TestProductFilter:
@@ -58,7 +58,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         product = "firefox"
         feedback_pg.go_to_feedback_page()
@@ -81,7 +81,7 @@ class TestProductFilter:
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         product = "firefox"
         version = "--"
@@ -101,7 +101,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         product = "mobile"
         feedback_pg.go_to_feedback_page()
@@ -124,7 +124,7 @@ class TestProductFilter:
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         product = "mobile"
         version = "--"
@@ -144,7 +144,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        sites_pg = sites_page.SitesPage(mozwebqa)
+        sites_pg = SitesPage(mozwebqa)
 
         product = "firefox"
         sites_pg.go_to_sites_page()
@@ -168,7 +168,7 @@ class TestProductFilter:
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
         """
-        sites_pg = sites_page.SitesPage(mozwebqa)
+        sites_pg = SitesPage(mozwebqa)
 
         product = "mobile"
         sites_pg.go_to_sites_page()

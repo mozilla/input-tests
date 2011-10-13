@@ -19,9 +19,7 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Vishal
-#                 David Burns
-#                 Dave Hunt <dhunt@mozilla.com>
+# Contributor(s): Dave Hunt <dhunt@mozilla.com>
 #                 Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
@@ -38,59 +36,27 @@
 #
 # ***** END LICENSE BLOCK *****
 '''
-Created on Nov 24, 2010
+Created on Jan 28, 2011
 '''
-from page import Page
-
-import input_base_page
-import type_filter_region
+from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 
-class ThemesPage(input_base_page.InputBasePage):
+class SubmitHappyFeedbackPage(SubmitFeedbackPage):
 
-    _page_title = 'Themes :: Firefox Input'
+    _feedback_locator = 'id=happy-description'
+    _remaining_character_count_locator = 'css=#happy-description-counter'
+    _submit_feedback_locator = 'css=#happy .submit span'
+    _error_locator = 'css=#happy .errorlist li'
+    _back_locator = 'css=#happy > header > nav > a'
 
-    _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
-
-    def go_to_themes_page(self):
-        self.selenium.open('/themes/')
+    def go_to_submit_happy_feedback_page(self):
+        self.selenium.open('/feedback#happy')
         self.is_the_current_page
+        self.wait_for_element_visible(self._happy_page_locator)
 
     @property
-    def type_filter(self):
-        return type_filter_region.TypeFilter.ButtonFilter(self.testsetup)
+    def is_submit_feedback_enabled(self):
+        return not self.selenium.is_element_present('css=#happy .submit a.disabled')
 
-    @property
-    def theme_count(self):
-        return int(self.selenium.get_xpath_count(self._themes_locator))
-
-    @property
-    def themes(self):
-        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
-
-    def theme(self, index):
-        return self.Theme(self.testsetup, index)
-
-    class Theme(Page):
-
-        _type_locator = " .type"
-        _similar_messages_locator = " .more"
-
-        def __init__(self, testsetup, index):
-            Page.__init__(self, testsetup)
-            self.index = index
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
-
-        @property
-        def root_locator(self):
-            return "css=#themes .theme:nth(%s)" % (self.index - 1)
-
-        @property
-        def type(self):
-            return self.selenium.get_text(self.absolute_locator(self._type_locator))
-
-        def click_similar_messages(self):
-            self.selenium.click(self.absolute_locator(self._similar_messages_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+    def is_visible(self):
+        return self.selenium.is_visible(self._happy_page_locator)

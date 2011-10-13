@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
 #
@@ -13,14 +13,15 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Original Code is Firefox Input.
+# The Original Code is Mozilla WebQA Tests.
 #
-# The Initial Developer of the Original Code is
-# Mozilla Corp.
+# The Initial Developer of the Original Code is Mozilla.
+#
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): Bebe <florin.strugariu@softvision.ro>
+# Contributor(s):
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -35,30 +36,3 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-
-Created on June 20, 2011
-
-'''
-import submit_feedback_page
-
-
-class SubmitSadPage(submit_feedback_page.SubmitFeedbackPage):
-
-    _feedback_locator = 'id=sad-description'
-    _remaining_character_count_locator = 'css=#sad-description-counter'
-    _submit_feedback_locator = 'css=#sad .submit span'
-    _error_locator = 'css=#sad .errorlist li'
-    _back_locator = 'css=#sad > header > nav > a'
-
-    def go_to_submit_sad_page(self):
-        self.selenium.open('/feedback#sad')
-        self.is_the_current_page
-        self.wait_for_element_visible(self._sad_page_locator)
-
-    @property
-    def is_submit_feedback_enabled(self):
-        return not self.selenium.is_element_present('css=#sad .submit a.disabled')
-
-    def is_visible(self):
-        return self.selenium.is_visible(self._sad_page_locator)

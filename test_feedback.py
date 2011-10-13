@@ -44,11 +44,11 @@ import pytest
 xfail = pytest.mark.xfail
 from unittestzero import Assert
 
-import submit_feedback_page
-import submit_happy_feedback_page
-import submit_sad_feedback_page
-import submit_idea_page
-import thanks_page
+from pages.desktop.submit_feedback import SubmitFeedbackPage
+from pages.desktop.submit_happy_feedback import SubmitHappyFeedbackPage
+from pages.desktop.submit_sad_feedback import SubmitSadPage
+from pages.desktop.submit_idea import SubmitIdeaPage
+from pages.desktop.thanks import ThanksPage
 
 class TestFeedback:
 
@@ -58,7 +58,7 @@ class TestFeedback:
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
+        submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(text)
@@ -75,7 +75,7 @@ class TestFeedback:
         This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
         """
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
+        submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
@@ -89,7 +89,7 @@ class TestFeedback:
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
         """
-        submit_happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
+        submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "140")
@@ -126,23 +126,23 @@ class TestFeedback:
         Litmus 13651 - Input: Submit feedback page
         """
 
-        submit_feedback_pg = submit_feedback_page.SubmitFeedbackPage(mozwebqa)
+        submit_feedback_pg = SubmitFeedbackPage(mozwebqa)
         submit_feedback_pg.go_to_submit_feedback_page()
 
         submit_feedback_pg.click_happy_feedback()
-        happy_feedback_pg = submit_happy_feedback_page.SubmitHappyFeedbackPage(mozwebqa)
+        happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % mozwebqa.base_url)
         happy_feedback_pg.click_back()
 
         submit_feedback_pg.click_sad_feedback()
-        sad_feedback_pg = submit_sad_feedback_page.SubmitSadPage(mozwebqa)
+        sad_feedback_pg = SubmitSadPage(mozwebqa)
 
         Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % mozwebqa.base_url)
         sad_feedback_pg.click_back()
 
         submit_feedback_pg.click_idea_feedback()
-        idea_feedback_pg = submit_idea_page.SubmitIdeaPage(mozwebqa)
+        idea_feedback_pg = SubmitIdeaPage(mozwebqa)
 
         Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % mozwebqa.base_url)
         idea_feedback_pg.click_back()

@@ -38,7 +38,7 @@
 
 from unittestzero import Assert
 
-import feedback_page
+from pages.desktop.feedback import FeedbackPage
 
 
 class TestPlatformFilter:
@@ -51,7 +51,7 @@ class TestPlatformFilter:
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')

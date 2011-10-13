@@ -41,8 +41,7 @@
 from unittestzero import Assert
 
 from datetime import date
-import feedback_page
-
+from pages.desktop.feedback import FeedbackPage
 
 class TestDatePicker:
 
@@ -56,7 +55,7 @@ class TestDatePicker:
         4.Selected date is set in the date field and calendar pop up gets closed
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
         Assert.false(feedback_pg.date_filter.is_datepicker_visible)
@@ -87,7 +86,7 @@ class TestDatePicker:
         select the date. Verify that selected date appears in the date field.
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
 
         today_date = date.today()
 
@@ -108,7 +107,7 @@ class TestDatePicker:
         is in current month thus unable to select some future date.
 
         """
-        feedback_pg = feedback_page.FeedbackPage(mozwebqa)
+        feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.date_filter.click_custom_dates()
         feedback_pg.date_filter.click_start_date()

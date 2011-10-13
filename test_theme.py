@@ -19,9 +19,10 @@
 # Portions created by the Initial Developer are Copyright (C) 2011
 # the Initial Developer. All Rights Reserved.
 #
-# Contributor(s): teodosia.pop@softvision.ro
-#                 mbrandt@mozilla.com
-#                 dhunt@mozilla.com
+# Contributor(s):
+#   Teodosia Pop <teodosia.pop@softvision.ro>
+#   Matt Brandt <mbrandt@mozilla.com>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -42,8 +43,8 @@ import re
 
 from unittestzero import Assert
 
-import theme_page
-import themes_page
+from pages.desktop.themes import ThemesPage
+from pages.desktop.theme import ThemePage
 
 
 class TestThemePage:
@@ -56,20 +57,20 @@ class TestThemePage:
         the user platform, language 3. Verify timestamp link goes to the suggestion, the
         Platform link goes to that product filter, verify language goes to locale filter.
         '''
-        themes_pg = themes_page.ThemesPage(mozwebqa)
+        themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(mozwebqa)
+        theme_pg = ThemePage(mozwebqa)
 
         Assert.equal(theme_pg.messages_heading, "Theme")
         Assert.true(theme_pg.is_back_link_visible())
         Assert.true(theme_pg.is_message_count_visible())
 
     def test_platform_link_applies_platform_filter(self, mozwebqa):
-        themes_pg = themes_page.ThemesPage(mozwebqa)
+        themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(mozwebqa)
+        theme_pg = ThemePage(mozwebqa)
 
         [Assert.true(message.is_platform_visible()) for message in theme_pg.messages]
 
@@ -81,10 +82,10 @@ class TestThemePage:
             Assert.equal(message.platform, platform)
 
     def test_locale_link_applies_locale_filter(self, mozwebqa):
-        themes_pg = themes_page.ThemesPage(mozwebqa)
+        themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(mozwebqa)
+        theme_pg = ThemePage(mozwebqa)
 
         [Assert.true(message.is_locale_visible()) for message in theme_pg.messages]
 
@@ -96,10 +97,10 @@ class TestThemePage:
             Assert.equal(message.locale, locale)
 
     def test_value_of_timestamp_link(self, mozwebqa):
-        themes_pg = themes_page.ThemesPage(mozwebqa)
+        themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         themes_pg.themes[0].click_similar_messages()
-        theme_pg = theme_page.ThemePage(mozwebqa)
+        theme_pg = ThemePage(mozwebqa)
 
         for message in theme_pg.messages:
             Assert.not_none(re.match('\d+ \w+ \w+', message.time))

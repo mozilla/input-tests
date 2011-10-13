@@ -48,14 +48,8 @@ http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
 
 
 class Page(object):
-    '''
-    Base class for all Pages
-    '''
 
     def __init__(self, testsetup):
-        '''
-        Constructor
-        '''
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium

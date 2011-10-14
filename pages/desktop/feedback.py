@@ -124,9 +124,7 @@ class FeedbackPage(InputBasePage):
 
     @property
     def total_message_count_heading(self):
-        """
-        Get the total messages header value
-        """
+        """Get the total messages header value."""
         return self.selenium.get_text(self._total_message_count_heading_locator)
 
     @property

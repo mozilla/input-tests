@@ -50,9 +50,8 @@ class TestPagination:
 
     @xfail(reason="Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
     def test_themes_filters_persist_when_paging_through_results(self, mozwebqa):
-        """
+        """This testcase covers # 15018 in Litmus.
 
-        This testcase covers # 15018 in Litmus
         1. Verifies the filter is in the URL
         2. Verifies the currently applied filter is styled appropriately
         3. Verifies the results of the filter
@@ -69,9 +68,7 @@ class TestPagination:
 
     @xfail(reason="Bug 668560 - The css class names 'prev' and 'next' are ambiguous:")
     def test_search_pagination(self, mozwebqa):
-        """
-        Litmus 13636 - Input: Verify Search results have pagination
-        """
+        """Litmus 13636 - Input: Verify Search results have pagination."""
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for("facebook")

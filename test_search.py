@@ -48,9 +48,7 @@ from pages.desktop.feedback import FeedbackPage
 class TestSearch:
 
     def test_that_empty_search_of_feedback_returns_some_data(self, mozwebqa):
-        '''
-            Litmus 13847
-        '''
+        """Litmus 13847"""
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
@@ -58,9 +56,7 @@ class TestSearch:
         Assert.true(0 < feedback_pg.message_count)
 
     def test_that_we_can_search_feedback_with_unicode(self, mozwebqa):
-        '''
-            Litmus 13697
-        '''
+        """Litmus 13697"""
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
@@ -73,11 +69,12 @@ class TestSearch:
         Assert.true(0 < feedback_pg.message_count)
 
     def test_search_box_placeholder(self, mozwebqa):
-        '''
-            Litmus 13845
+        """Litmus 13845.
+
         1. Verify that there is a search field appearing in Latest Feedback
         section it shows by default "Search by keyword"
-        '''
+
+        """
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()

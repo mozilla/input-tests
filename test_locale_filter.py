@@ -47,11 +47,12 @@ from pages.desktop.feedback import FeedbackPage
 class TestLocaleFilter:
 
     def test_feedback_can_be_filtered_by_locale(self, mozwebqa):
-        """
-        This testcase covers # 15120 in Litmus
+        """This testcase covers # 15120 in Litmus.
+
         1. Verify that the number of messages in the locale list matches the number of messages returned
         2. Verify that the locale short code appears in the URL
         3. Verify that the locale for all messages on the first page of results is correct
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -70,14 +71,15 @@ class TestLocaleFilter:
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
     def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, mozwebqa):
-        """
-        This testcase covers # 15087 & 15120 in Litmus
+        """This testcase covers # 15087 & 15120 in Litmus.
+
         1. Verify the initial locale count is 10
         2. Verify clicking the more locales link shows additional locales
         3. Verify filtering by one of the additional locales
         4. Verify that the number of messages in the locale list matches the number of messages returned
         5. Verify that the locale short code appears in the URL
         6. Verify that the locale for all messages on the first page of results is correct
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -100,9 +102,7 @@ class TestLocaleFilter:
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
     def test_percentage(self, mozwebqa):
-        """
-        Litmus 13719 - input:Verify the Percentage # for Platform and Locale
-        """
+        """Litmus 13719 - input:Verify the Percentage # for Platform and Locale"""
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 

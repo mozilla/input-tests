@@ -45,9 +45,10 @@ from unittestzero import Assert
 class TestFeedback:
 
     def test_submitting_same_feedback_twice(self, mozwebqa):
-        """
-        This testcase covers # 15119 in Litmus
+        """This testcase covers # 15119 in Litmus.
+
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
+
         """
         text = 'I submit this feedback twice within a five minute window and it should fail.'
 
@@ -65,9 +66,10 @@ class TestFeedback:
         Assert.equal(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
 
     def test_submitting_feedback_with_unicode_characters(self, mozwebqa):
-        """
-        This testcase covers # 15061 in Litmus
+        """This testcase covers # 15061 in Litmus.
+
         1. Verifies the thank you page is loaded
+
         """
         from pages.desktop.submit_happy_feedback import SubmitHappyFeedbackPage
         submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
@@ -78,11 +80,12 @@ class TestFeedback:
         Assert.true(thanks_pg.is_the_current_page)
 
     def test_remaining_character_count(self, mozwebqa):
-        """
-        This testcase covers # 13806 in Litmus
+        """This testcase covers # 13806 in Litmus.
+
         1. Verifies the remaining character count decreases
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
+
         """
         from pages.desktop.submit_happy_feedback import SubmitHappyFeedbackPage
         submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
@@ -118,9 +121,7 @@ class TestFeedback:
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
     def test_navigating_away_from_initial_submit_feedback_page(self, mozwebqa):
-        """
-        Litmus 13651 - Input: Submit feedback page
-        """
+        """Litmus 13651 - Input: Submit feedback page."""
         from pages.desktop.submit_feedback import SubmitFeedbackPage
         submit_feedback_pg = SubmitFeedbackPage(mozwebqa)
         submit_feedback_pg.go_to_submit_feedback_page()

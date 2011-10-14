@@ -49,13 +49,14 @@ from pages.desktop.themes import ThemesPage
 class TestThemePage:
 
     def test_navigate_to_theme_page(self, mozwebqa):
-        '''
-        This testcase covers #15170 in Litmus
+        """This testcase covers #15170 in Litmus.
+
         Verify you are able to navigate to individual theme page, includes # of messages,
         page title = THEME, includes link 'Back to all themes', a relative date '1 day ago',
         the user platform, language 3. Verify timestamp link goes to the suggestion, the
         Platform link goes to that product filter, verify language goes to locale filter.
-        '''
+
+        """
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         theme_pg = themes_pg.themes[0].click_similar_messages()

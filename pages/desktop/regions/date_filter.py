@@ -68,19 +68,11 @@ class DateFilter(Page):
 
     @property
     def current_days(self):
-        """
-
-        Returns the link text of the currently applied days filter
-
-        """
+        """Returns the link text of the currently applied days filter."""
         return self.selenium.get_text(self._current_when_link_locator)
 
     def get_days_tooltip(self, days):
-        """
-
-        Returns the tooltip for the days link 1d/7d/30d
-
-        """
+        """Returns the tooltip for the days link 1d/7d/30d."""
         for time in self._when_links:
             if re.search(days, time, re.IGNORECASE) is None:
                 continue
@@ -88,9 +80,7 @@ class DateFilter(Page):
                 return self.selenium.get_attribute(time + "@title")
 
     def click_days(self, days):
-        """
-        clicks 1d/7d/30d
-        """
+        """Clicks 1d/7d/30d."""
         for time in self._when_links:
             if not re.search(days, time, re.IGNORECASE) is None:
                 if not self.current_days == time:
@@ -100,38 +90,22 @@ class DateFilter(Page):
 
     @property
     def custom_dates_tooltip(self):
-        """
-
-        Returns the tooltip for the custom dates filter link 1d/7d/30d
-
-        """
+        """Returns the tooltip for the custom dates filter link."""
         return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
 
     def click_custom_dates(self):
-        """
-
-        Clicks the custom date filter button and waits for the form to appear
-
-        """
+        """Clicks the custom date filter button and waits for the form to appear."""
         self.selenium.click(self._show_custom_dates_locator)
         self.wait_for_element_visible(self._custom_dates_locator)
 
     @property
     def is_custom_date_filter_visible(self):
-        """
-
-        Returns True if the custom date filter form is visible
-
-        """
+        """Returns True if the custom date filter form is visible."""
         return self.selenium.is_visible(self._custom_dates_locator)
 
     @property
     def is_datepicker_visible(self):
-        """
-
-        Returns True if the datepicker pop up is visible
-
-        """
+        """Returns True if the datepicker pop up is visible."""
         date_picker = self.selenium.get_attribute(self._datepicker_locator + "@" + "style")
         if (date_picker.find("block") == -1):
             return False
@@ -140,20 +114,12 @@ class DateFilter(Page):
 
     @property
     def is_custom_start_date_visible(self):
-        """
-
-        Returns True if the custom start date input form is visible
-
-        """
+        """Returns True if the custom start date input form is visible."""
         return self.selenium.is_visible(self._custom_start_date_locator)
 
     @property
     def is_custom_end_date_visible(self):
-        """
-
-        Returns True if the custom end date input form is visible
-
-        """
+        """Returns True if the custom end date input form is visible."""
         return self.selenium.is_visible(self._custom_end_date_locator)
 
     @property
@@ -169,57 +135,33 @@ class DateFilter(Page):
         self.wait_for_element_not_visible(self._datepicker_locator)
 
     def click_start_date(self):
-        """
-
-        Clicks the start date in the custom date filter form and waits for the datepicker to appear
-
-        """
+        """Clicks the start date in the custom date filter form and waits for the datepicker to appear."""
         self.selenium.click(self._custom_start_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
     def click_end_date(self):
-        """
-
-        Clicks the end date in the custom date filter form and waits for the datepicker to appear
-
-        """
+        """Clicks the end date in the custom date filter form and waits for the datepicker to appear."""
         self.selenium.click(self._custom_end_date_locator)
         self.wait_for_datepicker_to_finish_animating()
 
     def click_previous_month(self):
-        """
-
-        Clicks the previous month button in the datepicker
-
-        """
+        """Clicks the previous month button in the datepicker."""
         self.selenium.click(self._datepicker_previous_month_locator)
 
     def click_next_month(self):
-        """
-
-        Clicks the next month button in the datepicker
-
-        """
+        """Clicks the next month button in the datepicker."""
         # TODO: Throw an error if the next month button is disabled
         self.selenium.click(self._datepicker_next_month_locator)
 
     def click_day(self, day):
-        """
-
-        Clicks the day in the datepicker and waits for the datepicker to disappear
-
-        """
+        """Clicks the day in the datepicker and waits for the datepicker to disappear."""
         # TODO: Throw an error if the day button is disabled
         self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
         self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
         self.wait_for_element_not_visible(self._datepicker_locator)
 
     def select_date_from_datepicker(self, target_date):
-        """
-
-        Navigates to the target month in the datepicker and clicks the target day
-
-        """
+        """Navigates to the target month in the datepicker and clicks the target day."""
         currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
         targetYear = target_date.year
         yearDelta = targetYear - currentYear
@@ -267,11 +209,7 @@ class DateFilter(Page):
         self.select_date_from_datepicker(date)
 
     def filter_by_custom_dates_using_datepicker(self, start_date, end_date):
-        """
-
-        Filters by a custom date range
-
-        """
+        """Filters by a custom date range."""
         self.click_custom_dates()
         self.set_custom_start_date_using_datepicker(start_date)
         self.set_custom_end_date_using_datepicker(end_date)
@@ -279,9 +217,8 @@ class DateFilter(Page):
         self.selenium.wait_for_page_to_load(self.timeout)
 
     def filter_by_custom_dates_using_keyboard(self, start_date, end_date):
-        """
+        """Filters by a custom date range using any input type, not using date() format.
 
-        Filters by a custom date range using any input type, not using date() format
         This uses selenium.type_keys in an attempt to mimic actual typing
 
         """
@@ -293,9 +230,7 @@ class DateFilter(Page):
 
     @property
     def is_days_visible(self):
-        """
-        Verifys if the 1d/7d/30d are visible
-        """
+        """Verifies if the 1d/7d/30d are visible."""
         for time in self._when_links:
             if not self.selenium.is_visible(time):
                 return False

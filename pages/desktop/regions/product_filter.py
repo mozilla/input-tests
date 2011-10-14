@@ -50,16 +50,11 @@ class ProductFilter(Page):
 
         @property
         def products(self):
-            """
-            returns a list of available products
-            """
+            """Returns a list of available products."""
             return self.selenium.get_select_options(self._product_dropdown_locator)
 
         def default_values(self, product, version):
-            """
-            returns true if the dropdowns exists
-            """
-
+            """Returns true if the dropdowns exists."""
             if self.selected_product == product and\
                 self.selected_version() == version:
                 return True
@@ -68,37 +63,27 @@ class ProductFilter(Page):
 
         @property
         def selected_product(self):
-            """
-            returns the currently selected product
-            """
+            """Returns the currently selected product."""
             self.wait_for_element_present(self._product_dropdown_locator)
             return self.selenium.get_selected_value(self._product_dropdown_locator)
 
         def select_product(self, product):
-            """
-            selects product
-            """
+            """Selects a product."""
             if not product == self.selected_product:
                 self.selenium.select(self._product_dropdown_locator, "value=%s" % product)
                 self.selenium.wait_for_page_to_load(self.timeout)
 
         @property
         def versions(self):
-            """
-            returns a list of available versions
-            """
+            """Returns a list of available versions."""
             return self.selenium.get_select_options(self._version_dropdown_locator)
 
         def selected_version(self, type='value'):
-            """
-            returns the currently selected product version
-            """
+            """Returns the currently selected product version."""
             return getattr(self.selenium, "get_selected_" + type)(self._version_dropdown_locator)
 
         def select_version(self, lookup, by='value'):
-            """
-            selects product version
-            """
+            """Selects a product version."""
             if not lookup == self.selected_version(by):
                 self.selenium.select(self._version_dropdown_locator, "%s=%s" % (by, lookup))
                 self.selenium.wait_for_page_to_load(self.timeout)

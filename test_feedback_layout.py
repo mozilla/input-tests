@@ -47,14 +47,14 @@ xfail = pytest.mark.xfail
 
 
 class Test_Feedback_Layout:
+    """Litmus 13593 - input:Verify the layout of homepage."""
 
-    """
-    Litmus 13593 - input:Verify the layout of homepage
-    """
     def test_the_header_layout(self, mozwebqa):
-        """
+        """This testcase covers # 13594 & 13599 in Litmus.
+
         Litmus 13594 - input:Verify the layout of header area
         Litmus 13599 - input:Check the links in header area
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -74,8 +74,10 @@ class Test_Feedback_Layout:
         Assert.true(feedback_pg.is_the_current_page)
 
     def test_the_area_layout(self, mozwebqa):
-        """
-        Litmus 13598 - input:Verify the layout of footer area
+        """This testcase covers # 13598 in Litmus.
+
+        Litmus 13598 - input:Verify the layout of footer area.
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
@@ -89,12 +91,12 @@ class Test_Feedback_Layout:
         Assert.true(feedback_pg.footer.is_language_dropdown_visible)
 
     def test_the_left_panel_layout(self, mozwebqa):
-        """
-        Litmus 13595 - input:Verify the layout of the left hand side section containing various
-        filtering options
-        Litmus 13600 - input:Verify the applications drop down in Product
-        """
+        """This testcase covers # 13595 & 13600 in Litmus.
 
+        Litmus 13595 - input:Verify the layout of the left hand side section containing various filtering options
+        Litmus 13600 - input:Verify the applications drop down in Product
+
+        """
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
@@ -121,9 +123,11 @@ class Test_Feedback_Layout:
 
     @xfail(reason="Bug 664562 - [stage] [prod] View older marks does not redirect to page=2")
     def test_the_middle_section_page(self, mozwebqa):
-        """
+        """This testcase covers # 13599 & 13721 in Litmus.
+
         Litmus 13596 - input:Verify the layout of Latest Feedback section
-        Litmus 13721 - input:Verify the layout of Feedback page(Feedback tab)
+        Litmus 13721 - input:Verify the layout of Feedback page (feedback tab)
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
@@ -153,11 +157,12 @@ class Test_Feedback_Layout:
 
     @xfail(reason="Bug 659640 - [Input] 'While visiting' section is not shown on the homepage")
     def test_the_right_panel_layout(self, mozwebqa):
-        """
+        """This testcase covers # 13597 & 13716 in Litmus.
+
         Litmus 13597 - input:Verify the layout of right hand section containing statistics data
         Litmus 13716 - input:Verify while visiting section
-        """
 
+        """
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 

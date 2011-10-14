@@ -45,7 +45,7 @@ from urlparse import urlparse
 from page import Page
 
 
-class InputBasePage(Page):
+class BasePage(Page):
 
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"

@@ -38,11 +38,11 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from pages.base import InputBasePage
+from pages.base import BasePage
 from pages.desktop.regions.message import Message
 
 
-class ThemePage(InputBasePage):
+class ThemePage(BasePage):
 
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"

@@ -40,10 +40,10 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from pages.base import InputBasePage
+from pages.base import BasePage
 
 
-class SubmitFeedbackPage(InputBasePage):
+class SubmitFeedbackPage(BasePage):
 
     _page_title = 'Submit Feedback :: Firefox Input'
 

@@ -41,10 +41,10 @@
 # ***** END LICENSE BLOCK *****
 
 from page import Page
-from pages.base import InputBasePage
+from pages.base import BasePage
 
 
-class SitesPage(InputBasePage):
+class SitesPage(BasePage):
 
     _page_title = 'Sites :: Firefox Input'
 

@@ -42,11 +42,11 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from pages.base import InputBasePage
+from pages.base import BasePage
 from pages.desktop.regions.message import Message
 
 
-class FeedbackPage(InputBasePage):
+class FeedbackPage(BasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 

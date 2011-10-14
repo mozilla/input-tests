@@ -41,10 +41,10 @@
 # ***** END LICENSE BLOCK *****
 
 from page import Page
-from pages.base import InputBasePage
+from pages.base import BasePage
 
 
-class ThemesPage(InputBasePage):
+class ThemesPage(BasePage):
 
     _page_title = 'Themes :: Firefox Input'
 

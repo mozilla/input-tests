@@ -37,9 +37,9 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from pages.base import InputBasePage
+from pages.base import BasePage
 
 
-class ThanksPage(InputBasePage):
+class ThanksPage(BasePage):
 
     _page_title = u'Thanks :: Firefox Input'

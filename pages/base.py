@@ -54,6 +54,16 @@ class InputBasePage(Page):
     _previous_page_locator = "css=.pager .prev"
     _next_page_locator = "css=.pager .next"
 
+    @property
+    def header(self):
+        from pages.desktop.regions.header import Header
+        return Header(self.testsetup)
+
+    @property
+    def footer(self):
+        from pages.desktop.regions.footer import Footer
+        return Footer(self.testsetup)
+
     def click_previous_page(self):
         """
         Navigates to the previous page of results

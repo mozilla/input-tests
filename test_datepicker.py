@@ -39,18 +39,18 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from datetime import date
 
 from unittestzero import Assert
 
-from datetime import date
 from pages.desktop.feedback import FeedbackPage
+
 
 class TestDatePicker:
 
     def test_datepicker_is_only_shown_when_a_date_field_has_focus(self, mozwebqa):
-        """
+        """This testcase covers # 13726 in Litmus.
 
-        This testcase covers # 13726 in Litmus
         1.Verify that two text fields appear to set the start and end dates
         2.On clicking inside the date text field a calendar should pop up to select the date
         3.Calendar pop up gets closed
@@ -81,9 +81,8 @@ class TestDatePicker:
         Assert.false(feedback_pg.date_filter.is_datepicker_visible)
 
     def test_selecting_date_from_datepicker_populates_text_field(self, mozwebqa):
-        """
+        """This testcase covers # 13844 in Litmus.
 
-        This testcase covers # 13844 in Litmus
         1. On clicking inside the date text field a calendar should pop up to
         select the date. Verify that selected date appears in the date field.
 
@@ -102,9 +101,8 @@ class TestDatePicker:
         Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%Y-%m-%d'))
 
     def test_datepicker_next_month_button_disabled(self, mozwebqa):
-        """
+        """This testcase covers # 13844 in Litmus.
 
-        This testcase covers # 13844 in Litmus
         1. The forward button of the calendar pop up is disabled if the user
         is in current month thus unable to select some future date.
 

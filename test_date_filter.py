@@ -38,31 +38,24 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
 
-Created on Nov 30, 2010
-
-'''
-
-from datetime import date
-from datetime import timedelta
+from datetime import date, timedelta
 import random
-import string
 
 from unittestzero import Assert
 import pytest
-xfail = pytest.mark.xfail
 
 from pages.desktop.feedback import FeedbackPage
+
+xfail = pytest.mark.xfail
 
 
 class TestSearchDates:
 
     @xfail(reason="Bug 678219 - [stage] Date format in the GET request changed from '2011-08-10' to '08%2F10%2F2011'")
     def test_feedback_preset_date_filters(self, mozwebqa):
-        """
+        """This testcase covers # 13605 & 13606 in Litmus.
 
-        This testcase covers # 13605 & 13606 in Litmus
         1. Verifies the preset date filters of 1, 7, and 30 days
 
         """
@@ -81,9 +74,8 @@ class TestSearchDates:
             # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
     def test_feedback_custom_date_filter(self, mozwebqa):
-        """
+        """This testcase covers # 13605, 13606 & 13715 in Litmus.
 
-        This testcase covers # 13605, 13606 & 13715 in Litmus
         1. Verifies the calendar is displayed when filtering on custom dates
         2. Verifies date-start=<date> and end-date=<date> in the url
 
@@ -112,9 +104,8 @@ class TestSearchDates:
             Assert.equal(feedback_pg.date_filter.current_days, days[1])
 
     def test_feedback_custom_date_filter_with_random_alphabet(self, mozwebqa):
-        """
+        """This testcase covers # 13607 in Litmus.
 
-        This testcase covers # 13607 in Litmus
         1.Verifies custom date fields do not accept alphabet
 
         """
@@ -135,9 +126,8 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_end_date, '')
 
     def test_feedback_custom_date_filter_with_random_numbers(self, mozwebqa):
-        """
+        """This testcase covers # 13608 in Litmus.
 
-        This testcase covers # 13608 in Litmus
         1.Verifies random numbers show all recent feedback
 
         """
@@ -159,9 +149,8 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_end_date, str(end_date))
 
     def test_feedback_custom_date_filter_with_invalid_dates(self, mozwebqa):
-        """
+        """This testcase covers # 13609 & 13725 in Litmus.
 
-        This testcase covers # 13609 , 13725 in Litmus
         1.Verifies invalid dates show all recent feedback
 
         """
@@ -183,13 +172,11 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
     def test_feedback_custom_date_filter_with_future_dates(self, mozwebqa):
-        """
+        """This testcase covers # 13612 in Litmus.
 
-        This testcase covers # 13612 in Litmus
         1.Verifies future dates generate an error
 
         """
-
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
@@ -209,13 +196,11 @@ class TestSearchDates:
 
     @xfail(reason="Bug 686850 - Returned message counts vary too much to reliably test")
     def test_feedback_custom_date_filter_with_future_start_date(self, mozwebqa):
-        """
+        """This testcase covers # 13610 in Litmus.
 
-        This testcase covers # 13610 in Litmus
         1.Verifies future start date are ignored as erroneous input and results for a 30 day period are returned
 
         """
-
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
@@ -235,13 +220,11 @@ class TestSearchDates:
 
     @xfail(reason="Bug 686850 - Returned message counts vary too much to reliably test")
     def test_feedback_custom_date_filter_with_future_end_date(self, mozwebqa):
-        """
+        """This testcase covers # 13611 in Litmus.
 
-        This testcase covers # 13611 in Litmus
         1. Verifies future end date filter data until current day
 
         """
-
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
@@ -258,11 +241,11 @@ class TestSearchDates:
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
+
     @xfail(reason="Bug 688113 - test_feedback_custom_date_filter_with_end_date_lower_than_start_date suffers from Search Unavailable Errors")
     def test_feedback_custom_date_filter_with_end_date_lower_than_start_date(self, mozwebqa):
-        """
+        """This testcase covers # 13613, 13724 in Litmus.
 
-        This testcase covers # 13613, 13724 in Litmus
         1. Verifies start_date > end_date get switched automatically and the results are shown from end date to start date
 
         """
@@ -283,9 +266,8 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date.strftime('%Y-%m-%d'))
 
     def test_feedback_custom_date_filter_with_mdy_format(self, mozwebqa):
-        """
+        """This testcase covers # 13614 in Litmus.
 
-        This testcase covers # 13614 in Litmus
         1.Verifies custom date fields show all recent feedback
 
         """

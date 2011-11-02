@@ -39,14 +39,12 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Nov 24, 2010
-'''
+
 from page import Page
-from pages.base import InputBasePage
+from pages.base import BasePage
 
 
-class SitesPage(InputBasePage):
+class SitesPage(BasePage):
 
     _page_title = 'Sites :: Firefox Input'
 

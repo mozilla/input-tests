@@ -40,26 +40,14 @@
 #
 # ***** END LICENSE BLOCK *****
 
-'''
-Created on Jun 21, 2010
-
-'''
-import re
 import time
-import base64
 
-http_regex = re.compile('https?://((\w+\.)+\w+\.\w+)')
+from unittestzero import Assert
 
 
 class Page(object):
-    '''
-    Base class for all Pages
-    '''
 
     def __init__(self, testsetup):
-        '''
-        Constructor
-        '''
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
@@ -67,18 +55,8 @@ class Page(object):
 
     @property
     def is_the_current_page(self):
-        page_title = self.selenium.get_title()
-        if not page_title == self._page_title:
-            try:
-                raise Exception("Expected page title to be: '" + self._page_title + "' but it was: '" + page_title + "'")
-            except Exception:
-                raise Exception('Expected page title does not match actual page title.')
-        else:
-            return True
-
-    def refresh(self):
-        self.selenium.refresh()
-        self.selenium.wait_for_page_to_load(self.timeout)
+        Assert.equal(self.selenium.get_title(), self._page_title)
+        return True
 
     def wait_for_element_present(self, element):
         count = 0
@@ -104,17 +82,6 @@ class Page(object):
             count += 1
             if count == self.timeout / 1000:
                 raise Exception(element + " is still visible")
-
-    @property
-    def title(self):
-        return self.selenium.get_title()
-
-    def is_element_visible(self, locator):
-        return self.selenium.is_visible(locator)
-
-    def go_back(self):
-        self.selenium.go_back()
-        self.selenium.wait_for_page_to_load(self.timeout)
 
     def current_page_url(self):
         return(self.selenium.get_location())

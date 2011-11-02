@@ -38,7 +38,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-
 from page import Page
 
 
@@ -83,16 +82,16 @@ class Header(Page):
 
     @property
     def is_feedback_link_visible(self):
-        return self.is_element_visible(self._feedback_link_locator)
+        return self.selenium.is_visible(self._feedback_link_locator)
 
     @property
     def is_themes_link_visible(self):
-        return self.is_element_visible(self._themes_link_locator)
+        return self.selenium.is_visible(self._themes_link_locator)
 
     @property
     def is_main_heading_link_visible(self):
-        return self.is_element_visible(self._main_heading_link_locator)
+        return self.selenium.is_visible(self._main_heading_link_locator)
 
     @property
     def is_sites_link_visible(self):
-        return self.is_element_visible(self._sites_link_locator)
+        return self.selenium.is_visible(self._sites_link_locator)

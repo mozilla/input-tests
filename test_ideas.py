@@ -37,11 +37,6 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-
-Created on Dec 22, 2010
-
-'''
 
 import time
 
@@ -53,9 +48,8 @@ from pages.desktop.submit_idea import SubmitIdeaPage
 class TestSubmitIdea:
 
     def test_submitting_idea(self, mozwebqa):
-        """
+        """This testcase covers # 15104 in Litmus.
 
-        This testcase covers # 15104 in Litmus
         1. Verifies the thank you page is loaded
 
         """
@@ -68,9 +62,8 @@ class TestSubmitIdea:
         Assert.true(thanks_pg.is_the_current_page)
 
     def test_submitting_idea_with_unicode_characters(self, mozwebqa):
-        """
+        """This testcase covers # 15061 in Litmus.
 
-        This testcase covers # 15061 in Litmus
         1. Verifies the thank you page is loaded
 
         """
@@ -83,9 +76,8 @@ class TestSubmitIdea:
         Assert.true(thanks_pg.is_the_current_page)
 
     def test_remaining_character_count(self, mozwebqa):
-        """
+        """This testcase covers # 15029 in Litmus.
 
-        This testcase covers # 15029 in Litmus
         1. Verifies the remaining character count decreases
         2. Verifies that the remaining character count style changes at certain thresholds
         3. Verified that the 'Submit Feedback' button is disabled when character limit is exceeded
@@ -124,9 +116,8 @@ class TestSubmitIdea:
         Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
     def test_submitting_same_idea_twice_generates_error_message(self, mozwebqa):
-        """
+        """This testcase covers # 15119 in Litmus.
 
-        This testcase covers # 15119 in Litmus
         1. Verifies feedback submission fails if the same feedback is submitted within a 5 minute window.
 
         """

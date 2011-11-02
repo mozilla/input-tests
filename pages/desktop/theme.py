@@ -37,39 +37,31 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on March 28, 2010
-'''
-from pages.base import InputBasePage
+
+from pages.base import BasePage
 from pages.desktop.regions.message import Message
 
 
-class ThemePage(InputBasePage):
+class ThemePage(BasePage):
 
     _messages_heading_locator = "css=#messages h2"
     _theme_callout_locator = "id=theme-callout"
     _back_link_locator = "css=a.exit"
     _messages_locator = "css=#messages .message"
     _relative_date = "css=.meta a"
-    _total_message_count_locator = "css=#big-count p" 
+    _total_message_count_locator = "css=#big-count p"
 
     def is_back_link_visible(self):
-        """
-        Returns true if the "Back to all themes" link is visible
-        """
+        """Returns true if the "Back to all themes" link is visible."""
         return self.selenium.is_visible(self._back_link_locator)
 
     def is_message_count_visible(self):
-        """
-        Returns True if the message count is visible
-        """
+        """Returns True if the message count is visible."""
         return self.selenium.is_visible(self._total_message_count_locator)
 
     @property
     def messages_heading(self):
-        """
-        Returns the heading text of the Theme page
-        """
+        """Returns the heading text of the Theme page."""
         return self.selenium.get_text(self._messages_heading_locator)
 
     @property
@@ -84,16 +76,12 @@ class ThemePage(InputBasePage):
 
     @property
     def theme_callout(self):
-        """
-        Returns the text value of the theme callout
-        """
+        """Returns the text value of the theme callout."""
         return self.selenium.get_text(self._theme_callout_locator)
 
     @property
     def back_link(self):
-        """
-        Returns the text value of the back link
-        """
+        """Returns the text value of the back link."""
         return self.selenium.get_text(self._back_link_locator)
 
     @property

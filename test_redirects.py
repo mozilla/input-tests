@@ -38,8 +38,9 @@
 # ***** END LICENSE BLOCK *****
 
 import urllib2
-import pytest
+
 from unittestzero import Assert
+import pytest
 
 
 class TestRedirects:

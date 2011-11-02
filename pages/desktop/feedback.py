@@ -41,14 +41,12 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Nov 19, 2010
-'''
-from pages.base import InputBasePage
+
+from pages.base import BasePage
 from pages.desktop.regions.message import Message
 
 
-class FeedbackPage(InputBasePage):
+class FeedbackPage(BasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
@@ -126,9 +124,7 @@ class FeedbackPage(InputBasePage):
 
     @property
     def total_message_count_heading(self):
-        """
-        Get the total messages header value
-        """
+        """Get the total messages header value."""
         return self.selenium.get_text(self._total_message_count_heading_locator)
 
     @property
@@ -148,7 +144,7 @@ class FeedbackPage(InputBasePage):
 
     @property
     def is_chart_visible(self):
-        return self.is_element_visible(self._chart_locator)
+        return self.selenium.is_visible(self._chart_locator)
 
     @property
     def warning_heading(self):

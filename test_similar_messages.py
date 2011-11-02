@@ -37,23 +37,20 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Jan 26, 2011
-'''
-import pytest
-xfail = pytest.mark.xfail
+
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.sites import SitesPage
+
+xfail = pytest.mark.xfail
 
 
 class TestSimilarMessages:
 
     @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
     def test_similar_messages(self, mozwebqa):
-        """
-        This testcase covers # 13807 in Litmus
-        """
+        """This testcase covers # 13807 in Litmus."""
         sites_pg = SitesPage(mozwebqa)
 
         sites_pg.go_to_sites_page()

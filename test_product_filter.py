@@ -38,12 +38,7 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-'''
-Created on Nov 24, 2010
-'''
 
-import pytest
-xfail = pytest.mark.xfail
 from unittestzero import Assert
 
 from pages.desktop.feedback import FeedbackPage
@@ -53,12 +48,13 @@ from pages.desktop.sites import SitesPage
 class TestProductFilter:
 
     def test_feedback_can_be_filtered_by_firefox_versions(self, mozwebqa):
-        """
-        This testcase covers # 13602 & 13603 in Litmus
+        """This testcase covers # 13602 & 13603 in Litmus.
+
         1. Verify that at least three firefox versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -77,11 +73,12 @@ class TestProductFilter:
             Assert.equal(feedback_pg.version_from_url, version)
 
     def test_feedback_can_be_displayed_for_all_firefox_versions(self, mozwebqa):
-        """
-        This testcase covers # 15149 in Litmus
+        """This testcase covers # 15149 in Litmus.
+
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -96,12 +93,13 @@ class TestProductFilter:
         Assert.equal(feedback_pg.version_from_url, version)
 
     def test_feedback_can_be_filtered_by_mobile_versions(self, mozwebqa):
-        """
-        This testcase covers # 13602 & 13604 in Litmus
+        """This testcase covers # 13602 & 13604 in Litmus.
+
         1. Verify that at least three mobile versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -120,11 +118,12 @@ class TestProductFilter:
             Assert.equal(feedback_pg.version_from_url, version)
 
     def test_feedback_can_be_displayed_for_all_mobile_versions(self, mozwebqa):
-        """
-        This testcase covers # 15377 in Litmus
+        """This testcase covers # 15377 in Litmus.
+
         1. Verify that filtering by all versions returns results
         2. Verify that the state of the filters are correct after being applied
         3. Verify product and version values in the URL
+
         """
         feedback_pg = FeedbackPage(mozwebqa)
 
@@ -139,12 +138,13 @@ class TestProductFilter:
         Assert.equal(feedback_pg.version_from_url, version)
 
     def test_sites_can_be_filtered_by_firefox_versions(self, mozwebqa):
-        """
-        This testcase covers # 15043 & 15045 in Litmus
+        """This testcase covers # 15043 & 15045 in Litmus.
+
         1. Verify that at least three firefox versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
+
         """
         sites_pg = SitesPage(mozwebqa)
 
@@ -163,12 +163,13 @@ class TestProductFilter:
             Assert.equal(sites_pg.version_from_url, version)
 
     def test_sites_can_be_filtered_by_mobile_versions(self, mozwebqa):
-        """
-        This testcase covers # 15043 & 15044 in Litmus
+        """This testcase covers # 15043 & 15044 in Litmus.
+
         1. Verify that at least three mobile versions exist
         2. Verify that filtering by version returns results
         3. Verify that the state of the filters are correct after being applied
         4. Verify product and version values in the URL
+
         """
         sites_pg = SitesPage(mozwebqa)
 

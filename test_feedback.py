@@ -56,12 +56,12 @@ class TestFeedback:
         submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
-        submit_happy_feedback_pg.set_feedback(text)
+        submit_happy_feedback_pg.type_feedback(text)
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
-        submit_happy_feedback_pg.set_feedback(text)
+        submit_happy_feedback_pg.type_feedback(text)
         submit_happy_feedback_pg.submit_feedback()
         Assert.equal(submit_happy_feedback_pg.error_message, 'We already got your feedback! Thanks.')
 
@@ -75,7 +75,7 @@ class TestFeedback:
         submit_happy_feedback_pg = SubmitHappyFeedbackPage(mozwebqa)
 
         submit_happy_feedback_pg.go_to_submit_happy_feedback_page()
-        submit_happy_feedback_pg.set_feedback(u'It made my \u2603 come alive!')
+        submit_happy_feedback_pg.type_feedback(u'It made my \u2603 come alive!')
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
@@ -96,25 +96,25 @@ class TestFeedback:
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("a" * 111)
+        submit_happy_feedback_pg.type_feedback("a" * 111)
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "29")
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("b")
+        submit_happy_feedback_pg.type_feedback("b")
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "28")
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("c" * 28)
+        submit_happy_feedback_pg.type_feedback("c" * 28)
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "0")
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.true(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
-        submit_happy_feedback_pg.set_feedback("d")
+        submit_happy_feedback_pg.type_feedback("d")
         Assert.equal(submit_happy_feedback_pg.remaining_character_count, "-1")
         Assert.false(submit_happy_feedback_pg.is_remaining_character_count_limited)
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
@@ -127,15 +127,15 @@ class TestFeedback:
         submit_feedback_pg.go_to_submit_feedback_page()
 
         happy_feedback_pg = submit_feedback_pg.click_happy_feedback()
-        Assert.equal(happy_feedback_pg.current_page_url(), "%s/en-US/feedback/#happy" % mozwebqa.base_url)
+        Assert.equal(happy_feedback_pg.current_page_url, "%s/en-US/feedback/#happy" % mozwebqa.base_url)
         happy_feedback_pg.click_back()
 
         sad_feedback_pg = submit_feedback_pg.click_sad_feedback()
-        Assert.equal(sad_feedback_pg.current_page_url(), "%s/en-US/feedback/#sad" % mozwebqa.base_url)
+        Assert.equal(sad_feedback_pg.current_page_url, "%s/en-US/feedback/#sad" % mozwebqa.base_url)
         sad_feedback_pg.click_back()
 
         idea_feedback_pg = submit_feedback_pg.click_idea_feedback()
-        Assert.equal(idea_feedback_pg.current_page_url(), "%s/en-US/feedback/#idea" % mozwebqa.base_url)
+        Assert.equal(idea_feedback_pg.current_page_url, "%s/en-US/feedback/#idea" % mozwebqa.base_url)
         idea_feedback_pg.click_back()
 
-        Assert.equal(submit_feedback_pg.suport_page_link_address(), "http://support.mozilla.com")
+        Assert.equal(submit_feedback_pg.support_page_link_address, 'http://support.mozilla.com/')

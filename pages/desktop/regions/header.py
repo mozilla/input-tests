@@ -38,60 +38,50 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
 class Header(Page):
 
-    _feedback_link_locator = "css=a.dashboard"
-    _themes_link_locator = "css=a.themes"
-    _main_heading_link_locator = "css=h1 > a"
-    _sites_link_locator = "css=a.issues"
+    _feedback_link_locator = (By.CSS_SELECTOR, 'a.dashboard')
+    _themes_link_locator = (By.CSS_SELECTOR, 'a.themes')
+    _main_heading_link_locator = (By.CSS_SELECTOR, 'h1 > a')
+    _sites_link_locator = (By.CSS_SELECTOR, 'a.issues')
 
     def click_feedback_link(self):
-        self.is_feedback_link_visible
-        self.selenium.click(self._feedback_link_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
+        self.selenium.find_element(*self._feedback_link_locator).click()
         from pages.desktop.feedback import FeedbackPage
         return FeedbackPage(self.testsetup)
 
     def click_themes_link(self):
-        self.is_themes_link_visible
-        self.selenium.click(self._themes_link_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
+        self.selenium.find_element(*self._themes_link_locator).click()
         from pages.desktop.themes import ThemesPage
         return ThemesPage(self.testsetup)
 
     def click_main_heading_link(self):
-        self.is_main_heading_link_visible
-        self.selenium.click(self._main_heading_link_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
+        self.selenium.find_element(*self._main_heading_link_locator).click()
         from pages.desktop.feedback import FeedbackPage
         return FeedbackPage(self.testsetup)
 
     def click_sites_link(self):
-        self.is_sites_link_visible
-        self.selenium.click(self._sites_link_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
+        self.selenium.find_element(*self._sites_link_locator).click()
         from pages.desktop.sites import SitesPage
         return SitesPage(self.testsetup)
 
     @property
     def is_feedback_link_visible(self):
-        return self.selenium.is_visible(self._feedback_link_locator)
+        return self.is_element_visible(self._feedback_link_locator)
 
     @property
     def is_themes_link_visible(self):
-        return self.selenium.is_visible(self._themes_link_locator)
+        return self.is_element_visible(self._themes_link_locator)
 
     @property
     def is_main_heading_link_visible(self):
-        return self.selenium.is_visible(self._main_heading_link_locator)
+        return self.is_element_visible(self._main_heading_link_locator)
 
     @property
     def is_sites_link_visible(self):
-        return self.selenium.is_visible(self._sites_link_locator)
+        return self.is_element_visible(self._sites_link_locator)

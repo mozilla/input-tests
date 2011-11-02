@@ -60,38 +60,37 @@ class TestPagination:
         themes_pg = ThemesPage(mozwebqa)
 
         themes_pg.go_to_themes_page()
-        themes_pg.type_filter.select_type("Issues")
-        themes_pg.click_next_page()
+        themes_pg.type_filter.click_issues()
+        themes_pg.click_older_messages()
         Assert.equal(themes_pg.feedback_type_from_url, "issue")
         Assert.equal(themes_pg.type_filter.selected_type, "Issues")
         [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
 
-    @xfail(reason="Bug 668560 - The css class names 'prev' and 'next' are ambiguous:")
     def test_search_pagination(self, mozwebqa):
         """Litmus 13636 - Input: Verify Search results have pagination."""
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for("facebook")
 
-        Assert.true(feedback_pg.is_next_page_visible)
-        Assert.true(feedback_pg.is_previous_page_visible)
-        Assert.false(feedback_pg.is_previous_page_enabled)
+        Assert.true(feedback_pg.is_older_messages_link_visible)
+        Assert.true(feedback_pg.is_newer_messages_link_visible)
+        Assert.false(feedback_pg.is_newer_messages_link_enabled)
 
-        Assert.equal(feedback_pg.previous_link, u"\xab Newer Messages")
-        Assert.equal(feedback_pg.next_link, u"Older Messages \xbb")
+        Assert.equal(feedback_pg.older_messages_link, u"\xab Older Messages")
+        Assert.equal(feedback_pg.newer_messages_link, u"Newer Messages \xbb")
 
         for var in range(2, 12):
-            feedback_pg.click_next_page()
+            feedback_pg.click_older_messages()
             Assert.equal(feedback_pg.product_from_url, "firefox")
             Assert.equal(feedback_pg.search_term_from_url, "facebook")
 
-            Assert.true(feedback_pg.is_next_page_visible)
-            Assert.true(feedback_pg.is_previous_page_visible)
+            Assert.true(feedback_pg.is_older_messages_link_visible)
+            Assert.true(feedback_pg.is_newer_messages_link_visible)
 
-            Assert.true(feedback_pg.is_previous_page_enabled)
-            Assert.true(feedback_pg.is_next_page_enabled)
+            Assert.true(feedback_pg.is_older_messages_link_enabled)
+            Assert.true(feedback_pg.is_newer_messages_link_enabled)
 
-            Assert.equal(feedback_pg.previous_link, u"\xab Newer Messages")
-            Assert.equal(feedback_pg.next_link, u"Older Messages \xbb")
+            Assert.equal(feedback_pg.older_messages_link, u"\xab Older Messages")
+            Assert.equal(feedback_pg.newer_messages_link, u"Newer Messages \xbb")
 
             Assert.equal(int(feedback_pg.page_from_url), var)

@@ -38,133 +38,55 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
 class PlatformFilter(Page):
 
-    #Button filter added  but the combo filter needs Moziila Accept
+    # Button filter added but the combo filter needs Mozilla Accept
     class CheckboxFilter(Page):
 
-        _platforms_locator = "id('filter_platform')//li"
+        _platforms_locator = (By.CSS_SELECTOR, '#filter_platform li')
 
-        def __init__(self, testsetup):
-            Page.__init__(self, testsetup)
+        def platform(self, value):
+            for platform in self.platforms:
+                if platform.name == value:
+                    return platform
+            raise Exception('Platform not found: %s' % value)
 
         @property
-        def platform_count(self):
-            return int(self.selenium.get_xpath_count(self._platforms_locator))
-
-        def platform(self, lookup):
-            return self.Platform(self.testsetup, lookup)
-
-        def contains_platform(self, lookup):
-            try:
-                self.selenium.get_text("css=#filter_platform li:contains(%s) label > strong" % lookup)
-                return True
-            except:
-                return False
-
         def platforms(self):
-            return [self.Platform(self.testsetup, i)for i in range(self.platform_count)]
+            return [self.Platform(self.testsetup, element) for element in self.selenium.find_elements(*self._platforms_locator)]
 
         class Platform(Page):
 
-            _checkbox_locator = " input"
-            _name_locator = " label > strong"
-            _message_count_locator = " .count"
+            _checkbox_locator = (By.TAG_NAME, 'input')
+            _name_locator = (By.CSS_SELECTOR, 'label > strong')
+            _message_count_locator = (By.CLASS_NAME, 'count')
 
-            def __init__(self, testsetup, lookup):
+            def __init__(self, testsetup, element):
                 Page.__init__(self, testsetup)
-                self.lookup = lookup
-
-            def absolute_locator(self, relative_locator):
-                return self.root_locator + relative_locator
-
-            @property
-            def root_locator(self):
-                if type(self.lookup) == int:
-                    # lookup by index
-                    return "css=#filter_platform li:nth(%s)" % self.lookup
-                else:
-                    # lookup by name
-                    return "css=#filter_platform li:contains(%s)" % self.lookup
+                self._root_element = element
 
             @property
             def is_selected(self):
-                return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+                return self._root_element.find_element(*self._checkbox_locator).is_selected()
 
             @property
             def name(self):
-                return self.selenium.get_text(self.absolute_locator(self._name_locator))
+                return self._root_element.find_element(*self._name_locator).text
 
             @property
             def code(self):
-                return self.selenium.get_attribute(self.absolute_locator(self._checkbox_locator + "@value"))
+                return self._root_element.find_element(*self._checkbox_locator).get_attribute('value')
 
             @property
             def message_count(self):
-                return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+                # TODO Use native mouse interactions to hover over element to get the text
+                message_count = self._root_element.find_element(*self._message_count_locator)
+                return self.selenium.execute_script('return arguments[0].textContent', message_count)
 
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._checkbox_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
-
-    class ButtonFilter(Page):
-
-        _selected_platform_locator = "css=#filter_platform a.selected"
-        _platform_locator = "id('filter_platform')//li"
-
-        @property
-        def platform_count(self):
-            return int(self.selenium.get_xpath_count(self._platform_locator))
-
-        @property
-        def selected_platform(self):
-            return self.selenium.get_text(self._selected_platform_locator)
-
-        def select_platform(self, platform):
-            self.selenium.click("css=#filter_platform a:contains(%s)" % platform)
-            self.selenium.wait_for_page_to_load(self.timeout)
-
-        def platforms(self):
-            return [self.Platform(self.testsetup, i)for i in range(self.platform_count)]
-
-        class Platform(Page):
-
-            _selected_locator = " selected"
-            _name_locator = " a"
-
-            def __init__(self, testsetup, lookup):
-                Page.__init__(self, testsetup)
-                self.lookup = lookup
-
-            def absolute_locator(self, relative_locator):
-                return self.root_locator + relative_locator
-
-            @property
-            def root_locator(self):
-                if type(self.lookup) == int:
-                    # lookup by index
-                    return "css=#filter_platform li:nth(%s)" % self.lookup
-                else:
-                    # lookup by name
-                    return "css=#filter_platform li:contains(%s)" % self.lookup
-
-            @property
-            def is_selected(self):
-                try:
-                    if  self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class") == "selected ":
-                        return True
-                    else:
-                        return False
-                except:
-                    return False
-
-            @property
-            def name(self):
-                return self.selenium.get_text(self.root_locator)
-
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._name_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
+            def click(self):
+                self._root_element.find_element(*self._checkbox_locator).click()

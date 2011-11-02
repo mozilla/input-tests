@@ -64,14 +64,29 @@ class TestSearchDates:
         feedback_pg.go_to_feedback_page()
         Assert.equal(feedback_pg.date_filter.current_days, u"\u221e")
 
-        day_filters = ((1, "1d", "Last day"), (7, "7d", "Last 7 days"), (30, "30d", "Last 30 days"))
-        for days in day_filters:
-            Assert.equal(feedback_pg.date_filter.get_days_tooltip(days[1]), days[2])
-            feedback_pg.date_filter.click_days(days[1])
-            Assert.equal(feedback_pg.date_filter.current_days, days[1])
-            start_date = date.today() - timedelta(days=days[0])
-            Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
-            # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
+        # Last day filter
+        Assert.equal(feedback_pg.date_filter.last_day_tooltip, 'Last day')
+        feedback_pg.date_filter.click_last_day()
+        Assert.equal(feedback_pg.date_filter.current_days, '1d')
+        start_date = date.today() - timedelta(days=1)
+        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+        # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
+
+        # Last seven days filter
+        Assert.equal(feedback_pg.date_filter.last_seven_days_tooltip, 'Last 7 days')
+        feedback_pg.date_filter.click_last_seven_days()
+        Assert.equal(feedback_pg.date_filter.current_days, '7d')
+        start_date = date.today() - timedelta(days=7)
+        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+        # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
+
+        # Last thirty days filter
+        Assert.equal(feedback_pg.date_filter.last_thirty_days_tooltip, 'Last 30 days')
+        feedback_pg.date_filter.click_last_thirty_days()
+        Assert.equal(feedback_pg.date_filter.current_days, '30d')
+        start_date = date.today() - timedelta(days=30)
+        Assert.equal(feedback_pg.date_start_from_url, start_date.strftime('%Y-%m-%d'))
+        # TODO: Check results are within the expected date range, possibly by navigating to the last page and checking the final result is within range. Currently blocked by bug 615844.
 
     def test_feedback_custom_date_filter(self, mozwebqa):
         """This testcase covers # 13605, 13606 & 13715 in Litmus.
@@ -142,7 +157,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, str(start_date))
         Assert.equal(feedback_pg.date_end_from_url, str(end_date))
 
-        Assert.equal(feedback_pg.message_count, 20)
+        Assert.equal(len(feedback_pg.messages), 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, str(start_date))
@@ -165,7 +180,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.equal(feedback_pg.message_count, 20)
+        Assert.equal(len(feedback_pg.messages), 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
@@ -188,7 +203,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.equal(feedback_pg.warning_heading, 'No search results found.')
+        Assert.equal(feedback_pg.warning_heading, 'NO SEARCH RESULTS FOUND.')
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
@@ -212,7 +227,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.equal(feedback_pg.message_count, 20)
+        Assert.equal(len(feedback_pg.messages), 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
@@ -236,7 +251,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, end_date)
 
-        Assert.contains('Search Results', feedback_pg.message_column_heading)
+        Assert.equal(feedback_pg.message_column_heading, 'SEARCH RESULTS')
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
@@ -282,7 +297,7 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_start_from_url, start_date)
         Assert.equal(feedback_pg.date_end_from_url, '')
 
-        Assert.equal(feedback_pg.message_count, 20)
+        Assert.equal(len(feedback_pg.messages), 20)
 
         feedback_pg.date_filter.click_custom_dates()
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)

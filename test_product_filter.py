@@ -68,7 +68,7 @@ class TestProductFilter:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
             Assert.equal(feedback_pg.product_filter.selected_product, product)
-            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_filter.selected_version, version)
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
@@ -88,7 +88,7 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
         Assert.equal(feedback_pg.product_filter.selected_product, product)
-        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_filter.selected_version, version)
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
@@ -113,7 +113,7 @@ class TestProductFilter:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
             Assert.equal(feedback_pg.product_filter.selected_product, product)
-            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_filter.selected_version, version)
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
@@ -133,7 +133,7 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
         Assert.equal(feedback_pg.product_filter.selected_product, product)
-        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_filter.selected_version, version)
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
@@ -158,7 +158,7 @@ class TestProductFilter:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
             Assert.equal(sites_pg.product_filter.selected_product, product)
-            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_filter.selected_version, version)
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
 
@@ -183,6 +183,6 @@ class TestProductFilter:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
             Assert.equal(sites_pg.product_filter.selected_product, product)
-            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_filter.selected_version, version)
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)

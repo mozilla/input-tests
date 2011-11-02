@@ -42,13 +42,15 @@
 import urllib
 from urlparse import urlparse
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
 class BasePage(Page):
 
-    _previous_page_locator = "css=.pager .prev"
-    _next_page_locator = "css=.pager .next"
+    _older_messages_link_locator = (By.CSS_SELECTOR, '.pager .older')
+    _newer_messages_link_locator = (By.CSS_SELECTOR, '.pager .newer')
 
     @property
     def header(self):
@@ -60,51 +62,45 @@ class BasePage(Page):
         from pages.desktop.regions.footer import Footer
         return Footer(self.testsetup)
 
-    def click_previous_page(self):
-        """Navigates to the previous page of results."""
-        self.selenium.click(self._previous_page_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
+    def click_older_messages(self):
+        """Navigates to the previous page of older messages."""
+        self.selenium.find_element(*self._older_messages_link_locator).click()
 
-    def click_next_page(self):
-        """Navigates to the next page of results."""
-        self.selenium.click(self._next_page_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
+    def click_newer_messages(self):
+        """Navigates to the next page of newer messages."""
+        self.selenium.find_element(*self._newer_messages_link_locator).click()
 
     @property
-    def next_link(self):
-        return self.selenium.get_text(self._next_page_locator)
+    def older_messages_link(self):
+        return self.selenium.find_element(*self._older_messages_link_locator).text
 
     @property
-    def previous_link(self):
-        return self.selenium.get_text(self._previous_page_locator)
+    def newer_messages_link(self):
+        return self.selenium.find_element(*self._newer_messages_link_locator).text
 
     @property
-    def is_next_page_visible(self):
-        return self.selenium.is_visible(self._next_page_locator)
+    def is_older_messages_link_visible(self):
+        return self.is_element_visible(self._older_messages_link_locator)
 
     @property
-    def is_previous_page_visible(self):
-        return self.selenium.is_visible(self._previous_page_locator)
+    def is_newer_messages_link_visible(self):
+        return self.is_element_visible(self._newer_messages_link_locator)
 
     @property
-    def is_next_page_enabled(self):
-        if not self.selenium.get_attribute(self._next_page_locator + "@class") == "prev inactive":
-            return True
-        else:
-            return False
+    def is_older_messages_link_enabled(self):
+        return not 'inactive' in self.selenium.find_element(*self._older_messages_link_locator).get_attribute('class')
 
     @property
-    def is_previous_page_enabled(self):
-        if not self.selenium.get_attribute(self._previous_page_locator + "@class") == "prev inactive":
-            return True
-        else:
-            return False
+    def is_newer_messages_link_enabled(self):
+        return not 'inactive' in self.selenium.find_element(*self._newer_messages_link_locator).get_attribute('class')
 
     def _value_from_url(self, param):
         """Returns the value for the specified parameter in the URL."""
-        url = urlparse(self.selenium.get_location())
-        params = dict([part.split('=') for part in url[4].split('&')])
-        return urllib.unquote(params[param])
+        url = urlparse(self.selenium.current_url)
+        if param in url[4]:
+            print '%s is in %s' % (param, url)
+            params = dict([part.split('=') for part in url[4].split('&')])
+            return urllib.unquote(params[param])
 
     @property
     def feedback_type_from_url(self):

@@ -39,72 +39,66 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
 class Message(Page):
 
-    _type_locator = " .type"
-    _body_locator = " .body"
-    _time_locator = " time"
-    _platform_locator = " .meta li:nth(1) a"
-    _locale_locator = " .meta li:nth(2) a"
-    _site_locator = " .meta li:nth(3)"
-    _more_options_locator = " .options"
-    _copy_user_agent_locator = " .options .copy_ua"
-    _copy_user_agent_locator = " .options .copy_ua"
-    _translate_message_locator = " li:nth(1) a"
-    _tweet_this_locator = " .options .twitter"
+    _type_locator = (By.CSS_SELECTOR, '.type')
+    _body_locator = (By.CSS_SELECTOR, '.body')
+    _time_locator = (By.CSS_SELECTOR, 'time')
+    _platform_locator = (By.CSS_SELECTOR, '.meta li:nth-child(2) a')
+    _locale_locator = (By.CSS_SELECTOR, '.meta li:nth-child(3) a')
+    _site_locator = (By.CSS_SELECTOR, '.meta li:nth-child(4)')
+    _more_options_locator = (By.CSS_SELECTOR, '.options')
+    _copy_user_agent_locator = (By.CSS_SELECTOR, '.options .copy_ua')
+    _copy_user_agent_locator = (By.CSS_SELECTOR, '.options .copy_ua')
+    _translate_message_locator = (By.CSS_SELECTOR, 'li:nth(1) a')
+    _tweet_this_locator = (By.CSS_SELECTOR, '.options .twitter')
 
-    def __init__(self, testsetup, index):
+    def __init__(self, testsetup, element):
         Page.__init__(self, testsetup)
-        self.index = index
+        self._root_element = element
 
     def click_platform(self):
-        self.selenium.click(self.absolute_locator(self._platform_locator))
-        self.selenium.wait_for_page_to_load(self.timeout)
+        self._root_element.find_element(*self._platform_locator).click()
 
     def click_locale(self):
-        self.selenium.click(self.absolute_locator(self._locale_locator))
-        self.selenium.wait_for_page_to_load(self.timeout)
+        self._root_element.find_element(*self._locale_locator).click()
 
     def click_timestamp(self):
-        self.selenium.click(self._time_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
-
-    def is_platform_visible(self):
-        return self.selenium.is_visible(self.absolute_locator(self._platform_locator))
-
-    def is_locale_visible(self):
-        return self.selenium.is_visible(self.absolute_locator(self._locale_locator))
-
-    def absolute_locator(self, relative_locator):
-        return self.root_locator + relative_locator
+        self._root_element.find_element(*self._time_locator).click()
 
     @property
-    def root_locator(self):
-        return "css=#messages .message:nth(" + str(self.index - 1) + ")"
+    def is_platform_visible(self):
+        return self.is_element_visible(self._platform_locator)
+
+    @property
+    def is_locale_visible(self):
+        return self.is_element_visible(self._locale_locator)
 
     @property
     def type(self):
-        return self.selenium.get_text(self.absolute_locator(self._type_locator))
+        return self._root_element.find_element(*self._type_locator).text
 
     @property
     def body(self):
-        return self.selenium.get_text(self.absolute_locator(self._body_locator).encode('utf-8'))
+        return self._root_element.find_element(*self._body_locator).text
 
     @property
     def time(self):
-        return self.selenium.get_text(self.absolute_locator(self._time_locator))
+        return self._root_element.find_element(*self._time_locator).text
 
     @property
     def platform(self):
-        return self.selenium.get_text(self.absolute_locator(self._platform_locator))
+        return self._root_element.find_element(*self._platform_locator).text
 
     @property
     def locale(self):
-        return self.selenium.get_text(self.absolute_locator(self._locale_locator))
+        return self._root_element.find_element(*self._locale_locator).text
 
     @property
     def site(self):
-        return self.selenium.get_text(self.absolute_locator(self._site_locator))
+        return self._root_element.find_element(*self._site_locator).text

@@ -45,7 +45,6 @@ from page import Page
 
 class PlatformFilter(Page):
 
-    # Button filter added but the combo filter needs Mozilla Accept
     class CheckboxFilter(Page):
 
         _platforms_locator = (By.CSS_SELECTOR, '#filter_platform li')

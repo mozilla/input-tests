@@ -98,7 +98,6 @@ class BasePage(Page):
         """Returns the value for the specified parameter in the URL."""
         url = urlparse(self.selenium.current_url)
         if param in url[4]:
-            print '%s is in %s' % (param, url)
             params = dict([part.split('=') for part in url[4].split('&')])
             return urllib.unquote(params[param])
 

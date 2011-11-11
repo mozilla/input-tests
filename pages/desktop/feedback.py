@@ -54,7 +54,6 @@ class FeedbackPage(BasePage):
     _page_title = 'Welcome :: Firefox Input'
 
     _warning_heading_locator = (By.CSS_SELECTOR, '#message-warning h3')
-    _type_issues_locator = (By.CSS_SELECTOR, '#filters a:contains(Issues)')
     _search_box = (By.ID, 'id_q')
     _chart_locator = (By.ID, 'feedback-chart')
     _total_message_count_locator = (By.CSS_SELECTOR, '#big-count p')

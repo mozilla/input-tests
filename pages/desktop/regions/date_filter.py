@@ -163,7 +163,7 @@ class DateFilter(Page):
         """Clicks the day in the datepicker and waits for the datepicker to disappear."""
         # TODO: Throw an error if the day button is disabled
         calendar = self.selenium.find_element(*self._datepicker_calendar_locator)
-        calendar.find_element(By.LINK_TEXT, day).click()
+        calendar.find_element(By.LINK_TEXT, str(day)).click()
         self.wait_for_datepicker_to_close()
 
     def select_date_from_datepicker(self, target_date):

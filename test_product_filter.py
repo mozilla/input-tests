@@ -63,12 +63,12 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         versions = feedback_pg.product_filter.versions
         [Assert.not_equal(version, "") for version in versions]
-        Assert.true(len(versions) > 3)
+        Assert.greater(len(versions), 3)
         for version in [versions[2], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
             Assert.equal(feedback_pg.product_filter.selected_product, product)
-            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_filter.selected_version, version)
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
@@ -88,7 +88,7 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
         Assert.equal(feedback_pg.product_filter.selected_product, product)
-        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_filter.selected_version, version)
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
@@ -108,12 +108,12 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         versions = feedback_pg.product_filter.versions
         [Assert.not_equal(version, "") for version in versions]
-        Assert.true(len(versions) > 3)
+        Assert.greater(len(versions), 3)
         for version in [versions[2], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             feedback_pg.product_filter.select_version(version)
             Assert.equal(feedback_pg.product_filter.selected_product, product)
-            Assert.equal(feedback_pg.product_filter.selected_version(), version)
+            Assert.equal(feedback_pg.product_filter.selected_version, version)
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
@@ -133,7 +133,7 @@ class TestProductFilter:
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
         Assert.equal(feedback_pg.product_filter.selected_product, product)
-        Assert.equal(feedback_pg.product_filter.selected_version(), version)
+        Assert.equal(feedback_pg.product_filter.selected_version, version)
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
@@ -153,12 +153,12 @@ class TestProductFilter:
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
         [Assert.not_equal(version, "") for version in versions]
-        Assert.true(len(versions) > 2)
+        Assert.greater(len(versions), 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
             Assert.equal(sites_pg.product_filter.selected_product, product)
-            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_filter.selected_version, version)
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
 
@@ -178,11 +178,11 @@ class TestProductFilter:
         sites_pg.product_filter.select_product(product)
         versions = sites_pg.product_filter.versions
         [Assert.not_equal(version, "") for version in versions]
-        Assert.true(len(versions) > 2)
+        Assert.greater(len(versions), 2)
         for version in [versions[1], versions[-1]]:
             print "Checking %s version '%s'." % (product, version)
             sites_pg.product_filter.select_version(version)
             Assert.equal(sites_pg.product_filter.selected_product, product)
-            Assert.equal(sites_pg.product_filter.selected_version(), version)
+            Assert.equal(sites_pg.product_filter.selected_version, version)
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)

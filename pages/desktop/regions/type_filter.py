@@ -38,6 +38,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
@@ -45,126 +47,54 @@ class TypeFilter(Page):
 
     class ButtonFilter(Page):
 
-        _selected_type_locator = "css=#filter_type a.selected"
-        _types_locator = "id('filter_type')//li"
-
-        def __init__(self, testsetup):
-            Page.__init__(self, testsetup)
-
-        @property
-        def type_count(self):
-            return int(self.selenium.get_xpath_count(self._types_locator))
+        _selected_type_locator = (By.CSS_SELECTOR, '#filter_type a.selected')
+        _all_locator = (By.CSS_SELECTOR, '#filter_type li:nth-child(1) a')
+        _praise_locator = (By.CSS_SELECTOR, '#filter_type li:nth-child(2) a')
+        _issues_locator = (By.CSS_SELECTOR, '#filter_type li:nth-child(3) a')
+        _ideas_locator = (By.CSS_SELECTOR, '#filter_type li:nth-child(4) a')
 
         @property
         def selected_type(self):
-            return self.selenium.get_text(self._selected_type_locator)
+            return self.selenium.find_element(*self._selected_type_locator).text
 
-        def select_type(self, type):
-            self.selenium.click("css=#filter_type a:contains(%s)" % type)
-            self.selenium.wait_for_page_to_load(self.timeout)
+        def click_issues(self):
+            self.selenium.find_element(*self._issues_locator).click()
 
-        def types(self):
-            return [self.Type(self.testsetup, i)for i in range(self.type_count)]
-
-        class Type(Page):
-
-            _selected_locator = " selected"
-            _name_locator = " a"
-
-            def __init__(self, testsetup, lookup):
-                Page.__init__(self, testsetup)
-                self.lookup = lookup
-
-            def absolute_locator(self, relative_locator):
-                return self.root_locator + relative_locator
-
-            @property
-            def root_locator(self):
-                if type(self.lookup) == int:
-                    # lookup by index
-                    return "css=#filter_type li:nth(%s)" % self.lookup
-                else:
-                    # lookup by name
-                    return "css=#filter_type li:contains(%s)" % self.lookup
-
-            @property
-            def is_selected(self):
-                try:
-                    if self.selenium.get_attribute(self.absolute_locator(self._name_locator) + "@class").strip() == "selected":
-                        return True
-                    else:
-                        return False
-                except:
-                    return False
-
-            @property
-            def name(self):
-                return self.selenium.get_text(self.root_locator)
-
-            def select(self):
-                self.selenium.click(self.absolute_locator(self._name_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
 
     class CheckboxFilter(Page):
 
-        _type_filter_locator = "id('filter_type')//li"
+        _types_locator = (By.CSS_SELECTOR, '#filter_type li')
 
         @property
-        def type_count(self):
-            return int(self.selenium.get_xpath_count(self._type_filter_locator))
-
-        def type(self, lookup):
-            return self.Type(self.testsetup, lookup)
-
-        def contains_type(self, lookup):
-            try:
-                self.selenium.get_text("css=#filter_type li:contains(%s) label > strong" % lookup)
-                return True
-            except:
-                return False
-
         def types(self):
-            return [self.Type(self.testsetup, i)for i in range(self.type_count)]
+            return [self.Type(self.testsetup, element) for element in self.selenium.find_elements(*self._types_locator)]
 
         class Type(Page):
 
-            _checkbox_locator = " input"
-            _name_locator = " label > strong"
-            _message_count_locator = " .count"
-            _percent_locator = " .perc"
+            _checkbox_locator = (By.TAG_NAME, 'input')
+            _name_locator = (By.CSS_SELECTOR, 'label > strong')
+            _message_count_locator = (By.CLASS_NAME, 'count')
+            _percent_locator = (By.CLASS_NAME, 'perc')
 
-            def __init__(self, testsetup, lookup):
+            def __init__(self, testsetup, element):
                 Page.__init__(self, testsetup)
-                self.lookup = lookup
-
-            def absolute_locator(self, relative_locator):
-                return self.root_locator + relative_locator
-
-            @property
-            def root_locator(self):
-                if type(self.lookup) == int:
-                    # lookup by index
-                    return "css=#filter_type li:nth(%s)" % self.lookup
-                else:
-                    # lookup by name
-                    return "css=#filter_type li:contains(%s)" % self.lookup
+                self._root_element = element
 
             @property
             def is_selected(self):
-                return self.selenium.is_checked(self.absolute_locator(self._checkbox_locator))
+                return self._root_element.find_element(*self._checkbox_locator).is_checked()
 
             @property
             def name(self):
-                return self.selenium.get_text(self.absolute_locator(self._name_locator))
+                return self._root_element.find_element(*self._name_locator).text
 
             @property
             def message_count(self):
-                return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+                return self._root_element.find_element(*self._message_count_locator).text
 
             @property
             def percent(self):
-                return self.selenium.get_text(self.absolute_locator(self._percent_locator))
+                return self._root_element.find_element(*self._percent_locator).text
 
             def select(self):
-                self.selenium.click(self.absolute_locator(self._checkbox_locator))
-                self.selenium.wait_for_page_to_load(self.timeout)
+                return self._root_element.find_element(*self._checkbox_locator).click

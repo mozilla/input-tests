@@ -57,7 +57,7 @@ class TestSubmitIdea:
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = 'Automated idea %s' % str(time.time()).split('.')[0]
-        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.type_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
@@ -71,7 +71,7 @@ class TestSubmitIdea:
 
         submit_idea_pg.go_to_submit_idea_page()
         idea = u'Automated idea with unicode \u2603 %s' % str(time.time()).split('.')[0]
-        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.type_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
@@ -91,25 +91,25 @@ class TestSubmitIdea:
         Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.false(submit_idea_pg.is_submit_feedback_enabled)
 
-        submit_idea_pg.set_feedback("a" * 199)
+        submit_idea_pg.type_feedback("a" * 199)
         Assert.equal(submit_idea_pg.remaining_character_count, "51")
         Assert.false(submit_idea_pg.is_remaining_character_count_limited)
         Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
-        submit_idea_pg.set_feedback("b")
+        submit_idea_pg.type_feedback("b")
         Assert.equal(submit_idea_pg.remaining_character_count, "50")
         Assert.true(submit_idea_pg.is_remaining_character_count_limited)
         Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
-        submit_idea_pg.set_feedback("c" * 50)
+        submit_idea_pg.type_feedback("c" * 50)
         Assert.equal(submit_idea_pg.remaining_character_count, "0")
         Assert.true(submit_idea_pg.is_remaining_character_count_limited)
         Assert.false(submit_idea_pg.is_remaining_character_count_negative)
         Assert.true(submit_idea_pg.is_submit_feedback_enabled)
 
-        submit_idea_pg.set_feedback("d")
+        submit_idea_pg.type_feedback("d")
         Assert.equal(submit_idea_pg.remaining_character_count, "-1")
         Assert.false(submit_idea_pg.is_remaining_character_count_limited)
         Assert.true(submit_idea_pg.is_remaining_character_count_negative)
@@ -125,11 +125,11 @@ class TestSubmitIdea:
         submit_idea_pg = SubmitIdeaPage(mozwebqa)
 
         submit_idea_pg.go_to_submit_idea_page()
-        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.type_feedback(idea)
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
         submit_idea_pg.go_to_submit_idea_page()
-        submit_idea_pg.set_feedback(idea)
+        submit_idea_pg.type_feedback(idea)
         submit_idea_pg.submit_feedback(expected_result='failure')
         Assert.equal(submit_idea_pg.error_message, 'We already got your feedback! Thanks.')

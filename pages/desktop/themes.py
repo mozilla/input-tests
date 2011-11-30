@@ -40,6 +40,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 from pages.base import BasePage
 
@@ -48,10 +50,10 @@ class ThemesPage(BasePage):
 
     _page_title = 'Themes :: Firefox Input'
 
-    _themes_locator = "id('themes')//li[contains(@class, 'theme')]"
+    _themes_locator = (By.CSS_SELECTOR, '#themes li.theme')
 
     def go_to_themes_page(self):
-        self.selenium.open('/themes/')
+        self.selenium.get(self.base_url + '/themes/')
         self.is_the_current_page
 
     @property
@@ -60,38 +62,23 @@ class ThemesPage(BasePage):
         return TypeFilter.ButtonFilter(self.testsetup)
 
     @property
-    def theme_count(self):
-        return int(self.selenium.get_xpath_count(self._themes_locator))
-
-    @property
     def themes(self):
-        return [self.Theme(self.testsetup, i + 1) for i in range(self.theme_count)]
-
-    def theme(self, index):
-        return self.Theme(self.testsetup, index)
+        return [self.Theme(self.testsetup, element) for element in self.selenium.find_elements(*self._themes_locator)]
 
     class Theme(Page):
 
-        _type_locator = " .type"
-        _similar_messages_locator = " .more"
+        _type_locator = (By.CLASS_NAME, 'type')
+        _similar_messages_locator = (By.CLASS_NAME, 'more')
 
-        def __init__(self, testsetup, index):
+        def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
-            self.index = index
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
-
-        @property
-        def root_locator(self):
-            return "css=#themes .theme:nth(%s)" % (self.index - 1)
+            self._root_element = element
 
         @property
         def type(self):
-            return self.selenium.get_text(self.absolute_locator(self._type_locator))
+            return self._root_element.find_element(*self._type_locator).text
 
         def click_similar_messages(self):
-            self.selenium.click(self.absolute_locator(self._similar_messages_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+            self._root_element.find_element(*self._similar_messages_locator).click()
             from pages.desktop.theme import ThemePage
             return ThemePage(self.testsetup)

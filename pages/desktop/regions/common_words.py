@@ -38,63 +38,39 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
 class CommonWordsRegion(Page):
 
-    _common_words_locator = "id('filter_themes')"
+    _header_locator = (By.XPATH, "id('filter_themes')/h3/a/text()[1]")
+    _common_words_locator = (By.CSS_SELECTOR, 'filter_themes li')
 
     @property
     def common_words_header(self):
-        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._common_words_locator)
-
-    @property
-    def common_words_count(self):
-        return int(self.selenium.get_xpath_count("%s//li" % self._common_words_locator))
-
-    def common_word(self, lookup):
-        return self.CommonWord(self.testsetup, lookup)
+        return self.selenium.find_element(*self._header_locator)
 
     def common_words(self):
-        return [self.CommonWord(self.testsetup, i)for i in range(self.common_words_count)]
-
-    def contains_common_words(self, lookup):
-        try:
-            self.selenium.get_text("css=#filter_themes li:contains(%s) a > strong" % lookup)
-            return True
-        except:
-            return False
+        return [self.CommonWord(self.testsetup, element) for element in self.selenium.find_elements(*self._common_words_locator)]
 
     class CommonWord(Page):
 
-        _name_locator = " a > strong"
-        _message_count_locator = " .count"
+        _name_locator = (By.CSS_SELECTOR, 'a > strong')
+        _message_count_locator = (By.CLASS_NAME, 'count')
 
-        def __init__(self, testsetup, lookup):
+        def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
-            self.lookup = lookup
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
-
-        @property
-        def root_locator(self):
-            if type(self.lookup) == int:
-                # lookup by index
-                return "css=#filter_themes li:nth(%s)" % self.lookup
-            else:
-                # lookup by name
-                return "css=#filter_themes li:contains(%s)" % self.lookup
+            self._root_element = element
 
         @property
         def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
+            return self._root_element.find_element(*self._name_locator).text
 
         @property
         def message_count(self):
-            return self.selenium.get_text(self.absolute_locator(self._message_count_locator))
+            return self._root_element.find_element(*self._message_count_locator).text
 
         def select(self):
-            self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+            self._root_element.find_element(*self._name_locator).click()

@@ -61,19 +61,19 @@ class TestThemePage:
         themes_pg.go_to_themes_page()
         theme_pg = themes_pg.themes[0].click_similar_messages()
 
-        Assert.equal(theme_pg.messages_heading, "Theme")
-        Assert.true(theme_pg.is_back_link_visible())
-        Assert.true(theme_pg.is_message_count_visible())
+        Assert.equal(theme_pg.messages_heading, "THEME")
+        Assert.true(theme_pg.is_back_link_visible)
+        Assert.true(theme_pg.is_message_count_visible)
 
     def test_platform_link_applies_platform_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
         theme_pg = themes_pg.themes[0].click_similar_messages()
 
-        [Assert.true(message.is_platform_visible()) for message in theme_pg.messages]
+        [Assert.true(message.is_platform_visible) for message in theme_pg.messages]
 
-        platform = theme_pg.message(1).platform
-        theme_pg.message(1).click_platform()
+        platform = theme_pg.messages[0].platform
+        theme_pg.messages[0].click_platform()
 
         Assert.true(theme_pg.platform_filter.platform(platform).is_selected)
         for message in theme_pg.messages:
@@ -84,10 +84,10 @@ class TestThemePage:
         themes_pg.go_to_themes_page()
         theme_pg = themes_pg.themes[0].click_similar_messages()
 
-        [Assert.true(message.is_locale_visible()) for message in theme_pg.messages]
+        [Assert.true(message.is_locale_visible) for message in theme_pg.messages]
 
-        locale = theme_pg.message(1).locale
-        theme_pg.message(1).click_locale()
+        locale = theme_pg.messages[0].locale
+        theme_pg.messages[0].click_locale()
 
         Assert.true(theme_pg.locale_filter.locale(locale).is_selected)
         for message in theme_pg.messages:

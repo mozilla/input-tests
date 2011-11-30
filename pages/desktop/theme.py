@@ -38,31 +38,34 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from pages.base import BasePage
 from pages.desktop.regions.message import Message
 
 
 class ThemePage(BasePage):
 
-    _messages_heading_locator = "css=#messages h2"
-    _theme_callout_locator = "id=theme-callout"
-    _back_link_locator = "css=a.exit"
-    _messages_locator = "css=#messages .message"
-    _relative_date = "css=.meta a"
-    _total_message_count_locator = "css=#big-count p"
+    _messages_heading_locator = (By.CSS_SELECTOR, '#messages h2')
+    _theme_callout_locator = (By.ID, 'theme-callout')
+    _back_link_locator = (By.CSS_SELECTOR, 'a.exit')
+    _messages_locator = (By.CSS_SELECTOR, '#messages .message')
+    _total_message_count_locator = (By.CSS_SELECTOR, '#big-count p')
 
+    @property
     def is_back_link_visible(self):
         """Returns true if the "Back to all themes" link is visible."""
-        return self.selenium.is_visible(self._back_link_locator)
+        return self.is_element_visible(self._back_link_locator)
 
+    @property
     def is_message_count_visible(self):
         """Returns True if the message count is visible."""
-        return self.selenium.is_visible(self._total_message_count_locator)
+        return self.is_element_visible(self._total_message_count_locator)
 
     @property
     def messages_heading(self):
         """Returns the heading text of the Theme page."""
-        return self.selenium.get_text(self._messages_heading_locator)
+        return self.selenium.find_element(*self._messages_heading_locator).text
 
     @property
     def locale_filter(self):
@@ -77,20 +80,13 @@ class ThemePage(BasePage):
     @property
     def theme_callout(self):
         """Returns the text value of the theme callout."""
-        return self.selenium.get_text(self._theme_callout_locator)
+        return self.selenium.find_element(*self._theme_callout_locator).text
 
     @property
     def back_link(self):
         """Returns the text value of the back link."""
-        return self.selenium.get_text(self._back_link_locator)
-
-    @property
-    def message_count(self):
-        return self.selenium.get_css_count(self._messages_locator)
+        return self.selenium.find_element(*self._back_link_locator).text
 
     @property
     def messages(self):
-        return [Message(self.testsetup, i + 1) for i in range(self.message_count)]
-
-    def message(self, index):
-        return Message(self.testsetup, index)
+        return [Message(self.testsetup, element) for element in self.selenium.find_elements(*self._messages_locator)]

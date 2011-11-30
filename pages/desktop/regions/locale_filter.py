@@ -38,7 +38,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 from page import Page
@@ -78,7 +77,6 @@ class LocaleFilter(Page):
     class Locale(Page):
 
         _checkbox_locator = (By.TAG_NAME, 'input')
-        _bar_locator = (By.CLASS_NAME, 'bar')
         _name_locator = (By.CSS_SELECTOR, 'label > strong')
         _message_count_locator = (By.CLASS_NAME, 'count')
         _message_percentage_locator = (By.CLASS_NAME, 'perc')

@@ -54,7 +54,7 @@ class SitesFilter(Page):
 
     @property
     def sites(self):
-        return [self.Site(self.testsetup, element) for element in self.selenium.find_elements(*self.sites_locator)]
+        return [self.Site(self.testsetup, element) for element in self.selenium.find_elements(*self._sites_locator)]
 
     class Site(Page):
 

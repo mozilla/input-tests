@@ -53,7 +53,7 @@ class CommonWordsRegion(Page):
         return self.selenium.find_element(*self._header_locator)
 
     def common_words(self):
-        return [self.CommonWord(self.testsetup, element) for element in self.selenium.find_elements(*common_words_locator)]
+        return [self.CommonWord(self.testsetup, element) for element in self.selenium.find_elements(*self._common_words_locator)]
 
     class CommonWord(Page):
 

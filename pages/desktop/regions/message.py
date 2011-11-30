@@ -54,8 +54,7 @@ class Message(Page):
     _site_locator = (By.CSS_SELECTOR, '.meta li:nth-child(4)')
     _more_options_locator = (By.CSS_SELECTOR, '.options')
     _copy_user_agent_locator = (By.CSS_SELECTOR, '.options .copy_ua')
-    _copy_user_agent_locator = (By.CSS_SELECTOR, '.options .copy_ua')
-    _translate_message_locator = (By.CSS_SELECTOR, 'li:nth(1) a')
+    _translate_message_locator = (By.CSS_SELECTOR, '.options ul li:nth-child(2) a')
     _tweet_this_locator = (By.CSS_SELECTOR, '.options .twitter')
 
     def __init__(self, testsetup, element):

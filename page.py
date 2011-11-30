@@ -40,8 +40,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import time
-
 from unittestzero import Assert
 
 

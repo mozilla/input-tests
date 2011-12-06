@@ -38,64 +38,35 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 
 
-class SitesFilterRegion(Page):
+class SitesFilter(Page):
 
-    _sites_filter_region_locator = "id('filter_sites')"
-
-    @property
-    def sites_filter_header(self):
-        return self.selenium.get_text("xpath=%s/h3/a/text()[1]" % self._sites_filter_region_locator)
+    _header_locator = (By.XPATH, "id('filter_sites')/h3/a/text()[1]")
+    _sites_locator = (By.CSS_SELECTOR, '#filter_sites li')
 
     @property
-    def sites_filter_count(self):
-        return int(self.selenium.get_xpath_count("%s//li" % self._sites_filter_locator))
+    def header(self):
+        return self.selenium.find_element(*self._header_locator).text
 
-    def sites_filter(self, lookup):
-        return self.SitesFilter(self.testsetup, lookup)
+    @property
+    def sites(self):
+        return [self.Site(self.testsetup, element) for element in self.selenium.find_elements(*self._sites_locator)]
 
-    def contains_sites_filter(self, lookup):
-        try:
-            self.selenium.get_text("css=#filter_sites li:contains(%s) a > strong" % lookup)
+    class Site(Page):
 
-            return True
-        except:
-            return False
+        _site_locator = (By.CSS_SELECTOR, 'a > strong')
 
-    def sites_filters(self):
-        return [self.SitesFilter(self.testsetup, i)for i in range(self.sites_filter_count)]
-
-    class SitesFilter(Page):
-
-        _name_locator = " a > strong"
-        _site_count_locator = " .count"
-
-        def __init__(self, testsetup, lookup):
+        def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
-            self.lookup = lookup
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
+            self._root_element = element
 
         @property
-        def root_locator(self):
-            if type(self.lookup) == int:
-                # lookup by index
-                return "css=#filter_sites li:nth(%s)" % self.lookup
-            else:
-                # lookup by name
-                return "css=#filter_sites li:contains(%s)" % self.lookup
+        def url(self):
+            return self._root_element.find_element(*self._site_locator).text
 
-        @property
-        def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
-
-        @property
-        def site_count(self):
-            return self.selenium.get_text(self.absolute_locator(self._site_count_locator))
-
-        def select(self):
-            self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+        def click(self):
+            return self._root_element.find_element(*self._site_locator).click

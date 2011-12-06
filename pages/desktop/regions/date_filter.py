@@ -38,131 +38,137 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import re
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 
 from page import Page
 
 
 class DateFilter(Page):
 
-    _current_when_link_locator = "css=#when a.selected"
-    _when_links = ("link=1d", "link=7d", "link=30d")
-    _show_custom_dates_locator = "id=show-custom-date"
-    _custom_dates_locator = "id=custom-date"
-    _custom_start_date_locator = "id=id_date_start"
-    _custom_end_date_locator = "id=id_date_end"
-    _set_custom_date_locator = "css=#custom-date button:contains(Set)"
+    _current_when_link_locator = (By.CSS_SELECTOR, '#when a.selected')
+    _last_day_locator = (By.LINK_TEXT, '1d')
+    _last_seven_days_locator = (By.LINK_TEXT, '7d')
+    _last_thirty_days_locator = (By.LINK_TEXT, '30d')
+    _show_custom_dates_locator = (By.ID, 'show-custom-date')
+    _custom_dates_locator = (By.ID, 'custom-date')
+    _custom_start_date_locator = (By.ID, 'id_date_start')
+    _custom_end_date_locator = (By.ID, 'id_date_end')
+    _set_custom_date_locator = (By.CSS_SELECTOR, '#custom-date button')
 
-    _datepicker_locator = "id=ui-datepicker-div"
-    _datepicker_month_locator = "css=.ui-datepicker-month"
-    _datepicker_year_locator = "css=.ui-datepicker-year"
-    _datepicker_previous_month_locator = "css=.ui-datepicker-prev"
-    _datepicker_next_month_locator = "css=.ui-datepicker-next"
-    _datepicker_next_month_disabled_locator = "css=.ui-datepicker-next.ui-state-disabled"
-    _datepicker_day_locator_prefix = "css=.ui-datepicker-calendar td:contains("
-    _datepicker_day_locator_suffix = ")"
+    _datepicker_locator = (By.ID, 'ui-datepicker-div')
+    _datepicker_calendar_locator = (By.CSS_SELECTOR, '.ui-datepicker-calendar')
+    _datepicker_month_locator = (By.CSS_SELECTOR, '.ui-datepicker-month')
+    _datepicker_year_locator = (By.CSS_SELECTOR, '.ui-datepicker-year')
+    _datepicker_previous_month_locator = (By.CSS_SELECTOR, '.ui-datepicker-prev')
+    _datepicker_next_month_locator = (By.CSS_SELECTOR, '.ui-datepicker-next')
+    _datepicker_next_month_disabled_locator = (By.CSS_SELECTOR, '.ui-datepicker-next.ui-state-disabled')
 
-    _custom_date_only_error_locator = "//div[@id='custom-date']/ul/li"
-    _custom_date_first_error_locator = "//div[@id='custom-date']/ul[1]/li"
-    _custom_date_second_error_locator = "//div[@id='custom-date']/ul[2]/li"
+    _custom_date_only_error_locator = (By.XPATH, "//div[@id='custom-date']/ul/li")
+    _custom_date_first_error_locator = (By.XPATH, "//div[@id='custom-date']/ul[1]/li")
+    _custom_date_second_error_locator = (By.XPATH, "//div[@id='custom-date']/ul[2]/li")
 
     @property
     def current_days(self):
         """Returns the link text of the currently applied days filter."""
-        return self.selenium.get_text(self._current_when_link_locator)
+        return self.selenium.find_element(*self._current_when_link_locator).text
 
-    def get_days_tooltip(self, days):
-        """Returns the tooltip for the days link 1d/7d/30d."""
-        for time in self._when_links:
-            if re.search(days, time, re.IGNORECASE) is None:
-                continue
-            else:
-                return self.selenium.get_attribute(time + "@title")
+    @property
+    def last_day_tooltip(self):
+        return self.selenium.find_element(*self._last_day_locator).get_attribute('title')
 
-    def click_days(self, days):
-        """Clicks 1d/7d/30d."""
-        for time in self._when_links:
-            if not re.search(days, time, re.IGNORECASE) is None:
-                if not self.current_days == time:
-                    self.selenium.click(time)
-                    self.selenium.wait_for_page_to_load(self.timeout)
-                    break
+    @property
+    def last_seven_days_tooltip(self):
+        return self.selenium.find_element(*self._last_seven_days_locator).get_attribute('title')
+
+    @property
+    def last_thirty_days_tooltip(self):
+        return self.selenium.find_element(*self._last_thirty_days_locator).get_attribute('title')
+
+    def click_last_day(self):
+        return self.selenium.find_element(*self._last_day_locator).click()
+
+    def click_last_seven_days(self):
+        return self.selenium.find_element(*self._last_seven_days_locator).click()
+
+    def click_last_thirty_days(self):
+        return self.selenium.find_element(*self._last_thirty_days_locator).click()
 
     @property
     def custom_dates_tooltip(self):
         """Returns the tooltip for the custom dates filter link."""
-        return self.selenium.get_attribute(self._show_custom_dates_locator + "@title")
+        return self.selenium.find_element(*self._show_custom_dates_locator).get_attribute('title')
 
     def click_custom_dates(self):
         """Clicks the custom date filter button and waits for the form to appear."""
-        self.selenium.click(self._show_custom_dates_locator)
-        self.wait_for_element_visible(self._custom_dates_locator)
+        self.selenium.find_element(*self._show_custom_dates_locator).click()
 
     @property
     def is_custom_date_filter_visible(self):
         """Returns True if the custom date filter form is visible."""
-        return self.selenium.is_visible(self._custom_dates_locator)
+        return self.is_element_visible(self._custom_dates_locator)
 
     @property
     def is_datepicker_visible(self):
         """Returns True if the datepicker pop up is visible."""
-        date_picker = self.selenium.get_attribute(self._datepicker_locator + "@" + "style")
-        if (date_picker.find("block") == -1):
-            return False
-        else:
-            return True
+        datepicker = self.selenium.find_element(*self._datepicker_locator)
+        return datepicker.is_displayed() and datepicker.location['x'] > 0
 
     @property
     def is_custom_start_date_visible(self):
         """Returns True if the custom start date input form is visible."""
-        return self.selenium.is_visible(self._custom_start_date_locator)
+        return self.is_element_visible(self._custom_start_date_locator)
 
     @property
     def is_custom_end_date_visible(self):
         """Returns True if the custom end date input form is visible."""
-        return self.selenium.is_visible(self._custom_end_date_locator)
+        return self.is_element_visible(self._custom_end_date_locator)
 
     @property
     def is_datepicker_next_month_button_disabled(self):
-        return self.selenium.is_visible(self._datepicker_next_month_disabled_locator)
+        return self.is_element_visible(self._datepicker_next_month_disabled_locator)
 
-    def wait_for_datepicker_to_finish_animating(self):
-        self.selenium.wait_for_condition(
-            "selenium.browserbot.getCurrentWindow().document.getElementById('ui-datepicker-div').scrollWidth == 251", 10000)
+    def wait_for_datepicker_to_open(self):
+        WebDriverWait(self.selenium, 3).until(lambda s: self.is_datepicker_visible)
+        WebDriverWait(self.selenium, 3).until(lambda s: s.find_element(*self._datepicker_locator).size['width'] == 251)
+
+    def wait_for_datepicker_to_close(self):
+        WebDriverWait(self.selenium, 3).until(lambda s: not self.is_datepicker_visible)
 
     def close_datepicker(self):
-        self.selenium.click_at("id=body", "1,1")
-        self.wait_for_element_not_visible(self._datepicker_locator)
+        self.selenium.find_element(*self._custom_start_date_locator).send_keys(Keys.ESCAPE)
+        WebDriverWait(self.selenium, 3).until(lambda s: not self.is_datepicker_visible)
 
     def click_start_date(self):
         """Clicks the start date in the custom date filter form and waits for the datepicker to appear."""
-        self.selenium.click(self._custom_start_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
+        self.selenium.find_element(*self._custom_start_date_locator).click()
+        self.wait_for_datepicker_to_open()
 
     def click_end_date(self):
         """Clicks the end date in the custom date filter form and waits for the datepicker to appear."""
-        self.selenium.click(self._custom_end_date_locator)
-        self.wait_for_datepicker_to_finish_animating()
+        self.selenium.find_element(*self._custom_end_date_locator).click()
+        self.wait_for_datepicker_to_open()
 
     def click_previous_month(self):
         """Clicks the previous month button in the datepicker."""
-        self.selenium.click(self._datepicker_previous_month_locator)
+        self.selenium.find_element(*self._datepicker_previous_month_locator).click()
 
     def click_next_month(self):
         """Clicks the next month button in the datepicker."""
         # TODO: Throw an error if the next month button is disabled
-        self.selenium.click(self._datepicker_next_month_locator)
+        self.selenium.find_element(*self._datepicker_next_month_locator).click()
 
     def click_day(self, day):
         """Clicks the day in the datepicker and waits for the datepicker to disappear."""
         # TODO: Throw an error if the day button is disabled
-        self.wait_for_element_visible(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
-        self.selenium.click(self._datepicker_day_locator_prefix + str(day) + self._datepicker_day_locator_suffix)
-        self.wait_for_element_not_visible(self._datepicker_locator)
+        calendar = self.selenium.find_element(*self._datepicker_calendar_locator)
+        calendar.find_element(By.LINK_TEXT, str(day)).click()
+        self.wait_for_datepicker_to_close()
 
     def select_date_from_datepicker(self, target_date):
         """Navigates to the target month in the datepicker and clicks the target day."""
-        currentYear = int(self.selenium.get_text(self._datepicker_year_locator))
+        currentYear = int(self.selenium.find_element(*self._datepicker_year_locator).text)
         targetYear = target_date.year
         yearDelta = targetYear - currentYear
         monthDelta = yearDelta * 12
@@ -179,7 +185,7 @@ class DateFilter(Page):
                   "October": 10,
                   "November": 11,
                   "December": 12}
-        currentMonth = months[self.selenium.get_text(self._datepicker_month_locator)]
+        currentMonth = months[self.selenium.find_element(*self._datepicker_month_locator).text]
         targetMonth = target_date.month
         monthDelta += targetMonth - currentMonth
 
@@ -192,29 +198,26 @@ class DateFilter(Page):
             count = count + 1
         self.click_day(target_date.day)
 
-    def set_custom_start_date_using_keyboard(self, date):
-        self.click_start_date()
-        self.selenium.type_keys(self._custom_start_date_locator, date)
+    def type_custom_start_date(self, date):
+        self.selenium.find_element(*self._custom_start_date_locator).send_keys(date)
 
-    def set_custom_end_date_using_keyboard(self, date):
-        self.click_end_date()
-        self.selenium.type_keys(self._custom_end_date_locator, date)
+    def type_custom_end_date(self, date):
+        self.selenium.find_element(*self._custom_end_date_locator).send_keys(date)
 
-    def set_custom_start_date_using_datepicker(self, date):
+    def select_custom_start_date_using_datepicker(self, date):
         self.click_start_date()
         self.select_date_from_datepicker(date)
 
-    def set_custom_end_date_using_datepicker(self, date):
+    def select_custom_end_date_using_datepicker(self, date):
         self.click_end_date()
         self.select_date_from_datepicker(date)
 
     def filter_by_custom_dates_using_datepicker(self, start_date, end_date):
         """Filters by a custom date range."""
         self.click_custom_dates()
-        self.set_custom_start_date_using_datepicker(start_date)
-        self.set_custom_end_date_using_datepicker(end_date)
-        self.selenium.click(self._set_custom_date_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
+        self.select_custom_start_date_using_datepicker(start_date)
+        self.select_custom_end_date_using_datepicker(end_date)
+        self.selenium.find_element(*self._set_custom_date_locator).click()
 
     def filter_by_custom_dates_using_keyboard(self, start_date, end_date):
         """Filters by a custom date range using any input type, not using date() format.
@@ -223,44 +226,44 @@ class DateFilter(Page):
 
         """
         self.click_custom_dates()
-        self.set_custom_start_date_using_keyboard(start_date)
-        self.set_custom_end_date_using_keyboard(end_date)
-        self.selenium.click(self._set_custom_date_locator)
-        self.selenium.wait_for_page_to_load(self.timeout)
+        self.type_custom_start_date(start_date)
+        self.type_custom_end_date(end_date)
+        self.selenium.find_element(*self._set_custom_date_locator).click()
 
     @property
-    def is_days_visible(self):
-        """Verifies if the 1d/7d/30d are visible."""
-        for time in self._when_links:
-            if not self.selenium.is_visible(time):
-                return False
-        return True
+    def is_last_day_visible(self):
+        return self.is_element_visible(self._last_day_locator)
+
+    @property
+    def is_last_seven_days_visible(self):
+        return self.is_element_visible(self._last_seven_days_locator)
+
+    @property
+    def is_last_thirty_days_visible(self):
+        return self.is_element_visible(self._last_thirty_days_locator)
 
     @property
     def is_date_filter_applied(self):
-        try:
-            self.date_start_from_url()
-            self.date_end_from_url()
-            return True
-        except:
-            return False
+        from pages.base import BasePage
+        base = BasePage(self.testsetup)
+        return base.date_start_from_url and base.date_end_from_url or False
 
     @property
     def custom_date_only_error(self):
-        return self.selenium.get_text(self._custom_date_only_error_locator)
+        return self.selenium.find_element(*self._custom_date_only_error_locator).text
 
     @property
     def custom_date_first_error(self):
-        return self.selenium.get_text(self._custom_date_first_error_locator)
+        return self.selenium.find_element(*self._custom_date_first_error_locator).text
 
     @property
     def custom_date_second_error(self):
-        return self.selenium.get_text(self._custom_date_second_error_locator)
+        return self.selenium.find_element(*self._custom_date_second_error_locator).text
 
     @property
     def custom_start_date(self):
-        return self.selenium.get_value(self._custom_start_date_locator)
+        return self.selenium.find_element(*self._custom_start_date_locator).get_attribute('value')
 
     @property
     def custom_end_date(self):
-        return self.selenium.get_value(self._custom_end_date_locator)
+        return self.selenium.find_element(*self._custom_end_date_locator).get_attribute('value')

@@ -40,6 +40,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from page import Page
 from pages.base import BasePage
 
@@ -48,10 +50,10 @@ class SitesPage(BasePage):
 
     _page_title = 'Sites :: Firefox Input'
 
-    _sites_locator = "id('themes')//li[@class='site']"
+    _sites_locator = (By.CSS_SELECTOR, '#themes li.site')
 
     def go_to_sites_page(self):
-        self.selenium.open('/sites/')
+        self.selenium.get(self.base_url + '/sites/')
         self.is_the_current_page
 
     @property
@@ -60,37 +62,22 @@ class SitesPage(BasePage):
         return ProductFilter.ComboFilter(self.testsetup)
 
     @property
-    def site_count(self):
-        return int(self.selenium.get_xpath_count(self._sites_locator))
-
-    @property
     def sites(self):
-        return [self.Site(self.selenium, i + 1) for i in range(self.site_count)]
-
-    def site(self, index):
-        return self.Site(self.testsetup, index)
+        return [self.Site(self.testsetup, element) for element in self.selenium.find_elements(*self._sites_locator)]
 
     class Site(Page):
 
-        _name_locator = " .name a"
+        _name_locator = (By.CSS_SELECTOR, '.name a')
 
-        def __init__(self, testsetup, index):
+        def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
-            self.index = index
-
-        def absolute_locator(self, relative_locator):
-            return self.root_locator + relative_locator
-
-        @property
-        def root_locator(self):
-            return "css=#themes .site:nth(%s)" % (self.index - 1)
+            self._root_element = element
 
         @property
         def name(self):
-            return self.selenium.get_text(self.absolute_locator(self._name_locator))
+            return self._root_element.find_element(*self._name_locator).text
 
         def click_name(self):
-            self.selenium.click(self.absolute_locator(self._name_locator))
-            self.selenium.wait_for_page_to_load(self.timeout)
+            self._root_element.find_element(*self._name_locator).click()
             from pages.desktop.themes import ThemesPage
             return ThemesPage(self.testsetup)

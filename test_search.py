@@ -53,7 +53,7 @@ class TestSearch:
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for('')
-        Assert.true(0 < feedback_pg.message_count)
+        Assert.greater(len(feedback_pg.messages), 0)
 
     def test_that_we_can_search_feedback_with_unicode(self, mozwebqa):
         """Litmus 13697"""
@@ -66,7 +66,7 @@ class TestSearch:
         feedback_pg.product_filter.select_version('--')
 
         feedback_pg.search_for(u"rapidit\xe9")
-        Assert.true(0 < feedback_pg.message_count)
+        Assert.greater(len(feedback_pg.messages), 0)
 
     def test_search_box_placeholder(self, mozwebqa):
         """Litmus 13845.

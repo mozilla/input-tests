@@ -49,17 +49,19 @@ class TestRedirects:
     _user_agent_safari = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_7; en-us) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27'
 
     def _check_redirect(self, testsetup, start_url, end_url, user_agent=_user_agent_firefox, locale='en-US'):
+        start_url = testsetup.base_url + start_url
+        end_url = testsetup.base_url + end_url
         if testsetup.selenium:
-            testsetup.selenium.open(start_url)
-            Assert.equal(testsetup.selenium.get_location(), testsetup.base_url + end_url)
+            testsetup.selenium.get(start_url)
+            Assert.equal(testsetup.selenium.current_url, end_url)
         else:
-            request = urllib2.Request(testsetup.base_url + start_url)
+            request = urllib2.Request(start_url)
             opener = urllib2.build_opener()
             request.add_header('User-Agent', user_agent)
             request.add_header('Accept-Language', locale)
             f = opener.open(request)
             opener.close()
-            Assert.equal(f.url, testsetup.base_url + end_url)
+            Assert.equal(f.url, end_url)
 
     @pytest.mark.skip_selenium
     def test_root_without_locale_redirects_to_root_with_german_locale(self, mozwebqa):

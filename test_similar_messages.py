@@ -55,20 +55,20 @@ class TestSimilarMessages:
 
         sites_pg.go_to_sites_page()
         sites_pg.product_filter.select_product('firefox')
-        sites_pg.product_filter.select_version(2, by='index')
+        sites_pg.product_filter.select_version(2)
 
-        #store the first site's name and click in
-        site = sites_pg.site(1)
+        #store the first site's name and click it
+        site = sites_pg.sites[1]
         site_name = site.name
         themes_pg = site.click_name()
 
         #click similar messages and navigate to the second page
-        theme_pg = themes_pg.theme(1).click_similar_messages()
-        theme_pg.click_next_page()
+        theme_pg = themes_pg.themes[1].click_similar_messages()
+        theme_pg.click_older_messages()
 
         Assert.equal(theme_pg.messages_heading, 'Theme')
         Assert.equal(theme_pg.page_from_url, '2')
-        Assert.equal(theme_pg.theme_callout, 'Theme for ' + site_name)
-        Assert.greater(theme_pg.message_count, 0)
+        Assert.equal(theme_pg.theme_callout, 'Theme for %s' % site_name)
+        Assert.greater(len(theme_pg.messages), 0)
         Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
-        [Assert.true(site_name in message.site) for message in theme_pg.messages]
+        [Assert.contains(site_name, message.site) for message in theme_pg.messages]

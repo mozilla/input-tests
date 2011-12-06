@@ -87,11 +87,11 @@ class TestLocaleFilter:
         feedback_pg.product_filter.select_product('firefox')
         feedback_pg.product_filter.select_version('--')
 
-        Assert.equal(feedback_pg.locale_filter.locale_count, 10)
-        feedback_pg.locale_filter.show_extra_locales()
-        Assert.true(feedback_pg.locale_filter.locale_count > 10)
+        Assert.equal(len(feedback_pg.locale_filter.locales), 10)
+        feedback_pg.locale_filter.show_more_locales()
+        Assert.greater(len(feedback_pg.locale_filter.locales), 10)
 
-        locale = feedback_pg.locale_filter.locale(11)
+        locale = feedback_pg.locale_filter.locales[10]
         locale_name = locale.name
         locale_message_count = locale.message_count
         locale_code = locale.code
@@ -106,7 +106,7 @@ class TestLocaleFilter:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.locale_filter.show_extra_locales()
-        for locale in feedback_pg.locale_filter.locales():
+        feedback_pg.locale_filter.show_more_locales()
+        for locale in feedback_pg.locale_filter.locales:
             expected_percentage = round((float(locale.message_count) / float(feedback_pg.locale_filter.total_message_count)) * 100)
             Assert.equal(expected_percentage, int(locale.message_percentage.split("%")[0]))

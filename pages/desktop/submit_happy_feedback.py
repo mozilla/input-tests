@@ -38,25 +38,22 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 
 class SubmitHappyFeedbackPage(SubmitFeedbackPage):
 
-    _feedback_locator = 'id=happy-description'
-    _remaining_character_count_locator = 'css=#happy-description-counter'
-    _submit_feedback_locator = 'css=#happy .submit span'
-    _error_locator = 'css=#happy .errorlist li'
-    _back_locator = 'css=#happy > header > nav > a'
+    _feedback_locator = (By.ID, 'happy-description')
+    _remaining_character_count_locator = (By.ID, 'happy-description-counter')
+    _submit_feedback_locator = (By.CSS_SELECTOR, '#happy-submit a')
+    _error_locator = (By.CSS_SELECTOR, '#happy .errorlist li')
+    _back_locator = (By.CSS_SELECTOR, '#happy > header > nav > a')
 
     def go_to_submit_happy_feedback_page(self):
-        self.selenium.open('/feedback#happy')
+        self.selenium.get(self.base_url + '/feedback#happy')
         self.is_the_current_page
-        self.wait_for_element_visible(self._happy_page_locator)
-
-    @property
-    def is_submit_feedback_enabled(self):
-        return not self.selenium.is_element_present('css=#happy .submit a.disabled')
 
     def is_visible(self):
-        return self.selenium.is_visible(self._happy_page_locator)
+        return self.is_element_visible(self._happy_page_locator)

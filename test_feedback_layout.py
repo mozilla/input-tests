@@ -100,28 +100,28 @@ class Test_Feedback_Layout:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        Assert.true(feedback_pg.product_filter.default_values("firefox", "7.0"))
+        Assert.equal(feedback_pg.product_filter.selected_product, 'firefox')
+        Assert.equal(feedback_pg.product_filter.selected_version, '7.0')
         Assert.false(feedback_pg.date_filter.is_date_filter_applied)
 
         Assert.false(feedback_pg.date_filter.is_custom_date_filter_visible)
 
         feedback_pg.date_filter.click_custom_dates()
 
-        Assert.true(feedback_pg.platform_filter.platform_count > 0)
-        Assert.equal(feedback_pg.product_filter.products, ['Firefox', 'Mobile'])
+        Assert.greater(len(feedback_pg.platform_filter.platforms), 0)
+        Assert.equal(feedback_pg.product_filter.products, ['firefox', 'mobile'])
         feedback_pg.product_filter.select_version('--')
-        types = [type.name for type in feedback_pg.type_filter.types()]
+        types = [type.name for type in feedback_pg.type_filter.types]
         Assert.equal(types, ['Praise', 'Issues', 'Ideas'])
 
-        platforms = [platform.name for platform in feedback_pg.platform_filter.platforms()]
-        Assert.equal(platforms, ['Windows 7', 'Windows XP', 'Windows Vista', 'Mac OS X', 'Linux'])
+        platforms = [platform.name for platform in feedback_pg.platform_filter.platforms]
+        Assert.equal(platforms, ['Windows 7', 'Windows XP', 'Windows Vista', 'Mac OS X', 'Linux', 'Android'])
 
-        Assert.true(feedback_pg.locale_filter.locale_count > 0)
+        Assert.greater(len(feedback_pg.locale_filter.locales), 0)
 
-        locales = [locale.name for locale in feedback_pg.locale_filter.locales()]
+        locales = [locale.name for locale in feedback_pg.locale_filter.locales]
         Assert.true(set(['English (US)', 'German', 'Spanish', 'French']).issubset(set(locales)))
 
-    @xfail(reason="Bug 664562 - [stage] [prod] View older marks does not redirect to page=2")
     def test_the_middle_section_page(self, mozwebqa):
         """This testcase covers # 13599 & 13721 in Litmus.
 
@@ -133,27 +133,20 @@ class Test_Feedback_Layout:
         feedback_pg.go_to_feedback_page()
 
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
-        Assert.true(feedback_pg.message_count > 0)
+        Assert.greater(len(feedback_pg.messages), 0)
 
         Assert.true(feedback_pg.is_chart_visible)
 
-        Assert.true(feedback_pg.is_next_page_enabled)
-        Assert.false(feedback_pg.is_previous_page_enabled)
+        Assert.true(feedback_pg.is_older_messages_link_enabled)
+        Assert.false(feedback_pg.is_newer_messages_link_enabled)
 
-        #the first click only applies the filters and add messages until the message count reaches 20
-        #the second click goes to the next page
-        #this is discussed in bug https://bugzilla.mozilla.org/show_bug.cgi?id=640007
+        feedback_pg.click_older_messages()
+        Assert.true(feedback_pg.is_older_messages_link_enabled)
+        Assert.true(feedback_pg.is_newer_messages_link_enabled)
 
-        feedback_pg.click_next_page()
-        feedback_pg.click_next_page()
-
-        Assert.true(feedback_pg.is_next_page_enabled)
-        Assert.true(feedback_pg.is_previous_page_enabled)
-
-        feedback_pg.click_previous_page()
-
-        Assert.true(feedback_pg.is_next_page_visible)
-        Assert.false(feedback_pg.is_previous_page_enabled)
+        feedback_pg.click_newer_messages()
+        Assert.true(feedback_pg.is_older_messages_link_enabled)
+        Assert.false(feedback_pg.is_newer_messages_link_enabled)
 
     @xfail(reason="Bug 659640 - [Input] 'While visiting' section is not shown on the homepage")
     def test_the_right_panel_layout(self, mozwebqa):
@@ -166,11 +159,11 @@ class Test_Feedback_Layout:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        Assert.equal(feedback_pg.total_message_count_heading, "Messages")
-        Assert.true(feedback_pg.total_message_count > 0)
+        Assert.equal(feedback_pg.total_message_count_heading, "MESSAGES")
+        Assert.greater(feedback_pg.total_message_count, 0)
 
         Assert.equal(feedback_pg.common_words_filter.common_words_header, "Often Mentioned")
-        Assert.true(feedback_pg.common_words_filter.common_words_count > 0)
+        Assert.greater(feedback_pg.common_words_filter.common_words_count, 0)
 
-        Assert.equal(feedback_pg.sites_filter.sites_filter_header, "While Visiting")
-        Assert.true(feedback_pg.sites_filter.sites_filter_count > 0)
+        Assert.equal(feedback_pg.sites_filter.header, "While Visiting")
+        Assert.greater(len(feedback_pg.sites_filter.sites), 0)

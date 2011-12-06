@@ -38,6 +38,8 @@
 #
 # ***** END LICENSE BLOCK *****
 
+from selenium.webdriver.common.by import By
+
 from pages.base import BasePage
 
 
@@ -45,48 +47,37 @@ class FeedbackPage(BasePage):
 
     _page_title = 'Welcome :: Firefox Input'
 
-    #header
-    _search_locator = 'id=id_q'
+    _feed_tab_locator = (By.ID, 'tab-feed')
+    _statistics_tab_locator = (By.ID, 'tab-stats')
+    _settings_tab_locator = (By.ID, 'tab-settings')
 
-    _feed_tab_locator = 'id=tab-feed'
-    _statistics_tab_locator = 'id=tab-stats'
-    _settings_tab_locator = 'id=tab-settings'
-
-    #body
-    _feed_page_locator = 'id=feed'
-    _statistics_page_locator = 'id=stats'
-    _trends_page_locator = 'id=trends'
-    _settings_page_locator = 'id=settings'
+    _feed_page_locator = (By.ID, 'feed')
+    _statistics_page_locator = (By.ID, 'stats')
+    _trends_page_locator = (By.ID, 'trends')
+    _settings_page_locator = (By.ID, 'settings')
 
     def go_to_feedback_page(self):
-        self.selenium.open('/')
+        print 'opening: ' + self.base_url + '/'
+        self.selenium.get(self.base_url + '/')
         self.is_the_current_page
 
-    def search_for(self, search_string):
-        self.selenium.type(self._search_locator, search_string)
-        self.selenium.key_press(self._search_locator, '\\13')
-        self.selenium.wait_for_page_to_load(self.timeout)
-
     def click_feed_tab(self):
-        self.selenium.click(self._feed_tab_locator)
-        self.wait_for_element_visible(self._feed_page_locator)
+        self.selenium.find_element(*self._feed_tab_locator).click()
 
     def click_statistics_tab(self):
-        self.selenium.click(self._statistics_tab_locator)
-        self.wait_for_element_visible(self._statistics_page_locator)
+        self.selenium.find_element(*self._statistics_tab_locator).click()
 
     def click_settings_tab(self):
-        self.selenium.click(self._settings_tab_locator)
-        self.wait_for_element_visible(self._settings_page_locator)
+        self.selenium.find_element(*self._settings_tab_locator).click()
 
     @property
     def is_feed_visible(self):
-        return self.selenium.is_visible(self._feed_page_locator)
+        return self.is_element_visible(self._feed_page_locator)
 
     @property
     def is_statistics_visible(self):
-        return self.selenium.is_visible(self._statistics_page_locator)
+        return self.is_element_visible(self._statistics_page_locator)
 
     @property
     def is_settings_visible(self):
-        return self.selenium.is_visible(self._settings_page_locator)
+        return self.is_element_visible(self._settings_page_locator)

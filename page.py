@@ -40,8 +40,6 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import time
-
 from unittestzero import Assert
 
 
@@ -51,37 +49,18 @@ class Page(object):
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
-        self.timeout = testsetup.timeout
 
     @property
     def is_the_current_page(self):
-        Assert.equal(self.selenium.get_title(), self._page_title)
+        Assert.equal(self.selenium.title, self._page_title)
         return True
 
-    def wait_for_element_present(self, element):
-        count = 0
-        while not self.selenium.is_element_present(element):
-            time.sleep(1)
-            count += 1
-            if count == self.timeout / 1000:
-                raise Exception(element + ' has not loaded')
+    def is_element_visible(self, locator):
+        try:
+            return self.selenium.find_element(*locator).is_displayed()
+        except:
+            return False
 
-    def wait_for_element_visible(self, element):
-        self.wait_for_element_present(element)
-        count = 0
-        while not self.selenium.is_visible(element):
-            time.sleep(1)
-            count += 1
-            if count == self.timeout / 1000:
-                raise Exception(element + " is not visible")
-
-    def wait_for_element_not_visible(self, element):
-        count = 0
-        while self.selenium.is_visible(element):
-            time.sleep(1)
-            count += 1
-            if count == self.timeout / 1000:
-                raise Exception(element + " is still visible")
-
+    @property
     def current_page_url(self):
-        return(self.selenium.get_location())
+        return(self.selenium.current_url)

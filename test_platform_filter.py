@@ -63,14 +63,15 @@ class TestPlatformFilter:
         platform = feedback_pg.platform_filter.platform(platform_name)
         platform_message_count = platform.message_count
         platform_code = platform.code
-        platform.select()
+        platform.click()
 
         total_message_count = feedback_pg.total_message_count.replace(',', '')
         message_count_difference = int(total_message_count) - int(platform_message_count)
 
-        Assert.equal(feedback_pg.platform_filter.platform_count, 1)
-        Assert.true(platform.is_selected)
+        Assert.equal(len(feedback_pg.platform_filter.platforms), 1)
+        Assert.true(feedback_pg.platform_filter.platform(platform_name).is_selected)
         # TODO refactor if unittest-zero receives an Assert.within_range method
-        Assert.true(message_count_difference <= 15 and message_count_difference >= -15)
+        Assert.less_equal(message_count_difference, 15)
+        Assert.greater_equal(message_count_difference, -15)
         Assert.equal(feedback_pg.platform_from_url, platform_code)
         [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]

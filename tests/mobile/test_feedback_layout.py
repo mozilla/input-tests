@@ -39,14 +39,12 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
-import pytest
 
 from pages.mobile.feedback import FeedbackPage
 
 
 class Test_Feedback_Layout:
 
-    @pytest.mark.mobile
     def test_the_header_layout(self, mozwebqa):
 
         feedback_pg = FeedbackPage(mozwebqa)

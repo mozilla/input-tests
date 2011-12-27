@@ -41,9 +41,11 @@ from unittestzero import Assert
 
 from pages.desktop.feedback import FeedbackPage
 
+nondestructive = pytest.mark.nondestructive
 
 class TestPlatformFilter:
 
+    @nondestructive
     def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """This testcase covers # 15215 in Litmus.
 

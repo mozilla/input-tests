@@ -45,9 +45,11 @@ from unittestzero import Assert
 
 from pages.desktop.themes import ThemesPage
 
+nondestructive = pytest.mark.nondestructive
 
 class TestThemePage:
 
+    @nondestructive
     def test_navigate_to_theme_page(self, mozwebqa):
         """This testcase covers #15170 in Litmus.
 
@@ -65,6 +67,7 @@ class TestThemePage:
         Assert.true(theme_pg.is_back_link_visible)
         Assert.true(theme_pg.is_message_count_visible)
 
+    @nondestructive
     def test_platform_link_applies_platform_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
@@ -79,6 +82,7 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.platform, platform)
 
+    @nondestructive
     def test_locale_link_applies_locale_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()
@@ -93,6 +97,7 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.locale, locale)
 
+    @nondestructive
     def test_value_of_timestamp_link(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
         themes_pg.go_to_themes_page()

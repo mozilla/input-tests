@@ -42,9 +42,11 @@ from unittestzero import Assert
 
 from pages.mobile.feedback import FeedbackPage
 
+nondestructive = pytest.mark.nondestructive
 
 class Test_Feedback_Layout:
 
+    @nondestructive
     def test_the_header_layout(self, mozwebqa):
 
         feedback_pg = FeedbackPage(mozwebqa)

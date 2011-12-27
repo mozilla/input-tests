@@ -41,6 +41,7 @@
 
 from unittestzero import Assert
 
+nondestructive = pytest.mark.nondestructive
 
 class TestFeedback:
 
@@ -79,6 +80,7 @@ class TestFeedback:
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
+    @nondestructive
     def test_remaining_character_count(self, mozwebqa):
         """This testcase covers # 13806 in Litmus.
 
@@ -120,6 +122,7 @@ class TestFeedback:
         Assert.true(submit_happy_feedback_pg.is_remaining_character_count_negative)
         Assert.false(submit_happy_feedback_pg.is_submit_feedback_enabled)
 
+    @nondestructive
     def test_navigating_away_from_initial_submit_feedback_page(self, mozwebqa):
         """Litmus 13651 - Input: Submit feedback page."""
         from pages.desktop.submit_feedback import SubmitFeedbackPage

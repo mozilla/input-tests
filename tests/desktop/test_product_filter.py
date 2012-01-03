@@ -40,15 +40,15 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.feedback import FeedbackPage
 from pages.desktop.sites import SitesPage
 
-nondestructive = pytest.mark.nondestructive
 
 class TestProductFilter:
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_firefox_versions(self, mozwebqa):
         """This testcase covers # 13602 & 13603 in Litmus.
 
@@ -74,7 +74,7 @@ class TestProductFilter:
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_feedback_can_be_displayed_for_all_firefox_versions(self, mozwebqa):
         """This testcase covers # 15149 in Litmus.
 
@@ -95,7 +95,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_mobile_versions(self, mozwebqa):
         """This testcase covers # 13602 & 13604 in Litmus.
 
@@ -121,7 +121,7 @@ class TestProductFilter:
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_feedback_can_be_displayed_for_all_mobile_versions(self, mozwebqa):
         """This testcase covers # 15377 in Litmus.
 
@@ -142,7 +142,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_sites_can_be_filtered_by_firefox_versions(self, mozwebqa):
         """This testcase covers # 15043 & 15045 in Litmus.
 
@@ -168,7 +168,7 @@ class TestProductFilter:
             Assert.equal(sites_pg.product_from_url, product)
             Assert.equal(sites_pg.version_from_url, version)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_sites_can_be_filtered_by_mobile_versions(self, mozwebqa):
         """This testcase covers # 15043 & 15044 in Litmus.
 

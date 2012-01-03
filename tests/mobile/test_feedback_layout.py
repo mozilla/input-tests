@@ -39,14 +39,14 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
 
 from pages.mobile.feedback import FeedbackPage
 
-nondestructive = pytest.mark.nondestructive
 
 class Test_Feedback_Layout:
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_the_header_layout(self, mozwebqa):
 
         feedback_pg = FeedbackPage(mozwebqa)

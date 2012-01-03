@@ -42,14 +42,14 @@
 from datetime import date
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.feedback import FeedbackPage
 
-nondestructive = pytest.mark.nondestructive
 
 class TestDatePicker:
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_datepicker_is_only_shown_when_a_date_field_has_focus(self, mozwebqa):
         """This testcase covers # 13726 in Litmus.
 
@@ -82,7 +82,7 @@ class TestDatePicker:
         feedback_pg.date_filter.close_datepicker()
         Assert.false(feedback_pg.date_filter.is_datepicker_visible)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_selecting_date_from_datepicker_populates_text_field(self, mozwebqa):
         """This testcase covers # 13844 in Litmus.
 
@@ -103,7 +103,7 @@ class TestDatePicker:
         feedback_pg.date_filter.click_day(today_date.day)
         Assert.equal(feedback_pg.date_filter.custom_end_date, today_date.strftime('%Y-%m-%d'))
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_datepicker_next_month_button_disabled(self, mozwebqa):
         """This testcase covers # 13844 in Litmus.
 

@@ -41,14 +41,14 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.feedback import FeedbackPage
 
-nondestructive = pytest.mark.nondestructive
 
 class TestSearch:
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_that_empty_search_of_feedback_returns_some_data(self, mozwebqa):
         """Litmus 13847"""
         feedback_pg = FeedbackPage(mozwebqa)
@@ -57,7 +57,7 @@ class TestSearch:
         feedback_pg.search_for('')
         Assert.greater(len(feedback_pg.messages), 0)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_that_we_can_search_feedback_with_unicode(self, mozwebqa):
         """Litmus 13697"""
         feedback_pg = FeedbackPage(mozwebqa)
@@ -71,7 +71,7 @@ class TestSearch:
         feedback_pg.search_for(u"rapidit\xe9")
         Assert.greater(len(feedback_pg.messages), 0)
 
-    @nondestructive
+    @pytest.mark.nondestructive
     def test_search_box_placeholder(self, mozwebqa):
         """Litmus 13845.
 

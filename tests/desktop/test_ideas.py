@@ -41,6 +41,7 @@
 import time
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.submit_idea import SubmitIdeaPage
 
@@ -75,6 +76,7 @@ class TestSubmitIdea:
         thanks_pg = submit_idea_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
+    @pytest.mark.nondestructive
     def test_remaining_character_count(self, mozwebqa):
         """This testcase covers # 15029 in Litmus.
 

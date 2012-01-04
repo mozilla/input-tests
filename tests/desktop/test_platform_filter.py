@@ -38,12 +38,14 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.feedback import FeedbackPage
-
+ 
 
 class TestPlatformFilter:
 
+    @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """This testcase covers # 15215 in Litmus.
 

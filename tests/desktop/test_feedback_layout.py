@@ -49,6 +49,7 @@ xfail = pytest.mark.xfail
 class Test_Feedback_Layout:
     """Litmus 13593 - input:Verify the layout of homepage."""
 
+    @pytest.mark.nondestructive
     def test_the_header_layout(self, mozwebqa):
         """This testcase covers # 13594 & 13599 in Litmus.
 
@@ -73,6 +74,7 @@ class Test_Feedback_Layout:
         feedback_pg.header.click_main_heading_link()
         Assert.true(feedback_pg.is_the_current_page)
 
+    @pytest.mark.nondestructive
     def test_the_area_layout(self, mozwebqa):
         """This testcase covers # 13598 in Litmus.
 
@@ -90,6 +92,7 @@ class Test_Feedback_Layout:
         Assert.equal(feedback_pg.footer.about_input, "About Firefox Input")
         Assert.true(feedback_pg.footer.is_language_dropdown_visible)
 
+    @pytest.mark.nondestructive
     def test_the_left_panel_layout(self, mozwebqa):
         """This testcase covers # 13595 & 13600 in Litmus.
 
@@ -122,6 +125,7 @@ class Test_Feedback_Layout:
         locales = [locale.name for locale in feedback_pg.locale_filter.locales]
         Assert.true(set(['English (US)', 'German', 'Spanish', 'French']).issubset(set(locales)))
 
+    @pytest.mark.nondestructive
     def test_the_middle_section_page(self, mozwebqa):
         """This testcase covers # 13599 & 13721 in Litmus.
 
@@ -149,6 +153,7 @@ class Test_Feedback_Layout:
         Assert.false(feedback_pg.is_newer_messages_link_enabled)
 
     @xfail(reason="Bug 659640 - [Input] 'While visiting' section is not shown on the homepage")
+    @pytest.mark.nondestructive
     def test_the_right_panel_layout(self, mozwebqa):
         """This testcase covers # 13597 & 13716 in Litmus.
 

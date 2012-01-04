@@ -49,6 +49,7 @@ xfail = pytest.mark.xfail
 class TestPagination:
 
     @xfail(reason="Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
+    @pytest.mark.nondestructive
     def test_themes_filters_persist_when_paging_through_results(self, mozwebqa):
         """This testcase covers # 15018 in Litmus.
 
@@ -66,6 +67,7 @@ class TestPagination:
         Assert.equal(themes_pg.type_filter.selected_type, "Issues")
         [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
 
+    @pytest.mark.nondestructive
     def test_search_pagination(self, mozwebqa):
         """Litmus 13636 - Input: Verify Search results have pagination."""
         feedback_pg = FeedbackPage(mozwebqa)

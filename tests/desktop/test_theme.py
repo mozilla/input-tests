@@ -40,9 +40,9 @@
 # ***** END LICENSE BLOCK *****
 
 import re
-import pytest
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.themes import ThemesPage
 

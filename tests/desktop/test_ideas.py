@@ -41,10 +41,10 @@
 import time
 
 from unittestzero import Assert
+import pytest
 
 from pages.desktop.submit_idea import SubmitIdeaPage
 
-import pytest
 
 class TestSubmitIdea:
 

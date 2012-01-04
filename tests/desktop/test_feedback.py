@@ -40,7 +40,6 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
-
 import pytest
 
 class TestFeedback:

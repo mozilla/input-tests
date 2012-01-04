@@ -41,7 +41,7 @@ from unittestzero import Assert
 import pytest
 
 from pages.desktop.feedback import FeedbackPage
- 
+
 
 class TestPlatformFilter:
 

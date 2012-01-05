@@ -43,9 +43,12 @@ import pytest
 
 from pages.mobile.feedback import FeedbackPage
 
+xfail = pytest.mark.xfail
+
 
 class Test_Feedback_Layout:
 
+    @xfail(reason="Bug 715542 - visiting the mobile site returns a 500 error")
     @pytest.mark.nondestructive
     def test_the_header_layout(self, mozwebqa):
 

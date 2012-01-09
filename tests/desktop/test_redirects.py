@@ -37,10 +37,9 @@
 #
 # ***** END LICENSE BLOCK *****
 
-import urllib2
-
 from unittestzero import Assert
 import pytest
+import requests
 
 
 class TestRedirects:
@@ -55,13 +54,10 @@ class TestRedirects:
             testsetup.selenium.get(start_url)
             Assert.equal(testsetup.selenium.current_url, end_url)
         else:
-            request = urllib2.Request(start_url)
-            opener = urllib2.build_opener()
-            request.add_header('User-Agent', user_agent)
-            request.add_header('Accept-Language', locale)
-            f = opener.open(request)
-            opener.close()
-            Assert.equal(f.url, end_url)
+            headers = {'user-agent': user_agent,
+                       'accept-language': locale}
+            r = requests.get(start_url, headers=headers)
+            Assert.equal(r.url, end_url)
 
     @pytest.mark.skip_selenium
     @pytest.mark.nondestructive

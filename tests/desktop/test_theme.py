@@ -49,6 +49,7 @@ from pages.desktop.themes import ThemesPage
 
 class TestThemePage:
 
+    @pytest.mark.xfail(reason='Bug 716852 - No themes data on any environment')
     @pytest.mark.nondestructive
     def test_navigate_to_theme_page(self, mozwebqa):
         """This testcase covers #15170 in Litmus.
@@ -67,6 +68,7 @@ class TestThemePage:
         Assert.true(theme_pg.is_back_link_visible)
         Assert.true(theme_pg.is_message_count_visible)
 
+    @pytest.mark.xfail(reason='Bug 716852 - No themes data on any environment')
     @pytest.mark.nondestructive
     def test_platform_link_applies_platform_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
@@ -82,6 +84,7 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.platform, platform)
 
+    @pytest.mark.xfail(reason='Bug 716852 - No themes data on any environment')
     @pytest.mark.nondestructive
     def test_locale_link_applies_locale_filter(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)
@@ -97,6 +100,7 @@ class TestThemePage:
         for message in theme_pg.messages:
             Assert.equal(message.locale, locale)
 
+    @pytest.mark.xfail(reason='Bug 716852 - No themes data on any environment')
     @pytest.mark.nondestructive
     def test_value_of_timestamp_link(self, mozwebqa):
         themes_pg = ThemesPage(mozwebqa)

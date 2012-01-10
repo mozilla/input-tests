@@ -118,7 +118,7 @@ class Test_Feedback_Layout:
         Assert.equal(types, ['Praise', 'Issues', 'Ideas'])
 
         platforms = [platform.name for platform in feedback_pg.platform_filter.platforms]
-        Assert.equal(platforms, ['Windows 7', 'Windows XP', 'Windows Vista', 'Mac OS X', 'Linux', 'Android'])
+        Assert.equal(platforms, ['Windows 7', 'Windows XP', 'Windows Vista', 'Mac OS X', 'Linux'])
 
         Assert.greater(len(feedback_pg.locale_filter.locales), 0)
 

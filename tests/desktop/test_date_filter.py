@@ -52,7 +52,6 @@ xfail = pytest.mark.xfail
 
 class TestSearchDates:
 
-    @xfail(reason="Bug 678219 - [stage] Date format in the GET request changed from '2011-08-10' to '08%2F10%2F2011'")
     @pytest.mark.nondestructive
     def test_feedback_preset_date_filters(self, mozwebqa):
         """This testcase covers # 13605 & 13606 in Litmus.

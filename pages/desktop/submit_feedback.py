@@ -95,6 +95,7 @@ class SubmitFeedbackPage(BasePage):
 
     def click_back(self):
         self.selenium.find_element(*self._back_locator).click()
+        self.wait_for_page_to_slide_into_view(self._intro_page_locator)
 
     @property
     def support_page_link_address(self):

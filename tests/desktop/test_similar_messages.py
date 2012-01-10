@@ -43,12 +43,9 @@ import pytest
 
 from pages.desktop.sites import SitesPage
 
-xfail = pytest.mark.xfail
-
 
 class TestSimilarMessages:
 
-    @xfail(reason="Bug 662095 - Sites shows feedback for 4.x but not 5.x")
     @pytest.mark.nondestructive
     def test_similar_messages(self, mozwebqa):
         """This testcase covers # 13807 in Litmus."""
@@ -59,17 +56,17 @@ class TestSimilarMessages:
         sites_pg.product_filter.select_version(2)
 
         #store the first site's name and click it
-        site = sites_pg.sites[1]
+        site = sites_pg.sites[0]
         site_name = site.name
         themes_pg = site.click_name()
 
         #click similar messages and navigate to the second page
-        theme_pg = themes_pg.themes[1].click_similar_messages()
-        theme_pg.click_older_messages()
+        theme_pg = themes_pg.themes[0].click_similar_messages()
+        theme_pg.click_next_page()
 
-        Assert.equal(theme_pg.messages_heading, 'Theme')
+        Assert.equal(theme_pg.messages_heading, 'THEME')
         Assert.equal(theme_pg.page_from_url, '2')
-        Assert.equal(theme_pg.theme_callout, 'Theme for %s' % site_name)
+        Assert.equal(theme_pg.theme_callout, 'Theme for %s' % site_name.lower())
         Assert.greater(len(theme_pg.messages), 0)
-        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name)
-        [Assert.contains(site_name, message.site) for message in theme_pg.messages]
+        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name.lower())
+        [Assert.contains(site_name.lower(), message.site) for message in theme_pg.messages]

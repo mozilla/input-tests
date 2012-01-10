@@ -51,6 +51,16 @@ class ThemePage(BasePage):
     _back_link_locator = (By.CSS_SELECTOR, 'a.exit')
     _messages_locator = (By.CSS_SELECTOR, '#messages .message')
     _total_message_count_locator = (By.CSS_SELECTOR, '#big-count p')
+    _previous_page_link_locator = (By.CSS_SELECTOR, '.pager .prev')
+    _next_page_link_locator = (By.CSS_SELECTOR, '.pager .next')
+
+    def click_previous_page(self):
+        """Navigates to the previous page."""
+        self.selenium.find_element(*self._previous_page_link_locator).click()
+
+    def click_next_page(self):
+        """Navigates to the next page."""
+        self.selenium.find_element(*self._next_page_link_locator).click()
 
     @property
     def is_back_link_visible(self):

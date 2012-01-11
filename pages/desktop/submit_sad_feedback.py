@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,27 +38,23 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from unittestzero import Assert
+from selenium.webdriver.common.by import By
+
+from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 
-class Page(object):
+class SubmitSadFeedbackPage(SubmitFeedbackPage):
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
+    _feedback_locator = (By.ID, 'sad-description')
+    _remaining_character_count_locator = (By.ID, 'sad-description-counter')
+    _submit_feedback_locator = (By.CSS_SELECTOR, '#sad-submit a')
+    _error_locator = (By.CSS_SELECTOR, '#sad .errorlist li')
+    _back_locator = (By.CSS_SELECTOR, '#sad > header > nav > a')
 
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    def go_to_submit_sad_page(self):
+        self.selenium.get(self.base_url + '/feedback#sad')
+        self.is_the_current_page
 
     @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+    def is_visible(self):
+        return self.is_element_visible(self._sad_page_locator)

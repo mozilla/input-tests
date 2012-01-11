@@ -17,28 +17,40 @@ You will need a version of the [Java Runtime Environment][JRE] installed
 ### Python
 Before you will be able to run these tests you will need to have Python 2.6 installed.
 
-Run
+__note__
 
-    easy_install pip
+The below instructions will install the required Python libraries into your
+global Python installation. If you work on multiple Python projects that might
+end up needing different versions of the same libraries, you might want to
+follow `sudo easy_install pip` with `sudo pip install virtualenv`, and then
+create and activate a [virtualenv](http://www.virtualenv.org) (e.g. `virtualenv
+caseconductor-tests-env; source case-conductor-tests-env/bin/activate`) to
+create a clean "virtual environment" for just this project. Then you can `pip
+install -r requiremenst/mozwebqa.txt` in your virtual environment without
+needing to use `sudo`.
+
+If you don't mind installing globally, just run
+
+    sudo easy_install pip
 
 followed by
 
-    sudo pip install -r requirements/mozwebqa.txt
+    sudo pip install -r requirements.txt
 
 __note__
 
-If you are running on Ubuntu/Debian you will need to do following first
+If you are running on Ubuntu/Debian you will need to first do
 
     sudo apt-get install python-setuptools
-    
+
 to install the required Python libraries.
 
 ### Selenium
-Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-2.0b2.jar'
+Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-x.x.jar (where x.x is current shipping version)'
 
 To start the Selenium server run the following command:
 
-    java -jar ~/Downloads/selenium-server-standalone-2.0b3.jar
+    java -jar ~/Downloads/selenium-server-standalone-x.x.jar (where x.x is current shipping version)
 
 Change the path/name to the downloaded Selenium server file.
 
@@ -46,10 +58,11 @@ Change the path/name to the downloaded Selenium server file.
 
 ### Running tests locally
 
-To run tests locally its a simple case of calling the command below from this directory
+To run tests locally it's a simple case of calling py.test from the root directory.
 
-    py.test . 
+    py.test
 
+For more command line options access https://github.com/davehunt/pytest-mozwebqa
 
 Writing Tests
 -------------
@@ -82,9 +95,10 @@ This software is licensed under the [Mozilla Tri-License][MPL]:
     for the specific language governing rights and limitations under the
     License.
 
-    The Original Code is Mozilla WebQA Selenium Tests.
+    The Original Code is Mozilla WebQA Tests.
 
     The Initial Developer of the Original Code is Mozilla.
+
     Portions created by the Initial Developer are Copyright (C) 2011
     the Initial Developer. All Rights Reserved.
 

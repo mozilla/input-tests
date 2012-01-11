@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
+#   Tobias Markus <tobbi.bugs@googlemail.com>
 #   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
-#   Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,26 +39,34 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
+
+from pages.desktop.sites import SitesPage
 
 
-class Page(object):
+class TestSimilarMessages:
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
+    @pytest.mark.nondestructive
+    def test_similar_messages(self, mozwebqa):
+        """This testcase covers # 13807 in Litmus."""
+        sites_pg = SitesPage(mozwebqa)
 
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
+        sites_pg.go_to_sites_page()
+        sites_pg.product_filter.select_product('firefox')
+        sites_pg.product_filter.select_version(2)
 
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+        #store the first site's name and click it
+        site = sites_pg.sites[0]
+        site_name = site.name
+        themes_pg = site.click_name()
 
-    @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+        #click similar messages and navigate to the second page
+        theme_pg = themes_pg.themes[0].click_similar_messages()
+        theme_pg.click_next_page()
+
+        Assert.equal(theme_pg.messages_heading, 'THEME')
+        Assert.equal(theme_pg.page_from_url, '2')
+        Assert.equal(theme_pg.theme_callout, 'Theme for %s' % site_name.lower())
+        Assert.greater(len(theme_pg.messages), 0)
+        Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name.lower())
+        [Assert.contains(site_name.lower(), message.site) for message in theme_pg.messages]

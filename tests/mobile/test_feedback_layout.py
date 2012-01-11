@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,26 +39,40 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
+
+from pages.mobile.feedback import FeedbackPage
+
+xfail = pytest.mark.xfail
 
 
-class Page(object):
+class Test_Feedback_Layout:
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
+    @xfail(reason="Bug 715542 - visiting the mobile site returns a 500 error")
+    @pytest.mark.nondestructive
+    def test_the_header_layout(self, mozwebqa):
 
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
+        feedback_pg = FeedbackPage(mozwebqa)
+        feedback_pg.go_to_feedback_page()
 
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+        Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
 
-    @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+        feedback_pg.click_settings_tab()
+
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.true(feedback_pg.is_settings_visible)
+
+        feedback_pg.click_statistics_tab()
+
+        Assert.false(feedback_pg.is_feed_visible)
+        Assert.true(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)
+
+        feedback_pg.click_feed_tab()
+
+        Assert.true(feedback_pg.is_feed_visible)
+        Assert.false(feedback_pg.is_statistics_visible)
+        Assert.false(feedback_pg.is_settings_visible)

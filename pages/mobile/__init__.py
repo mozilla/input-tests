@@ -21,10 +21,7 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
 #   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
-#   Bebe <florin.strugariu@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -39,28 +36,3 @@
 # the terms of any one of the MPL, the GPL or the LGPL.
 #
 # ***** END LICENSE BLOCK *****
-
-from unittestzero import Assert
-
-
-class Page(object):
-
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
-
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
-
-    @property
-    def current_page_url(self):
-        return(self.selenium.current_url)

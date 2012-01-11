@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,27 +38,50 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from unittestzero import Assert
+from selenium.webdriver.common.by import By
+
+from page import Page
 
 
-class Page(object):
+class Header(Page):
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
+    _feedback_link_locator = (By.CSS_SELECTOR, 'a.dashboard')
+    _themes_link_locator = (By.CSS_SELECTOR, 'a.themes')
+    _main_heading_link_locator = (By.CSS_SELECTOR, 'h1 > a')
+    _sites_link_locator = (By.CSS_SELECTOR, 'a.issues')
+
+    def click_feedback_link(self):
+        self.selenium.find_element(*self._feedback_link_locator).click()
+        from pages.desktop.feedback import FeedbackPage
+        return FeedbackPage(self.testsetup)
+
+    def click_themes_link(self):
+        self.selenium.find_element(*self._themes_link_locator).click()
+        from pages.desktop.themes import ThemesPage
+        return ThemesPage(self.testsetup)
+
+    def click_main_heading_link(self):
+        self.selenium.find_element(*self._main_heading_link_locator).click()
+        from pages.desktop.feedback import FeedbackPage
+        return FeedbackPage(self.testsetup)
+
+    def click_sites_link(self):
+        self.selenium.find_element(*self._sites_link_locator).click()
+        from pages.desktop.sites import SitesPage
+        return SitesPage(self.testsetup)
 
     @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    def is_feedback_link_visible(self):
+        return self.is_element_visible(self._feedback_link_locator)
 
     @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+    def is_themes_link_visible(self):
+        return self.is_element_visible(self._themes_link_locator)
+
+    @property
+    def is_main_heading_link_visible(self):
+        return self.is_element_visible(self._main_heading_link_locator)
+
+    @property
+    def is_sites_link_visible(self):
+        return self.is_element_visible(self._sites_link_locator)

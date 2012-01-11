@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,27 +38,39 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from unittestzero import Assert
+from selenium.webdriver.common.by import By
+
+from page import Page
 
 
-class Page(object):
+class CommonWordsRegion(Page):
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
-
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    _header_locator = (By.XPATH, "id('filter_themes')/h3/a/text()[1]")
+    _common_words_locator = (By.CSS_SELECTOR, 'filter_themes li')
 
     @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+    def common_words_header(self):
+        return self.selenium.find_element(*self._header_locator)
+
+    def common_words(self):
+        return [self.CommonWord(self.testsetup, element) for element in self.selenium.find_elements(*self._common_words_locator)]
+
+    class CommonWord(Page):
+
+        _name_locator = (By.CSS_SELECTOR, 'a > strong')
+        _message_count_locator = (By.CLASS_NAME, 'count')
+
+        def __init__(self, testsetup, element):
+            Page.__init__(self, testsetup)
+            self._root_element = element
+
+        @property
+        def name(self):
+            return self._root_element.find_element(*self._name_locator).text
+
+        @property
+        def message_count(self):
+            return self._root_element.find_element(*self._message_count_locator).text
+
+        def select(self):
+            self._root_element.find_element(*self._name_locator).click()

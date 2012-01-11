@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,27 +38,45 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from unittestzero import Assert
+from selenium.webdriver.common.by import By
+
+from page import Page
 
 
-class Page(object):
+class Footer(Page):
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
-
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    _privacy_policy_link_locator = (By.CSS_SELECTOR, '#footer-links a:nth-child(1)')
+    _legal_notices_link_locator = (By.CSS_SELECTOR, '#footer-links a:nth-child(2)')
+    _report_trademark_abuse_link_locator = (By.CSS_SELECTOR, '#footer-links a:nth-child(3)')
+    _about_input_link_locator = (By.CSS_SELECTOR, '#footer-links a:nth-child(5)')
+    _unless_otherwise_noted_link_locator = (By.CSS_SELECTOR, '#copyright p:nth-child(3) a:nth-child(1)')
+    _creative_commons_link_locator = (By.CSS_SELECTOR, '#copyright p:nth-child(3) a:nth-child(3)')
+    _language_dropdown_locator = (By.ID, 'language')
 
     @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+    def is_language_dropdown_visible(self):
+        return self.is_element_visible(self._language_dropdown_locator)
+
+    @property
+    def privacy_policy(self):
+        return self.selenium.find_element(*self._privacy_policy_link_locator).text
+
+    @property
+    def legal_notices(self):
+        return self.selenium.find_element(*self._legal_notices_link_locator).text
+
+    @property
+    def report_trademark_abuse(self):
+        return self.selenium.find_element(*self._report_trademark_abuse_link_locator).text
+
+    @property
+    def unless_otherwise_noted(self):
+        return self.selenium.find_element(*self._unless_otherwise_noted_link_locator).text
+
+    @property
+    def creative_commons(self):
+        return self.selenium.find_element(*self._creative_commons_link_locator).text
+
+    @property
+    def about_input(self):
+        return self.selenium.find_element(*self._about_input_link_locator).text

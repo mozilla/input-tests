@@ -21,10 +21,8 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
-#   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -40,27 +38,35 @@
 #
 # ***** END LICENSE BLOCK *****
 
-from unittestzero import Assert
+from selenium.webdriver.common.by import By
+
+from page import Page
 
 
-class Page(object):
+class SitesFilter(Page):
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
-
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
-
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    _header_locator = (By.XPATH, "id('filter_sites')/h3/a/text()[1]")
+    _sites_locator = (By.CSS_SELECTOR, '#filter_sites li')
 
     @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+    def header(self):
+        return self.selenium.find_element(*self._header_locator).text
+
+    @property
+    def sites(self):
+        return [self.Site(self.testsetup, element) for element in self.selenium.find_elements(*self._sites_locator)]
+
+    class Site(Page):
+
+        _site_locator = (By.CSS_SELECTOR, 'a > strong')
+
+        def __init__(self, testsetup, element):
+            Page.__init__(self, testsetup)
+            self._root_element = element
+
+        @property
+        def url(self):
+            return self._root_element.find_element(*self._site_locator).text
+
+        def click(self):
+            return self._root_element.find_element(*self._site_locator).click

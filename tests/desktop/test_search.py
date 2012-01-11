@@ -21,10 +21,10 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-#   Vishal
-#   Dave Hunt <dhunt@mozilla.com>
 #   David Burns
-#   Bebe <florin.strugariu@softvision.ro>
+#   Dave Hunt <dhunt@mozilla.com>
+#   Matt Brandt <mbrandt@mozilla.com>
+#   Teodosia Pop <teodosia.pop@softvision.ro>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -41,26 +41,45 @@
 # ***** END LICENSE BLOCK *****
 
 from unittestzero import Assert
+import pytest
+
+from pages.desktop.feedback import FeedbackPage
 
 
-class Page(object):
+class TestSearch:
 
-    def __init__(self, testsetup):
-        self.testsetup = testsetup
-        self.base_url = testsetup.base_url
-        self.selenium = testsetup.selenium
+    @pytest.mark.nondestructive
+    def test_that_empty_search_of_feedback_returns_some_data(self, mozwebqa):
+        """Litmus 13847"""
+        feedback_pg = FeedbackPage(mozwebqa)
 
-    @property
-    def is_the_current_page(self):
-        Assert.equal(self.selenium.title, self._page_title)
-        return True
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.search_for('')
+        Assert.greater(len(feedback_pg.messages), 0)
 
-    def is_element_visible(self, locator):
-        try:
-            return self.selenium.find_element(*locator).is_displayed()
-        except:
-            return False
+    @pytest.mark.nondestructive
+    def test_that_we_can_search_feedback_with_unicode(self, mozwebqa):
+        """Litmus 13697"""
+        feedback_pg = FeedbackPage(mozwebqa)
 
-    @property
-    def current_page_url(self):
-        return(self.selenium.current_url)
+        feedback_pg.go_to_feedback_page()
+        # Select the Firefox version that is 1 less than the newest to ensure the unicode
+        # search returns at least 1 result.
+        feedback_pg.product_filter.select_product('firefox')
+        feedback_pg.product_filter.select_version('--')
+
+        feedback_pg.search_for(u"rapidit\xe9")
+        Assert.greater(len(feedback_pg.messages), 0)
+
+    @pytest.mark.nondestructive
+    def test_search_box_placeholder(self, mozwebqa):
+        """Litmus 13845.
+
+        1. Verify that there is a search field appearing in Latest Feedback
+        section it shows by default "Search by keyword"
+
+        """
+        feedback_pg = FeedbackPage(mozwebqa)
+
+        feedback_pg.go_to_feedback_page()
+        Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")

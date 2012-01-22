@@ -92,6 +92,7 @@ class Test_Feedback_Layout:
         Assert.equal(feedback_pg.footer.about_input, "About Firefox Input")
         Assert.true(feedback_pg.footer.is_language_dropdown_visible)
 
+    @xfail(reason="Bug 720191 - [prod] Platform section: Android is listed as a Desktop platform")
     @pytest.mark.nondestructive
     def test_the_left_panel_layout(self, mozwebqa):
         """This testcase covers # 13595 & 13600 in Litmus.

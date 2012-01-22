@@ -25,6 +25,7 @@
 #   Dave Hunt <dhunt@mozilla.com>
 #   David Burns
 #   Bebe <florin.strugariu@softvision.ro>
+#   Matt Brandt <mbrandt@mozilla.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -50,11 +51,12 @@ class Page(object):
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
+        self.timeout = testsetup.timeout
 
     @property
     def is_the_current_page(self):
         if self._page_title:
-            WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.title)
 
         Assert.equal(self.selenium.title, self._page_title,
             "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))

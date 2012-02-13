@@ -6,6 +6,5 @@ py==1.4.7
 pytest==2.2.3
 pytest-mozwebqa==0.8
 pytest-xdist==1.8
-rdflib==3.1.0
 requests==0.9.1
 selenium

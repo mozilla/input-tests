@@ -96,15 +96,15 @@ class DateFilter(Page):
         return self.is_element_visible(self._datepicker_next_month_disabled_locator)
 
     def wait_for_datepicker_to_open(self):
-        WebDriverWait(self.selenium, 3).until(lambda s: self.is_datepicker_visible)
-        WebDriverWait(self.selenium, 3).until(lambda s: s.find_element(*self._datepicker_locator).size['width'] == 251)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_datepicker_visible)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._datepicker_locator).size['width'] == 251)
 
     def wait_for_datepicker_to_close(self):
-        WebDriverWait(self.selenium, 3).until(lambda s: not self.is_datepicker_visible)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_datepicker_visible)
 
     def close_datepicker(self):
         self.selenium.find_element(*self._custom_start_date_locator).send_keys(Keys.ESCAPE)
-        WebDriverWait(self.selenium, 3).until(lambda s: not self.is_datepicker_visible)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_datepicker_visible)
 
     def click_start_date(self):
         """Clicks the start date in the custom date filter form and waits for the datepicker to appear."""

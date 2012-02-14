@@ -36,8 +36,8 @@ class SubmitFeedbackPage(BasePage):
         self.selenium.find_element(*self._support_page_locator).click()
 
     def wait_for_page_to_slide_into_view(self, page_locator):
-        WebDriverWait(self.selenium, 3).until(lambda s: 'entering' in s.find_element(*page_locator).get_attribute('class'))
-        WebDriverWait(self.selenium, 3).until(lambda s: 'entering' not in s.find_element(*page_locator).get_attribute('class'))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'entering' in s.find_element(*page_locator).get_attribute('class'))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'entering' not in s.find_element(*page_locator).get_attribute('class'))
 
     def click_happy_feedback(self):
         self.selenium.find_element(*self._happy_button_locator).click()

@@ -14,11 +14,12 @@ class Page(object):
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
+        self.timeout = testsetup.timeout
 
     @property
     def is_the_current_page(self):
         if self._page_title:
-            WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
 
         Assert.equal(self.selenium.title, self._page_title,
             "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))

@@ -9,11 +9,6 @@ For information specific to Firefox Input see the [GitHub repository][GitHub Inp
 Running Tests
 -------------
 
-### Java
-You will need a version of the [Java Runtime Environment][JRE] installed
-
-[JRE]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-
 ### Python
 Before you will be able to run these tests you will need to have Python 2.6 installed.
 
@@ -45,24 +40,13 @@ If you are running on Ubuntu/Debian you will need to first do
 
 to install the required Python libraries.
 
-### Selenium
-Once this is all set up you will need to download and start a Selenium server. You can download the latest Selenium server from [here][Selenium Downloads]. The filename will be something like 'selenium-server-standalone-x.x.jar (where x.x is current shipping version)'
-
-To start the Selenium server run the following command:
-
-    java -jar ~/Downloads/selenium-server-standalone-x.x.jar (where x.x is current shipping version)
-
-Change the path/name to the downloaded Selenium server file.
-
-[Selenium Downloads]: http://code.google.com/p/selenium/downloads/list
-
 ### Running tests locally
 
 To run tests locally it's a simple case of calling py.test from the root directory.
 
-    py.test
+    py.test --driver=firefox tests/desktop
 
-For more command line options access https://github.com/davehunt/pytest-mozwebqa
+For more command line options see https://github.com/davehunt/pytest-mozwebqa
 
 Writing Tests
 -------------

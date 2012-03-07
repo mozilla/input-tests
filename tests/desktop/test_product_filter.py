@@ -49,10 +49,12 @@ class TestProductFilter:
 
         """
         feedback_pg = FeedbackPage(mozwebqa)
+        # We can't select the all (default) so set to 1st item first then back to default
+        feedback_pg.go_to_feedback_page()
+        feedback_pg.product_filter.select_version(1)
 
         product = "firefox"
         version = "--"
-        feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product(product)
         feedback_pg.product_filter.select_version(version)
         Assert.equal(feedback_pg.product_filter.selected_product, product)

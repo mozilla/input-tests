@@ -71,7 +71,7 @@ class SubmitFeedbackPage(BasePage):
 
     @property
     def remaining_character_count(self):
-        return self.selenium.find_element(*self._remaining_character_count_locator).text
+        return int(self.selenium.find_element(*self._remaining_character_count_locator).text)
 
     @property
     def is_remaining_character_count_limited(self):

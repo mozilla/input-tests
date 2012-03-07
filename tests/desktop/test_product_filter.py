@@ -107,6 +107,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
+    @pytest.xfail(Reason = 'Bug 733787 - Default version not being set')
     @pytest.mark.nondestructive
     def test_sites_can_be_filtered_by_firefox_versions(self, mozwebqa):
         """This testcase covers # 15043 & 15045 in Litmus.

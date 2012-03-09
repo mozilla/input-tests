@@ -13,6 +13,7 @@ from pages.desktop.feedback import FeedbackPage
 class TestPlatformFilter:
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason='Bug 733787 - Default version not set correctly')
     def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """This testcase covers # 15215 in Litmus.
 

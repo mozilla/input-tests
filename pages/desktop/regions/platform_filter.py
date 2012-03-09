@@ -51,7 +51,7 @@ class PlatformFilter(Page):
             def message_count(self):
                 # TODO Use native mouse interactions to hover over element to get the text
                 message_count = self._root_element.find_element(*self._message_count_locator)
-                return self.selenium.execute_script('return arguments[0].textContent', message_count)
+                return int(self.selenium.execute_script('return arguments[0].textContent', message_count))
 
             def click(self):
                 self._root_element.find_element(*self._checkbox_locator).click()

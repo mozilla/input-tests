@@ -84,7 +84,7 @@ class FeedbackPage(BasePage):
 
     @property
     def total_message_count(self):
-        return self.selenium.find_element(*self._total_message_count_locator).text
+        return int(self.selenium.find_element(*self._total_message_count_locator).text.replace(',',''))
 
     @property
     def total_message_count_heading(self):

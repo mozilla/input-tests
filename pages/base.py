@@ -114,7 +114,7 @@ class BasePage(Page):
     @property
     def page_from_url(self):
         """Returns the page value from the current location URL."""
-        return self._value_from_url("page")
+        return int(self._value_from_url("page"))
 
     @property
     def locale_from_url(self):

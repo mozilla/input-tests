@@ -18,7 +18,7 @@ class LocaleFilter(Page):
 
     @property
     def total_message_count(self):
-        return self.selenium.find_element(*self._total_message_count_locator).get_attribute('data-total')
+        return int(self.selenium.find_element(*self._total_message_count_locator).get_attribute('data-total'))
 
     @property
     def are_more_locales_visible(self):
@@ -67,11 +67,11 @@ class LocaleFilter(Page):
         def message_count(self):
             # TODO Use native mouse interactions to hover over element to get the text
             message_count = self._root_element.find_element(*self._message_count_locator)
-            return self.selenium.execute_script('return arguments[0].textContent', message_count)
+            return int(self.selenium.execute_script('return arguments[0].textContent', message_count))
 
         @property
         def message_percentage(self):
-            return self._root_element.find_element(*self._message_percentage_locator).text
+            return int(self._root_element.find_element(*self._message_percentage_locator).text.split("%")[0])
 
         def select(self):
             self._root_element.find_element(*self._checkbox_locator).click()

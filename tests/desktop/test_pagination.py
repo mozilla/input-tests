@@ -61,7 +61,7 @@ class TestPagination:
         Assert.equal(feedback_pg.older_messages_link, u"\xab Older Messages")
         Assert.equal(feedback_pg.newer_messages_link, u"Newer Messages \xbb")
 
-        Assert.equal(int(feedback_pg.page_from_url), 2)
+        Assert.equal(feedback_pg.page_from_url, 2)
 
         feedback_pg.click_newer_messages()
         Assert.equal(feedback_pg.product_from_url, "firefox")
@@ -76,4 +76,4 @@ class TestPagination:
         Assert.equal(feedback_pg.older_messages_link, u"\xab Older Messages")
         Assert.equal(feedback_pg.newer_messages_link, u"Newer Messages \xbb")
 
-        Assert.equal(int(feedback_pg.page_from_url), 1)
+        Assert.equal(feedback_pg.page_from_url, 1)

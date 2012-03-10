@@ -31,7 +31,7 @@ class TestSimilarMessages:
         theme_pg.click_next_page()
 
         Assert.equal(theme_pg.messages_heading, 'THEME')
-        Assert.equal(theme_pg.page_from_url, '2')
+        Assert.equal(theme_pg.page_from_url, 2)
         Assert.equal(theme_pg.theme_callout, 'Theme for %s' % site_name.lower())
         Assert.greater(len(theme_pg.messages), 0)
         Assert.equal(theme_pg.back_link, u'Back to %s \xbb' % site_name.lower())

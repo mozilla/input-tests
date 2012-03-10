@@ -2,3 +2,5 @@
 *.pyc
 *.tmproj
 *.komodoproject
+*.idea
+results

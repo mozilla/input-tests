@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from pages.base import BasePage
 
@@ -21,6 +22,10 @@ class FeedbackPage(BasePage):
     _statistics_page_locator = (By.ID, 'stats')
     _trends_page_locator = (By.ID, 'trends')
     _settings_page_locator = (By.ID, 'settings')
+
+    _search_box = (By.ID, 'id_q')
+
+    _messages_locator = (By.CSS_SELECTOR, 'div.block > ul.messages > li')
 
     def go_to_feedback_page(self):
         print 'opening: ' + self.base_url + '/'
@@ -47,3 +52,17 @@ class FeedbackPage(BasePage):
     @property
     def is_settings_visible(self):
         return self.is_element_visible(self._settings_page_locator)
+
+    def search_for(self, search_string):
+        search_box = self.selenium.find_element(*self._search_box)
+        search_box.send_keys(search_string)
+        search_box.submit()
+
+    @property
+    def search_box_placeholder(self):
+        return self.selenium.find_element(*self._search_box).get_attribute('placeholder')
+
+    @property
+    def messages(self):
+        from pages.mobile.regions.message import Message
+        return [Message(self.testsetup, message) for message in self.selenium.find_elements(*self._messages_locator)]

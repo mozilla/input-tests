@@ -49,5 +49,6 @@ class TestSearch:
 
         feedback_pg.search_for(self.positive_search_term)
 
+        Assert.greater(len(feedback_pg.messages), 0)
         for message in feedback_pg.messages:
             Assert.contains(self.positive_search_term, message.body.lower())

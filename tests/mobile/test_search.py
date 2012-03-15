@@ -12,17 +12,17 @@ from pages.mobile.feedback import FeedbackPage
 
 class TestSearch:
 
-    pozitive_search_term = "firefox"
+    positive_search_term = "firefox"
 
     @pytest.mark.nondestructive
     def test_that_search_returns_results(self, mozwebqa):
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.search_for(self.pozitive_search_term)
+        feedback_pg.search_for(self.positive_search_term)
         messages = feedback_pg.messages
 
-        Assert.equal(self.pozitive_search_term, feedback_pg.search_term_from_url)
+        Assert.equal(self.positive_search_term, feedback_pg.search_term_from_url)
         Assert.greater(len(messages), 0)
 
     @pytest.mark.nondestructive
@@ -47,7 +47,7 @@ class TestSearch:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.search_for(self.pozitive_search_term)
+        feedback_pg.search_for(self.positive_search_term)
 
         for message in feedback_pg.messages:
-            Assert.contains(self.pozitive_search_term, message.body.lower())
+            Assert.contains(self.positive_search_term, message.body.lower())

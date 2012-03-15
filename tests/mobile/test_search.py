@@ -9,20 +9,20 @@ import pytest
 
 from pages.mobile.feedback import FeedbackPage
 
-xfail = pytest.mark.xfail
-
 
 class TestSearch:
+
+    pozitive_search_term = "firefox"
 
     @pytest.mark.nondestructive
     def test_that_search_returns_results(self, mozwebqa):
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.search_for("test")
+        feedback_pg.search_for(self.pozitive_search_term)
         messages = feedback_pg.messages
 
-        Assert.equal('test', feedback_pg.search_term_from_url)
+        Assert.equal(self.pozitive_search_term, feedback_pg.search_term_from_url)
         Assert.greater(len(messages), 0)
 
     @pytest.mark.nondestructive
@@ -43,12 +43,11 @@ class TestSearch:
         Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
 
     @pytest.mark.nondestructive
-    def test_taht_search_results_contain_search_text(self, mozwebqa):
+    def test_that_search_results_contain_search_text(self, mozwebqa):
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.search_for('test')
-        messages = feedback_pg.messages
+        feedback_pg.search_for(self.pozitive_search_term)
 
-        Assert.contains('test',
-                        [message.body for message in messages])
+        for message in feedback_pg.messages:
+            Assert.contains(self.pozitive_search_term, message.body.lower())

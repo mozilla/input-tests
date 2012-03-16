@@ -22,6 +22,9 @@ class FeedbackPage(BasePage):
     _trends_page_locator = (By.ID, 'trends')
     _settings_page_locator = (By.ID, 'settings')
 
+    _older_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager a.next')
+    _newer_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager .prev')
+
     def go_to_feedback_page(self):
         print 'opening: ' + self.base_url + '/'
         self.selenium.get(self.base_url + '/')
@@ -47,3 +50,19 @@ class FeedbackPage(BasePage):
     @property
     def is_settings_visible(self):
         return self.is_element_visible(self._settings_page_locator)
+
+    def click_older_feedback_button(self):
+        self.selenium.find_element(*self._older_feedback_button_locator).click()
+
+    def click_newer_feedback_button(self):
+        self.selenium.find_element(*self._newer_feedback_button_locator).click()
+
+    @property
+    def is_older_feedback_button_disabled(self):
+        is_disabled = self.selenium.find_element(*self._older_feedback_button_locator).get_attribute('class')
+        return "disabled" in is_disabled
+
+    @property
+    def is_newer_feedback_button_disabled(self):
+        is_disabled = self.selenium.find_element(*self._newer_feedback_button_locator).get_attribute('class')
+        return "disabled" in is_disabled

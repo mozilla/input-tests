@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+
 from pages.base import BasePage
 
 
@@ -21,9 +22,9 @@ class FeedbackPage(BasePage):
     _trends_page_locator = (By.ID, 'trends')
     _settings_page_locator = (By.ID, 'settings')
 
-    _search_box = (By.ID, 'id_q')
+    _search_box_locator = (By.ID, 'id_q')
 
-    _messages_locator = (By.CSS_SELECTOR, 'div.block > ul.messages > li.list-item')
+    _messages_locator = (By.CSS_SELECTOR, '.messages .message')
 
     def go_to_feedback_page(self):
         print 'opening: ' + self.base_url + '/'
@@ -39,9 +40,9 @@ class FeedbackPage(BasePage):
     def click_settings_tab(self):
         self.selenium.find_element(*self._settings_tab_locator).click()
 
-    def search_for(self, search_string):
-        search_box = self.selenium.find_element(*self._search_box)
-        search_box.send_keys(search_string)
+    def search_for(self, search_term):
+        search_box = self.selenium.find_element(*self._search_box_locator)
+        search_box.send_keys(search_term)
         search_box.submit()
 
     @property
@@ -58,7 +59,7 @@ class FeedbackPage(BasePage):
 
     @property
     def search_box_placeholder(self):
-        return self.selenium.find_element(*self._search_box).get_attribute('placeholder')
+        return self.selenium.find_element(*self._search_box_locator).get_attribute('placeholder')
 
     @property
     def messages(self):

@@ -20,10 +20,10 @@ class TestSearch:
         feedback_pg.go_to_feedback_page()
 
         feedback_pg.search_for(self.positive_search_term)
-        messages = feedback_pg.messages
 
         Assert.equal(self.positive_search_term, feedback_pg.search_term_from_url)
-        Assert.greater(len(messages), 0)
+        Assert.greater(len(feedback_pg.messages), 0)
+
 
     @pytest.mark.nondestructive
     def test_that_empty_search_of_feedback_returns_some_data(self, mozwebqa):

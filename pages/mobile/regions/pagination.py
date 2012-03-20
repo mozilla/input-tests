@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from pages.base import BasePage
 
 
-class Paginator(BasePage):
+class PaginationRegion(BasePage):
 
     _older_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager a.next')
     _newer_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager .prev')
@@ -22,10 +22,8 @@ class Paginator(BasePage):
 
     @property
     def is_older_feedback_button_disabled(self):
-        is_disabled = self.selenium.find_element(*self._older_feedback_button_locator).get_attribute('class')
-        return "disabled" in is_disabled
+        return "disabled" in self.selenium.find_element(*self._older_feedback_button_locator).get_attribute('class')
 
     @property
     def is_newer_feedback_button_disabled(self):
-        is_disabled = self.selenium.find_element(*self._newer_feedback_button_locator).get_attribute('class')
-        return "disabled" in is_disabled
+        return "disabled" in self.selenium.find_element(*self._newer_feedback_button_locator).get_attribute('class')

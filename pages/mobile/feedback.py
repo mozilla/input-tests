@@ -49,6 +49,6 @@ class FeedbackPage(BasePage):
         return self.is_element_visible(self._settings_page_locator)
 
     @property
-    def paginator(self):
-        from pages.mobile.regions.paginator import Paginator
-        return Paginator(self.testsetup)
+    def pagination(self):
+        from pages.mobile.regions.pagination import PaginationRegion
+        return PaginationRegion(self.testsetup)

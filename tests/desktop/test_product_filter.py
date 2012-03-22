@@ -39,6 +39,7 @@ class TestProductFilter:
             Assert.equal(feedback_pg.product_from_url, product)
             Assert.equal(feedback_pg.version_from_url, version)
 
+    @pytest.mark.xfail(reason='Bug 733787 - Default version not set correctly')
     @pytest.mark.nondestructive
     def test_feedback_can_be_displayed_for_all_firefox_versions(self, mozwebqa):
         """This testcase covers # 15149 in Litmus.

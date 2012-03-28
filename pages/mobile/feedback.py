@@ -22,6 +22,10 @@ class FeedbackPage(BasePage):
     _trends_page_locator = (By.ID, 'trends')
     _settings_page_locator = (By.ID, 'settings')
 
+    _search_box_locator = (By.ID, 'id_q')
+
+    _messages_locator = (By.CSS_SELECTOR, '.messages .message')
+
     def go_to_feedback_page(self):
         print 'opening: ' + self.base_url + '/'
         self.selenium.get(self.base_url + '/')
@@ -35,6 +39,11 @@ class FeedbackPage(BasePage):
 
     def click_settings_tab(self):
         self.selenium.find_element(*self._settings_tab_locator).click()
+
+    def search_for(self, search_term):
+        search_box = self.selenium.find_element(*self._search_box_locator)
+        search_box.send_keys(search_term)
+        search_box.submit()
 
     @property
     def is_feed_visible(self):
@@ -52,3 +61,12 @@ class FeedbackPage(BasePage):
     def pagination(self):
         from pages.mobile.regions.pagination import PaginationRegion
         return PaginationRegion(self.testsetup)
+
+    @property
+    def search_box_placeholder(self):
+        return self.selenium.find_element(*self._search_box_locator).get_attribute('placeholder')
+
+    @property
+    def messages(self):
+        from pages.mobile.regions.message import Message
+        return [Message(self.testsetup, message) for message in self.selenium.find_elements(*self._messages_locator)]

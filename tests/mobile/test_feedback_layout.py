@@ -48,13 +48,13 @@ class Test_Feedback_Layout:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        Assert.false(feedback_pg.pagination.is_older_feedback_button_disabled)
-        Assert.true(feedback_pg.pagination.is_newer_feedback_button_disabled)
+        Assert.false(feedback_pg.pagination.is_older_button_disabled)
+        Assert.true(feedback_pg.pagination.is_newer_button_disabled)
 
-        feedback_pg.pagination.click_older_feedback_button()
-        Assert.false(feedback_pg.pagination.is_newer_feedback_button_disabled)
+        feedback_pg.pagination.click_older_button()
+        Assert.false(feedback_pg.pagination.is_newer_button_disabled)
 
         # return to first page
-        feedback_pg.pagination.click_newer_feedback_button()
-        Assert.false(feedback_pg.pagination.is_older_feedback_button_disabled)
-        Assert.true(feedback_pg.pagination.is_newer_feedback_button_disabled)
+        feedback_pg.pagination.click_newer_button()
+        Assert.false(feedback_pg.pagination.is_older_button_disabled)
+        Assert.true(feedback_pg.pagination.is_newer_button_disabled)

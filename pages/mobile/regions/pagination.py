@@ -11,19 +11,19 @@ from pages.base import BasePage
 
 class PaginationRegion(BasePage):
 
-    _older_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager a.next')
-    _newer_feedback_button_locator = (By.CSS_SELECTOR, 'div.pager .prev')
+    _older_button_locator = (By.CSS_SELECTOR, 'div.pager a.next')
+    _newer_button_locator = (By.CSS_SELECTOR, 'div.pager .prev')
 
-    def click_older_feedback_button(self):
-        self.selenium.find_element(*self._older_feedback_button_locator).click()
+    def click_older_button(self):
+        self.selenium.find_element(*self._older_button_locator).click()
 
-    def click_newer_feedback_button(self):
-        self.selenium.find_element(*self._newer_feedback_button_locator).click()
-
-    @property
-    def is_older_feedback_button_disabled(self):
-        return "disabled" in self.selenium.find_element(*self._older_feedback_button_locator).get_attribute('class')
+    def click_newer_button(self):
+        self.selenium.find_element(*self._newer_button_locator).click()
 
     @property
-    def is_newer_feedback_button_disabled(self):
-        return "disabled" in self.selenium.find_element(*self._newer_feedback_button_locator).get_attribute('class')
+    def is_older_button_disabled(self):
+        return "disabled" in self.selenium.find_element(*self._older_button_locator).get_attribute('class')
+
+    @property
+    def is_newer_button_disabled(self):
+        return "disabled" in self.selenium.find_element(*self._newer_button_locator).get_attribute('class')

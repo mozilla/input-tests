@@ -58,6 +58,11 @@ class FeedbackPage(BasePage):
         return self.is_element_visible(self._settings_page_locator)
 
     @property
+    def pagination(self):
+        from pages.mobile.regions.pagination import PaginationRegion
+        return PaginationRegion(self.testsetup)
+
+    @property
     def search_box_placeholder(self):
         return self.selenium.find_element(*self._search_box_locator).get_attribute('placeholder')
 

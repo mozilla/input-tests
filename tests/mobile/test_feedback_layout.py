@@ -42,3 +42,19 @@ class Test_Feedback_Layout:
         Assert.true(feedback_pg.is_feed_visible)
         Assert.false(feedback_pg.is_statistics_visible)
         Assert.false(feedback_pg.is_settings_visible)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_pagination(self, mozwebqa):
+        feedback_pg = FeedbackPage(mozwebqa)
+        feedback_pg.go_to_feedback_page()
+
+        Assert.false(feedback_pg.pagination.is_older_button_disabled)
+        Assert.true(feedback_pg.pagination.is_newer_button_disabled)
+
+        feedback_pg.pagination.click_older_button()
+        Assert.false(feedback_pg.pagination.is_newer_button_disabled)
+
+        # return to first page
+        feedback_pg.pagination.click_newer_button()
+        Assert.false(feedback_pg.pagination.is_older_button_disabled)
+        Assert.true(feedback_pg.pagination.is_newer_button_disabled)

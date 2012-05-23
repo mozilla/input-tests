@@ -8,6 +8,7 @@ import urllib
 from urlparse import urlparse
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from page import Page
 
@@ -30,6 +31,7 @@ class BasePage(Page):
     def click_older_messages(self):
         """Navigates to the previous page of older messages."""
         self.selenium.find_element(*self._older_messages_link_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: self.header.is_feedback_link_visible)
 
     def click_newer_messages(self):
         """Navigates to the next page of newer messages."""

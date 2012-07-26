@@ -1,6 +1,11 @@
 Firefox Input Tests
 ===================
 
+This project is currently disabled so we are currently not developing tests for Input.
+If you want to write tests, you should check out some of our other projects:
+https://quality.mozilla.org/docs/webqa/projects/automation/
+
+
 Automated tests for the Firefox Input web application.
 For information specific to Firefox Input see the [GitHub repository][GitHub Input].
 

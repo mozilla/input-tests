@@ -39,6 +39,7 @@ class TestPagination:
         """Litmus 13636 - Input: Verify Search results have pagination."""
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
+        feedback_pg.product_filter.select_version("--")
         feedback_pg.search_for("facebook")
 
         Assert.true(feedback_pg.is_older_messages_link_visible)

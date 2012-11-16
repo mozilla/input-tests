@@ -9,8 +9,6 @@ import pytest
 
 from pages.desktop.feedback import FeedbackPage
 
-xfail = pytest.mark.xfail
-
 
 class TestPagination:
 

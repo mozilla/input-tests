@@ -16,15 +16,6 @@ class ThemesPage(BasePage):
 
     _themes_locator = (By.CSS_SELECTOR, '#themes li.theme')
 
-    def go_to_themes_page(self):
-        self.selenium.get(self.base_url + '/themes/')
-        self.is_the_current_page
-
-    @property
-    def type_filter(self):
-        from pages.desktop.regions.type_filter import TypeFilter
-        return TypeFilter.ButtonFilter(self.testsetup)
-
     @property
     def themes(self):
         return [self.Theme(self.testsetup, element) for element in self.selenium.find_elements(*self._themes_locator)]

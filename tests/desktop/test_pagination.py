@@ -8,31 +8,11 @@ from unittestzero import Assert
 import pytest
 
 from pages.desktop.feedback import FeedbackPage
-from pages.desktop.themes import ThemesPage
 
 xfail = pytest.mark.xfail
 
 
 class TestPagination:
-
-    @xfail(reason="Bug 716852 - No themes data on any environment, Bug 617177 - Filter type (happy/sad) doesn't persist when paginating through Themes")
-    @pytest.mark.nondestructive
-    def test_themes_filters_persist_when_paging_through_results(self, mozwebqa):
-        """This testcase covers # 15018 in Litmus.
-
-        1. Verifies the filter is in the URL
-        2. Verifies the currently applied filter is styled appropriately
-        3. Verifies the results of the filter
-
-        """
-        themes_pg = ThemesPage(mozwebqa)
-
-        themes_pg.go_to_themes_page()
-        themes_pg.type_filter.click_issues()
-        themes_pg.click_older_messages()
-        Assert.equal(themes_pg.feedback_type_from_url, "issue")
-        Assert.equal(themes_pg.type_filter.selected_type, "Issues")
-        [Assert.equal(theme.type, "Issue") for theme in themes_pg.themes]
 
     @pytest.mark.nondestructive
     def test_search_pagination(self, mozwebqa):

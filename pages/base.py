@@ -18,6 +18,11 @@ class BasePage(Page):
     _older_messages_link_locator = (By.CSS_SELECTOR, '.pager .older')
     _newer_messages_link_locator = (By.CSS_SELECTOR, '.pager .newer')
 
+    def scroll_to_element(self, *locator):
+        """Scroll to element"""
+        el = self.selenium.find_element(*locator)
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
+
     @property
     def header(self):
         from pages.desktop.regions.header import Header

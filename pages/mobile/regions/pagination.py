@@ -16,11 +16,11 @@ class PaginationRegion(BasePage):
     _pager_locator = (By.CSS_SELECTOR, 'div.pager')
 
     def click_older_button(self):
-        self.click_pager()
+        self.scroll_to_element(*self._older_button_locator)
         self.selenium.find_element(*self._older_button_locator).click()
 
     def click_newer_button(self):
-        self.click_pager()
+        self.scroll_to_element(*self._newer_button_locator)
         self.selenium.find_element(*self._newer_button_locator).click()
 
     @property
@@ -30,7 +30,3 @@ class PaginationRegion(BasePage):
     @property
     def is_newer_button_disabled(self):
         return "disabled" in self.selenium.find_element(*self._newer_button_locator).get_attribute('class')
-
-    def click_pager(self):
-        """We click the footer because of a android scroll issue #3171."""
-        self.selenium.find_element(*self._pager_locator).click()

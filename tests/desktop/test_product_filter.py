@@ -61,6 +61,7 @@ class TestProductFilter:
         Assert.equal(feedback_pg.product_from_url, product)
         Assert.equal(feedback_pg.version_from_url, version)
 
+    @pytest.mark.xfail(reason='Bug 815108 - There are only 2 Mobile versions, when there should be more then 3')
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_mobile_versions(self, mozwebqa):
         """This testcase covers # 13602 & 13604 in Litmus.

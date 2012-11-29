@@ -277,6 +277,8 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, '')
 
+    @xfail(reason="Bug 816213 - No new data on dashboard since 2012-11-26")
+    #https://bugzilla.mozilla.org/show_bug.cgi?id=816213
     @pytest.mark.nondestructive
     def test_dashboard_should_have_recent_feedback(self, mozwebqa):
         """This testcase covers https://bugzilla.mozilla.org/show_bug.cgi?id=816213

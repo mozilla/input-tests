@@ -229,7 +229,6 @@ class TestSearchDates:
         Assert.equal(feedback_pg.date_filter.custom_start_date, start_date)
         Assert.equal(feedback_pg.date_filter.custom_end_date, end_date)
 
-    @xfail(reason="Bug 688113 - test_feedback_custom_date_filter_with_end_date_lower_than_start_date suffers from Search Unavailable Errors")
     @pytest.mark.nondestructive
     def test_feedback_custom_date_filter_with_end_date_lower_than_start_date(self, mozwebqa):
         """This testcase covers # 13613, 13724 in Litmus.

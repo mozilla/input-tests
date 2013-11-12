@@ -16,12 +16,12 @@ class FeedbackPage(BasePage):
     _page_title = 'Welcome :: Firefox Input'
 
     _warning_heading_locator = (By.CSS_SELECTOR, '#message-warning h3')
-    _search_box = (By.ID, 'id_q')
+    _search_box = (By.NAME, 'q')
     _chart_locator = (By.ID, 'feedback-chart')
     _total_message_count_locator = (By.CSS_SELECTOR, '#big-count p')
     _total_message_count_heading_locator = (By.CSS_SELECTOR, '#big-count h3')
     _messages_column_heading_locator = (By.CSS_SELECTOR, '#messages h2')
-    _messages_locator = (By.CSS_SELECTOR, '#messages.block ul li.message')
+    _messages_locator = (By.CSS_SELECTOR, '.opinion')
 
     def go_to_feedback_page(self):
         self.selenium.get(self.base_url + '/')
@@ -84,7 +84,7 @@ class FeedbackPage(BasePage):
 
     @property
     def total_message_count(self):
-        return int(self.selenium.find_element(*self._total_message_count_locator).text.replace(',',''))
+        return int(self.selenium.find_element(*self._total_message_count_locator).text.replace(',', ''))
 
     @property
     def total_message_count_heading(self):

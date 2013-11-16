@@ -14,41 +14,58 @@ class ProductFilter(Page):
 
     class ComboFilter(Page):
 
-        _product_dropdown_locator = (By.ID, 'product')
-        _version_dropdown_locator = (By.ID, 'version')
+        _product_checkbox_locator = (By.CSS_SELECTOR, ".bars[name='product'] input")
+        _version_checkbox_locator = (By.CSS_SELECTOR, ".bars[name='version'] input")
 
         @property
         def products(self):
             """Returns a list of available products."""
-            select = Select(self.selenium.find_element(*self._product_dropdown_locator))
-            return [option.get_attribute('value') for option in select.options]
+            select = self.selenium.find_elements(*self._product_checkbox_locator)
+            return [element.get_attribute('value') for element in select]
 
         @property
         def selected_product(self):
             """Returns the currently selected product."""
-            return Select(self.selenium.find_element(*self._product_dropdown_locator)).first_selected_option.get_attribute('value')
+            return self.selenium.find_element(*self._product_checkbox_locator).get_attribute('value')
 
         def select_product(self, product):
             """Selects a product."""
-            if not product == self.selected_product:
-                Select(self.selenium.find_element(*self._product_dropdown_locator)).select_by_value(product)
+            product = product.lower().replace(' ', '-')
+            select = self.selenium.find_element(self._product_checkbox_locator[0],
+                                                self._product_checkbox_locator[1] + "[name='%s']" % product)
+            if not select.is_selected():
+                select.click()
+
+        def unselect_product(self, product):
+            """Un-Selects a product."""
+            product = product.lower().replace(' ', '-')
+            select = self.selenium.find_element(self._product_checkbox_locator[0],
+                                                self._product_checkbox_locator[1] + "[name='%s']" % product)
+            if select.is_selected():
+                select.click()
 
         @property
         def versions(self):
             """Returns a list of available versions."""
-            select = Select(self.selenium.find_element(*self._version_dropdown_locator))
-            return [option.get_attribute('value') for option in select.options]
+            select = self.selenium.find_elements(*self._version_checkbox_locator)
+            return [element.get_attribute('value') for element in select]
 
         @property
         def selected_version(self):
             """Returns the currently selected product version."""
-            return Select(self.selenium.find_element(*self._version_dropdown_locator)).first_selected_option.get_attribute('value')
+            return self.selenium.find_element(self._version_checkbox_locator[0],
+                                              self._version_checkbox_locator[1]).get_attribute('value')
 
         def select_version(self, version):
             """Selects a product version."""
-            select = Select(self.selenium.find_element(*self._version_dropdown_locator))
+            select = self.selenium.find_element(self._version_checkbox_locator[0],
+                                                self._version_checkbox_locator[1] + "[value ='%s']" % version)
+            if not select.is_selected():
+                select.click()
 
-            if type(version) == int:
-                select.select_by_index(version)
-            else:
-                select.select_by_value(version)
+        def unselect_version(self, version):
+            """Un-Selects a product version."""
+            select = self.selenium.find_element(self._version_checkbox_locator[0],
+                                                self._version_checkbox_locator[1] + "[value ='%s']" % version)
+            if select.is_selected():
+                select.click()

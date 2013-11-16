@@ -11,7 +11,7 @@ from pages.desktop.submit_feedback import SubmitFeedbackPage
 
 class SubmitHappyFeedbackPage(SubmitFeedbackPage):
 
-    _feedback_locator = (By.ID, 'happy-description')
+    _feedback_locator = (By.CSS_SELECTOR, '#happy #id_description')
     _remaining_character_count_locator = (By.ID, 'happy-description-counter')
     _submit_feedback_locator = (By.CSS_SELECTOR, '#happy-submit a')
     _error_locator = (By.CSS_SELECTOR, '#happy .errorlist li')

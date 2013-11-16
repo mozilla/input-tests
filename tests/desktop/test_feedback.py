@@ -7,8 +7,10 @@
 from unittestzero import Assert
 import pytest
 
+
 class TestFeedback:
 
+    @pytest.mark.xfail(reason='Functionality missing - prevent multiply submission')
     def test_submitting_same_feedback_twice(self, mozwebqa):
         """This testcase covers # 15119 in Litmus.
 
@@ -44,6 +46,7 @@ class TestFeedback:
         thanks_pg = submit_happy_feedback_pg.submit_feedback()
         Assert.true(thanks_pg.is_the_current_page)
 
+    @pytest.mark.xfail(reason='Functionality missing - remaining characters count')
     @pytest.mark.nondestructive
     def test_remaining_character_count(self, mozwebqa):
         """This testcase covers # 13806 in Litmus.
@@ -101,8 +104,4 @@ class TestFeedback:
         Assert.equal(sad_feedback_pg.current_page_url, "%s/en-US/feedback/#sad" % mozwebqa.base_url)
         sad_feedback_pg.click_back()
 
-        idea_feedback_pg = submit_feedback_pg.click_idea_feedback()
-        Assert.equal(idea_feedback_pg.current_page_url, "%s/en-US/feedback/#idea" % mozwebqa.base_url)
-        idea_feedback_pg.click_back()
-
-        Assert.equal(submit_feedback_pg.support_page_link_address, 'http://support.mozilla.com/')
+        Assert.equal(submit_feedback_pg.support_page_link_address, 'http://support.mozilla.org/')

@@ -58,14 +58,6 @@ class BasePage(Page):
     def is_newer_messages_link_visible(self):
         return self.is_element_visible(self._newer_messages_link_locator)
 
-    @property
-    def is_older_messages_link_enabled(self):
-        return not 'inactive' in self.selenium.find_element(*self._older_messages_link_locator).get_attribute('class')
-
-    @property
-    def is_newer_messages_link_enabled(self):
-        return not 'inactive' in self.selenium.find_element(*self._newer_messages_link_locator).get_attribute('class')
-
     def _value_from_url(self, param):
         """Returns the value for the specified parameter in the URL."""
         url = urlparse(self.selenium.current_url)

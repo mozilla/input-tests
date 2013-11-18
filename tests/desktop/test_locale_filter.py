@@ -36,6 +36,8 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
+    @pytest.mark.xfail(reason='Bug 940361 - response counts for a locale in sidebar change when you select the locale')
+    @pytest.mark.skipif("not config.getvalue('base_url').endswith('allizom.org')")
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, mozwebqa):
         """This testcase covers # 15087 & 15120 in Litmus.
@@ -70,13 +72,3 @@ class TestLocaleFilter:
             # Un-select selected locale
             locale = feedback_pg.locale_filter.locale(locale_name)
             locale.select()
-
-    @pytest.mark.nondestructive
-    def test_percentage(self, mozwebqa):
-        """Litmus 13719 - input:Verify the Percentage # for Platform and Locale"""
-        feedback_pg = FeedbackPage(mozwebqa)
-        feedback_pg.go_to_feedback_page()
-
-        for locale in feedback_pg.locale_filter.locales:
-            expected_percentage = round((float(locale.message_count) / float(feedback_pg.total_message_count)) * 100)
-            Assert.equal(expected_percentage, locale.message_percentage)

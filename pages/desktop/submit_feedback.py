@@ -12,7 +12,7 @@ from pages.base import BasePage
 
 class SubmitFeedbackPage(BasePage):
 
-    _page_title = 'Submit Feedback :: Firefox Input'
+    _page_title = 'Submit Your Feedback :: Firefox Input'
 
     _idea_page_locator = (By.ID, 'idea')
     _happy_page_locator = (By.ID, 'happy')

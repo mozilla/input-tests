@@ -13,7 +13,6 @@ from pages.desktop.feedback import FeedbackPage
 class TestPlatformFilter:
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason='Bug 733787 - Default version not set correctly')
     def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """This testcase covers # 15215 in Litmus.
 
@@ -27,9 +26,8 @@ class TestPlatformFilter:
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
 
-        platform_name = "Mac OS X"
+        platform_name = "OS X"
         platform = feedback_pg.platform_filter.platform(platform_name)
         platform_message_count = platform.message_count
         platform_code = platform.code

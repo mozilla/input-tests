@@ -13,7 +13,7 @@ class PlatformFilter(Page):
 
     class CheckboxFilter(Page):
 
-        _platforms_locator = (By.CSS_SELECTOR, '#filter_platform li')
+        _platforms_locator = (By.CSS_SELECTOR, "ul[name='platform'] li")
 
         def platform(self, value):
             for platform in self.platforms:
@@ -28,7 +28,7 @@ class PlatformFilter(Page):
         class Platform(Page):
 
             _checkbox_locator = (By.TAG_NAME, 'input')
-            _name_locator = (By.CSS_SELECTOR, 'label > strong')
+            _name_locator = (By.CSS_SELECTOR, 'label > span:nth-child(2)')
             _message_count_locator = (By.CLASS_NAME, 'count')
 
             def __init__(self, testsetup, element):

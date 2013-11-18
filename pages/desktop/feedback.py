@@ -18,7 +18,7 @@ class FeedbackPage(BasePage):
     _warning_heading_locator = (By.CSS_SELECTOR, '#message-warning h3')
     _search_box = (By.NAME, 'q')
     _chart_locator = (By.ID, 'feedback-chart')
-    _total_message_count_locator = (By.CSS_SELECTOR, '#big-count p')
+    _total_message_count_locator = (By.CSS_SELECTOR, '.count > p > strong')
     _total_message_count_heading_locator = (By.CSS_SELECTOR, '#big-count h3')
     _messages_column_heading_locator = (By.CSS_SELECTOR, '#messages h2')
     _messages_locator = (By.CSS_SELECTOR, '.opinion')

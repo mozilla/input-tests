@@ -21,7 +21,7 @@ class ProductFilter(Page):
         def products(self):
             """Returns a list of available products."""
             select = self.selenium.find_elements(*self._product_checkbox_locator)
-            return [element.get_attribute('name') for element in select]
+            return [element.get_attribute('value') for element in select]
 
         @property
         def selected_product(self):
@@ -34,6 +34,14 @@ class ProductFilter(Page):
             select = self.selenium.find_element(self._product_checkbox_locator[0],
                                                 self._product_checkbox_locator[1] + "[name='%s']" % product)
             if not select.is_selected():
+                select.click()
+
+        def unselect_product(self, product):
+            """Un-Selects a product."""
+            product = product.lower().replace(' ', '-')
+            select = self.selenium.find_element(self._product_checkbox_locator[0],
+                                                self._product_checkbox_locator[1] + "[name='%s']" % product)
+            if select.is_selected():
                 select.click()
 
         @property
@@ -53,4 +61,11 @@ class ProductFilter(Page):
             select = self.selenium.find_element(self._version_checkbox_locator[0],
                                                 self._version_checkbox_locator[1] + "[value ='%s']" % version)
             if not select.is_selected():
+                select.click()
+
+        def unselect_version(self, version):
+            """Un-Selects a product version."""
+            select = self.selenium.find_element(self._version_checkbox_locator[0],
+                                                self._version_checkbox_locator[1] + "[value ='%s']" % version)
+            if select.is_selected():
                 select.click()

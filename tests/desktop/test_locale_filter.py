@@ -36,6 +36,7 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
+    @pytest.mark.xfail("reason = https://bugzilla.mozilla.org/show_bug.cgi?id=965451")
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, mozwebqa):
         """This testcase covers # 15087 & 15120 in Litmus.

@@ -12,7 +12,6 @@ from pages.desktop.feedback import FeedbackPage
 
 class TestLocaleFilter:
 
-    @pytest.mark.xfail(reason='Bug 733787 - Default version not set correctly')
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_locale(self, mozwebqa):
         """This testcase covers # 15120 in Litmus.
@@ -26,7 +25,6 @@ class TestLocaleFilter:
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
 
         locale_name = "Russian"
         locale = feedback_pg.locale_filter.locale(locale_name)
@@ -38,7 +36,7 @@ class TestLocaleFilter:
         Assert.equal(feedback_pg.locale_from_url, locale_code)
         [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
-    @pytest.mark.xfail(reason='Bug 733787 - Default version not set correctly')
+    @pytest.mark.xfail("reason = https://bugzilla.mozilla.org/show_bug.cgi?id=965451")
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_locale_from_expanded_list(self, mozwebqa):
         """This testcase covers # 15087 & 15120 in Litmus.
@@ -55,21 +53,24 @@ class TestLocaleFilter:
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.product_filter.select_product('firefox')
-        feedback_pg.product_filter.select_version('--')
 
         Assert.equal(len(feedback_pg.locale_filter.locales), 10)
-        feedback_pg.locale_filter.show_more_locales()
-        Assert.greater(len(feedback_pg.locale_filter.locales), 10)
 
-        locale = feedback_pg.locale_filter.locales[10]
-        locale_name = locale.name
-        locale_message_count = locale.message_count
-        locale_code = locale.code
-        locale.select()
+        locale_names = []
+        for locale in feedback_pg.locale_filter.locales:
+            locale_names.append(locale.name)
+        for locale_name in locale_names:
+            locale = feedback_pg.locale_filter.locale(locale_name)
+            locale_message_count = locale.message_count
+            locale_code = locale.code
+            locale.select()
+            Assert.equal(feedback_pg.total_message_count, locale_message_count)
+            Assert.equal(feedback_pg.locale_from_url, locale_code)
+            [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
 
-        Assert.equal(feedback_pg.total_message_count, locale_message_count)
-        Assert.equal(feedback_pg.locale_from_url, locale_code)
-        [Assert.equal(message.locale, locale_name) for message in feedback_pg.messages]
+            # Un-select selected locale
+            locale = feedback_pg.locale_filter.locale(locale_name)
+            locale.select()
 
     @pytest.mark.nondestructive
     def test_percentage(self, mozwebqa):
@@ -77,7 +78,6 @@ class TestLocaleFilter:
         feedback_pg = FeedbackPage(mozwebqa)
         feedback_pg.go_to_feedback_page()
 
-        feedback_pg.locale_filter.show_more_locales()
         for locale in feedback_pg.locale_filter.locales:
-            expected_percentage = round((float(locale.message_count) / float(feedback_pg.locale_filter.total_message_count)) * 100)
+            expected_percentage = round((float(locale.message_count) / float(feedback_pg.total_message_count)) * 100)
             Assert.equal(expected_percentage, locale.message_percentage)

@@ -11,7 +11,7 @@ from page import Page
 
 class LocaleFilter(Page):
 
-    _locales_locator = (By.XPATH, "id('filter_locale')//li[..[not(@class='extra')]][input[@name='locale']]")
+    _locales_locator = (By.CSS_SELECTOR, "ul[name='locale'] li")
     _more_locales_link_locator = (By.CSS_SELECTOR, '#filter_locale .more')
     _more_locales_locator = (By.CSS_SELECTOR, '#filter_locale .extra li')
     _total_message_count_locator = (By.CSS_SELECTOR, '#filter_locale .bars')
@@ -43,9 +43,9 @@ class LocaleFilter(Page):
     class Locale(Page):
 
         _checkbox_locator = (By.TAG_NAME, 'input')
-        _name_locator = (By.CSS_SELECTOR, 'label > strong')
+        _name_locator = (By.CSS_SELECTOR, 'label > span:nth-child(2)')
         _message_count_locator = (By.CLASS_NAME, 'count')
-        _message_percentage_locator = (By.CLASS_NAME, 'perc')
+        _message_percentage_locator = (By.CLASS_NAME, 'percent')
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)

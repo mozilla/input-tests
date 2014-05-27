@@ -1,6 +1,8 @@
 Firefox Input Tests
 ===================
 
+__note__
+
 This project is currently disabled so we are currently not developing tests for Input.
 If you want to write tests, you should check out some of our other projects:
 https://quality.mozilla.org/docs/webqa/projects/automation/
@@ -9,7 +11,7 @@ https://quality.mozilla.org/docs/webqa/projects/automation/
 Automated tests for the Firefox Input web application.
 For information specific to Firefox Input see the [GitHub repository][GitHub Input].
 
-[GitHub Input]: https://github.com/fwenzel/reporter
+[GitHub Input]: https://github.com/mozilla/fjord
 
 Running Tests
 -------------
@@ -45,11 +47,19 @@ If you are running on Ubuntu/Debian you will need to first do
 
 to install the required Python libraries.
 
-### Running tests locally
+### Running tests
 
-To run tests locally it's a simple case of calling py.test from the root directory.
+To run tests locally it's a simple case of calling py.test from the root directory:
 
     py.test --driver=firefox tests/desktop
+
+Against a local instance of Input:
+
+    py.test --driver=firefox --baseurl=http://localhost:8000/ tests/desktop
+
+Against stage:
+
+    py.test --driver=firefox --baseurl=https://input.allizom.org/ tests/desktop
 
 For more command line options see https://github.com/davehunt/pytest-mozwebqa
 

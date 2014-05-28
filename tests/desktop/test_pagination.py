@@ -30,7 +30,7 @@ class TestPagination:
         Assert.greater(feedback_pg.total_message_count, 50, "Search term didn't kick up enough messages. Please prime the server with more data!")
 
         Assert.true(feedback_pg.is_older_messages_link_visible)
-        Assert.false(feedback_pg.is_newer_messages_link_visible)
+        Assert.true(feedback_pg.is_newer_messages_link_not_visible)
         Assert.equal(feedback_pg.older_messages_link, 'Older Messages')
 
         feedback_pg.click_older_messages()
@@ -46,6 +46,6 @@ class TestPagination:
         Assert.equal(feedback_pg.search_term_from_url, self.SEARCH_TERM)
 
         Assert.true(feedback_pg.is_older_messages_link_visible)
-        Assert.false(feedback_pg.is_newer_messages_link_visible)
+        Assert.true(feedback_pg.is_newer_messages_link_not_visible)
         Assert.equal(feedback_pg.older_messages_link, 'Older Messages')
         Assert.equal(feedback_pg.page_from_url, 1)

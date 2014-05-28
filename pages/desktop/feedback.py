@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import datetime
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
@@ -22,6 +24,9 @@ class FeedbackPage(BasePage):
     _total_message_count_heading_locator = (By.CSS_SELECTOR, '#big-count h3')
     _messages_column_heading_locator = (By.CSS_SELECTOR, '#messages h2')
     _messages_locator = (By.CSS_SELECTOR, '.opinion')
+    _date_start = (By.CSS_SELECTOR, 'div#whentext input[name=date_start]')
+    _date_end = (By.CSS_SELECTOR, 'div#whentext input[name=date_end]')
+    _date_set = (By.ID, 'whensubmit')
 
     def go_to_feedback_page(self):
         self.selenium.get(self.base_url + '/')
@@ -64,6 +69,19 @@ class FeedbackPage(BasePage):
     def date_filter(self):
         from pages.desktop.regions.date_filter import DateFilter
         return DateFilter(self.testsetup)
+
+    def set_date_range(self, date_start, date_end=None):
+        if date_end is None:
+            date_end = datetime.date.today().strftime('%Y-%m-%d')
+
+        date_start_box = self.selenium.find_element(*self._date_start)
+        date_start_box.clear()
+        date_start_box.send_keys(date_start)
+        date_end_box = self.selenium.find_element(*self._date_end)
+        date_end_box.clear()
+        date_end_box.send_keys(date_end)
+
+        self.selenium.find_element(*self._date_set).click()
 
     def search_for(self, search_string):
         search_box = self.selenium.find_element(*self._search_box)

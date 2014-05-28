@@ -7,6 +7,10 @@
 import urllib
 from urlparse import urlparse
 
+from selenium.common.exceptions import (
+    ElementNotVisibleException,
+    NoSuchElementException
+)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from unittestzero import Assert
@@ -34,6 +38,16 @@ class Page(object):
             return self.selenium.find_element(*locator).is_displayed()
         except:
             return False
+
+    def is_element_not_visible(self, *locator):
+        self.selenium.implicitly_wait(0)
+        try:
+            return not self.selenium.find_element(*locator).is_displayed()
+        except (NoSuchElementException, ElementNotVisibleException):
+            return True
+        finally:
+            # set back to where you once belonged
+            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
     @property
     def current_page_url(self):
@@ -84,6 +98,10 @@ class BasePage(Page):
     @property
     def is_newer_messages_link_visible(self):
         return self.is_element_visible(self._newer_messages_link_locator)
+
+    @property
+    def is_newer_messages_link_not_visible(self):
+        return self.is_element_not_visible(self._newer_messages_link_locator)
 
     def _value_from_url(self, param):
         """Returns the value for the specified parameter in the URL."""

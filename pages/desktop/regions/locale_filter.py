@@ -6,7 +6,7 @@
 
 from selenium.webdriver.common.by import By
 
-from page import Page
+from pages.base import Page
 
 
 class LocaleFilter(Page):

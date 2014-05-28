@@ -7,7 +7,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 
-from page import Page
+from pages.base import Page
 
 
 class ProductFilter(Page):

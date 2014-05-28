@@ -6,8 +6,7 @@
 
 from selenium.webdriver.common.by import By
 
-from page import Page
-from pages.base import BasePage
+from pages.base import BasePage, Page
 
 
 class SitesPage(BasePage):

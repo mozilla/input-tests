@@ -96,6 +96,10 @@ class FeedbackPage(BasePage):
         return [Message(self.testsetup, message) for message in self.selenium.find_elements(*self._messages_locator)]
 
     @property
+    def no_messages(self):
+        return self.total_message_count == 0
+
+    @property
     def is_chart_visible(self):
         return self.is_element_visible(self._chart_locator)
 

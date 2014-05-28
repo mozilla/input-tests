@@ -10,7 +10,7 @@ import pytest
 from pages.desktop.feedback import FeedbackPage
 
 
-class TestSearch:
+class TestSearch(object):
 
     @pytest.mark.nondestructive
     def test_that_empty_search_of_feedback_returns_some_data(self, mozwebqa):
@@ -28,17 +28,10 @@ class TestSearch:
 
         feedback_pg.go_to_feedback_page()
         feedback_pg.search_for(u"p\xe1gina")
-        Assert.greater(len(feedback_pg.messages), 0)
-
-    @pytest.mark.nondestructive
-    def test_search_box_placeholder(self, mozwebqa):
-        """Litmus 13845.
-
-        1. Verify that there is a search field appearing in Latest Feedback
-        section it shows by default "Search by keyword"
-
-        """
-        feedback_pg = FeedbackPage(mozwebqa)
-
-        feedback_pg.go_to_feedback_page()
-        Assert.equal(feedback_pg.search_box_placeholder, "Search by keyword")
+        # There's no way to guarantee that the search we did finds
+        # responses on the page. So we check for one of two possible
+        # scenarios: existences of responses or a message count of 0.
+        Assert.true(
+            (len(feedback_pg.messages) > 0)
+            or feedback_pg.no_messages
+        )

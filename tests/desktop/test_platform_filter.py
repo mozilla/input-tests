@@ -4,20 +4,20 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from unittestzero import Assert
 import pytest
+from unittestzero import Assert
 
 from pages.desktop.feedback import FeedbackPage
 
 
-class TestPlatformFilter:
+class TestPlatformFilter(object):
 
     @pytest.mark.nondestructive
     def test_feedback_can_be_filtered_by_platform(self, mozwebqa):
         """This testcase covers # 15215 in Litmus.
 
         1. Verify that the selected platform is the only one to appear in the list and is selected
-        2. Verify that the number of messages in the platform list is plus or minus 15 for the number of messages returned
+        2. Verify that the number of messages is less than the total messages
         3. Verify that the platform appears in the URL
         4. Verify that the platform for all messages on the first page of results is correct
 
@@ -25,21 +25,30 @@ class TestPlatformFilter:
         feedback_pg = FeedbackPage(mozwebqa)
 
         feedback_pg.go_to_feedback_page()
-        feedback_pg.product_filter.select_product('firefox')
+        total_messages = feedback_pg.total_message_count
 
-        platform_name = "OS X"
-        platform = feedback_pg.platform_filter.platform(platform_name)
-        platform_message_count = platform.message_count
-        platform_code = platform.code
-        platform.click()
+        platforms = feedback_pg.platform_filter.platforms
+        platform_names = [platform.name for platform in platforms]
 
-        total_message_count = feedback_pg.total_message_count
-        message_count_difference = total_message_count - platform_message_count
+        Assert.greater(len(platforms), 0)
 
-        Assert.equal(len(feedback_pg.platform_filter.platforms), 1)
-        Assert.true(feedback_pg.platform_filter.platform(platform_name).is_selected)
-        # TODO refactor if unittest-zero receives an Assert.within_range method
-        Assert.less_equal(message_count_difference, 15)
-        Assert.greater_equal(message_count_difference, -15)
-        Assert.equal(feedback_pg.platform_from_url, platform_code)
-        [Assert.equal(message.platform, platform_name) for message in feedback_pg.messages]
+        for name in platform_names[:2]:
+            platform = feedback_pg.platform_filter.platform(name)
+
+            platform_name = platform.name
+            platform_code = platform.code
+
+            platform_count = platform.message_count
+            Assert.greater(total_messages, platform_count)
+
+            feedback_pg.platform_filter.select_platform(platform_code)
+
+            Assert.greater(total_messages, feedback_pg.total_message_count)
+            Assert.equal(len(feedback_pg.platform_filter.platforms), 1)
+            Assert.equal(feedback_pg.platform_filter.selected_platform.name, platform_name)
+            Assert.equal(feedback_pg.platform_from_url, platform_code)
+
+            for message in feedback_pg.messages:
+                Assert.equal(message.platform, platform_name)
+
+            feedback_pg.platform_filter.unselect_platform(platform_code)

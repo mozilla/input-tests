@@ -13,17 +13,41 @@ class PlatformFilter(Page):
 
     class CheckboxFilter(Page):
 
+        _platform_checkbox_locator = (By.CSS_SELECTOR, ".bars[name='platform'] input")
         _platforms_locator = (By.CSS_SELECTOR, "ul[name='platform'] li")
-
-        def platform(self, value):
-            for platform in self.platforms:
-                if platform.name == value:
-                    return platform
-            raise Exception('Platform not found: %s' % value)
 
         @property
         def platforms(self):
+            """Returns a list of Platform instances"""
             return [self.Platform(self.testsetup, element) for element in self.selenium.find_elements(*self._platforms_locator)]
+
+        @property
+        def selected_platform(self):
+            """Returns the currently selected platform."""
+            for platform in self.platforms:
+                if platform.is_selected:
+                    return platform
+
+        def select_platform(self, value):
+            """Selects a platform."""
+            select = self.selenium.find_element(
+                self._platform_checkbox_locator[0],
+                self._platform_checkbox_locator[1] + '[value="%s"]' % value)
+            if not select.is_selected():
+                select.click()
+
+        def unselect_platform(self, value):
+            select = self.selenium.find_element(
+                self._platform_checkbox_locator[0],
+                self._platform_checkbox_locator[1] + '[value="%s"]' % value)
+            if select.is_selected():
+                select.click()
+
+        def platform(self, name):
+            for platform in self.platforms:
+                if platform.name == name:
+                    return platform
+            raise Exception('Platform not found: %s' % name)
 
         class Platform(Page):
 

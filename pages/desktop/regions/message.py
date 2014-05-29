@@ -14,7 +14,7 @@ class Message(Page):
     _type_locator = (By.CSS_SELECTOR, '.type')
     _body_locator = (By.CSS_SELECTOR, '.body')
     _time_locator = (By.CSS_SELECTOR, 'time')
-    _platform_locator = (By.CSS_SELECTOR, '.meta li:nth-child(2) a')
+    _platform_locator = (By.CSS_SELECTOR, '.meta li:nth-child(3) a')
     _locale_locator = (By.CSS_SELECTOR, '.meta li:nth-child(3) a')
     _site_locator = (By.CSS_SELECTOR, '.meta li:nth-child(4)')
     _more_options_locator = (By.CSS_SELECTOR, '.options')

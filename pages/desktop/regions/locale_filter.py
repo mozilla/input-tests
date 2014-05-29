@@ -11,21 +11,36 @@ from pages.base import Page
 
 class LocaleFilter(Page):
 
+    _locales_checkbox_locator = (By.CSS_SELECTOR, ".bars[name='locale'] input")
     _locales_locator = (By.CSS_SELECTOR, "ul[name='locale'] li")
-    _more_locales_link_locator = (By.CSS_SELECTOR, '#filter_locale .more')
-    _more_locales_locator = (By.CSS_SELECTOR, '#filter_locale .extra li')
-    _total_message_count_locator = (By.CSS_SELECTOR, '#filter_locale .bars')
 
     @property
-    def total_message_count(self):
-        return int(self.selenium.find_element(*self._total_message_count_locator).get_attribute('data-total'))
+    def locales(self):
+        """Returns a list of Locale instances"""
+        locales = [self.Locale(self.testsetup, element) for element in self.selenium.find_elements(*self._locales_locator)]
+        return locales
 
     @property
-    def are_more_locales_visible(self):
-        return self.is_element_visible(self._more_locales_locator)
+    def selected_locale(self):
+        """Returns the currently selected locale."""
+        for locale in self.locales:
+            if locale.is_selected:
+                return locale
 
-    def show_more_locales(self):
-        self.selenium.find_element(*self._more_locales_link_locator).click()
+    def select_locale(self, value):
+        """Selects a locale."""
+        select = self.selenium.find_element(
+            self._locales_checkbox_locator[0],
+            self._locales_checkbox_locator[1] + '[value="%s"]' % value)
+        if not select.is_selected():
+            select.click()
+
+    def unselect_locale(self, value):
+        select = self.selenium.find_element(
+            self._locales_checkbox_locator[0],
+            self._locales_checkbox_locator[1] + '[value="%s"]' % value)
+        if select.is_selected():
+            select.click()
 
     def locale(self, value):
         for locale in self.locales:
@@ -33,12 +48,6 @@ class LocaleFilter(Page):
                 return locale
         raise Exception("Locale not found: '%s'. Locales: %s" % (value, [locale.name for locale in self.locales]))
 
-    @property
-    def locales(self):
-        locales = [self.Locale(self.testsetup, element) for element in self.selenium.find_elements(*self._locales_locator)]
-        if self.are_more_locales_visible:
-            locales.extend([self.Locale(self.testsetup, element) for element in self.selenium.find_elements(*self._more_locales_locator)])
-        return locales
 
     class Locale(Page):
 
